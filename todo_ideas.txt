@@ -1,0 +1,3 @@
+Add weight to the random apply in FunctionSlot
+Implement the Steady State GA
+Implement crossover bias (don't disrupt building block)

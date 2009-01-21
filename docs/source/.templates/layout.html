@@ -1,0 +1,25 @@
+{% extends "!layout.html" %}
+{% block sidebarlogo %}
+<a href="http://del.icio.us/post?url=http://pyevolve.sourceforge.net" target="_blank">
+	<img src="_static/delicious_icon.png" border="0">
+</a>
+
+<a href="http://digg.com/submit?url=http://pyevolve.sourceforge.net" target="_blank">
+	<img src="_static/digg_icon.png"  border="0">
+</a>
+
+<a href="#" target="_blank">
+	<img src="_static/feed_icon.png" border="0">
+</a>
+{% endblock %}
+
+{% block sidebartoc %}
+	{{ super() }}
+
+<!--h3><a href="">Downloads</a></h3>
+<ul>
+	<li><a class="reference external" href="">Pyevolve 0.5 (Windows, Python 2.5) !</a></li>
+	<li><a class="reference external" href="">Pyevolve 0.5 (Windows, Python 2.6) !</a></li>
+</ul-->
+
+{% endblock %}
