@@ -206,4 +206,3 @@ class G1DList(GenomeBase):
       newcopy = G1DList(self.listSize)
       self.copy(newcopy)
       return newcopy
-

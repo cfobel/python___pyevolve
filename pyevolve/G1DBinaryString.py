@@ -250,4 +250,3 @@ class G1DBinaryString(GenomeBase):
       newcopy = G1DBinaryString(self.stringLength)
       self.copy(newcopy)
       return newcopy
-

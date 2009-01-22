@@ -3,7 +3,9 @@
 :mod:`GAllele` -- the genome alleles module
 ===========================================================
 
-In this module, there are the **GAlleles** class and all the allele types to use with the supported chromosomes.
+In this module, there are the :class:`GAllele.GAlleles` class (which is the
+class that holds the allele types) and all the
+allele types to use with the supported chromosomes.
 
 """
 import random

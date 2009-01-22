@@ -15,6 +15,6 @@ setup(
    description = "A complete python genetic algorithm framework",
    license = "PSF",
    keywords = "genetic algorithm algorithms framework library python",
-   url = "http://code.google.com/p/pyevolve/", 
-   download_url = "http://code.google.com/p/pyevolve/downloads/list"
+   url = "http://pyevolve.sourceforge.net/", 
+   download_url = "https://sourceforge.net/project/showfiles.php?group_id=251160"
 )

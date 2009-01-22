@@ -11,16 +11,13 @@ is above this namespace, for example, to import :mod:`Mutators`:
 """
 __version__=  '0.5'
 __author__ =  'Christian S. Perone'
-__revision__ = "$Id: __init__.py 143 2009-01-18 16:22:22Z christian.perone $"
 
 import Consts
 import sys
 
 if sys.version_info < Consts.CDefPythonRequire:
    import logging
-   critical_msg = "Python 2.5 required !"
-   logging.critical(critical_msg)
-   raise Exception(critical_msg)
+   raise Exception("Python 2.5+ required !")
 else:
    del sys
 

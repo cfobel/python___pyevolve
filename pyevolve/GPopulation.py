@@ -10,7 +10,7 @@ to keep the population and the statistics.
 import Consts
 from FunctionSlot import FunctionSlot
 from Statistics import Statistics
-import math
+from math import sqrt as math_sqrt
 import logging
 
 def key_raw_score(individual):
@@ -200,7 +200,7 @@ class GPopulation:
          tmpvar += s
 
       tmpvar/= float((len(self) - 1))
-      self.stats["rawDev"] = math.sqrt(tmpvar)
+      self.stats["rawDev"] = math_sqrt(tmpvar)
       self.stats["rawVar"] = tmpvar
 
       self.statted = True

@@ -5,7 +5,7 @@
 This is the 2D List representation, this list can carry real numbers or
 integers or any kind of object, by default, we have genetic operators
 for integer and real lists, which can be found on the respective modules.
-This chromosome class extends the **GenomeBase**.
+This chromosome class extends the :class:`GenomeBase.GenomeBase`.
 
 """
 
