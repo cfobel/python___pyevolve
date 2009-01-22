@@ -55,7 +55,7 @@ class G1DBinaryString(GenomeBase):
 
 
    def __init__(self, length=10):
-      """ The initializator of G1DList representation, size parameter must be specified """
+      """ The initializator of G1DList representation """
       GenomeBase.__init__(self)
       self.genomeString = []
       self.stringLength = length

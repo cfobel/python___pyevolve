@@ -127,6 +127,8 @@ Usage Examples
 
    pyevolve_graph.py -i ex1_run1,ex1_run2,ex1_run3 -6s
 
+.. _graphs_screens:
+
 Graph Types and Screenshots
 ---------------------------------------------------------------------------
 
