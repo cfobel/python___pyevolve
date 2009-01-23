@@ -13,6 +13,19 @@ from Statistics import Statistics
 from math import sqrt as math_sqrt
 import logging
 
+try:
+   import sys
+   from multiprocessing import cpu_count, Queue, Process
+   CPU_COUNT = cpu_count()
+   MULTI_PROCESSING = True if CPU_COUNT > 1 else False
+except:
+   MULTI_PROCESSING = False
+
+def async_eval(population, q):
+   for ind in population:
+      ind.evaluate()
+   q.put(population)
+
 def key_raw_score(individual):
    """ A key function to return raw score
 
@@ -126,6 +139,9 @@ class GPopulation:
       self.statted = False
       self.stats   = Statistics()
 
+   def async_eval(self):
+      pass
+   
    def setMinimax(minimax):
       """ Sets the population minimax
 
@@ -279,8 +295,21 @@ class GPopulation:
       :param args: this params are passed to the evaluation function
 
       """
-      for ind in self.internalPop:
-         ind.evaluate(**args)
+
+      # We have multiprocessing
+      if MULTI_PROCESSING:
+         pop_len = len(self)
+         q = Queue()
+         p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()
+         p2 = Process(target=async_eval, args=(self.internalPop[:pop_len/2], q)).start()
+         half1, half2 = q.get(), q.get()
+
+         self.internalPop = half1 + half2
+
+      else:
+         for ind in self.internalPop:
+            ind.evaluate(**args)
+
       self.__clear_flags()
 
    def scale(self, **args):
