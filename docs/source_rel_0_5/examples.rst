@@ -11,7 +11,7 @@ Filename: :file:`examples/pyevolve_ex1_simple.py`
 
 This is the Example #1, it is a very simple example: 
 
-.. literalinclude:: ../../pyevolve_ex1_simple.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex1_simple.py
 
 Example 2 - Real numbers, Gaussian Mutator
 -------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ Filename: :file:`examples/pyevolve_ex2_realgauss.py`
 This example uses the :func:`Initializators.G1DListInitializatorReal` initializator
 and the :func:`Mutators.G1DListMutatorRealGaussian` mutator:
 
-.. literalinclude:: ../../pyevolve_ex2_realgauss.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex2_realgauss.py
 
 Example 3 - Schaffer F6 deceptive function
 -------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ Filename: :file:`examples/pyevolve_ex3_schaffer.py`
 This examples tries to minimize the Schaffer F6 function, this function is a
 deceptive function, considered a GA-hard function to optimize: 
 
-.. literalinclude:: ../../pyevolve_ex3_schaffer.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex3_schaffer.py
 
 Example 4 - Using Sigma truncation scaling
 -------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ Filename: :file:`examples/pyevolve_ex4_sigmatrunc.py`
 This example shows the use of the sigma truncation scale method, it tries
 to minimize a function with negative results:
 
-.. literalinclude:: ../../pyevolve_ex4_sigmatrunc.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex4_sigmatrunc.py
 
 Example 5 - Step callback function
 -------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ Filename: :file:`examples/pyevolve_ex5_callback.py`
 
 This example shows the use of the :term:`step callback function`: 
 
-.. literalinclude:: ../../pyevolve_ex5_callback.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex5_callback.py
 
 
 Example 6 - The DB Adapters
@@ -60,7 +60,7 @@ Filename: :file:`examples/pyevolve_ex6_dbadapter.py`
 
 This example show the use of the DB Adapters (:mod:`DBAdapters`) : 
 
-.. literalinclude:: ../../pyevolve_ex6_dbadapter.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex6_dbadapter.py
 
 
 Example 7 - The Rastringin function
@@ -70,7 +70,7 @@ Filename: :file:`examples/pyevolve_ex7_rastringin.py`
 
 This example minimizes the deceptive function Rastringin with 20 variables: 
 
-.. literalinclude:: ../../pyevolve_ex7_rastringin.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex7_rastringin.py
 
 
 Example 8 - The Gaussian Integer Mutator
@@ -81,7 +81,7 @@ Filename: :file:`examples/pyevolve_ex8_gauss_int.py`
 This example shows the use of the Gaussian Integer Mutator
 (:class:`Mutators.G1DListMutatorIntegerGaussian`): 
 
-.. literalinclude:: ../../pyevolve_ex8_gauss_int.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex8_gauss_int.py
 
 Example 9 - The 2D List genome
 -------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ Filename: :file:`examples/pyevolve_ex9_g2dlist.py`
 
 This example shows the use of the 2d list genome (:class:`G2DList.G2DList`):
 
-.. literalinclude:: ../../pyevolve_ex9_g2dlist.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex9_g2dlist.py
 
 Example 10 - The 1D Binary String
 -------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ Filename: :file:`examples/pyevolve_ex10_g1dbinstr.py`
 
 This example shows the use of the 1D Binary String genome: 
 
-.. literalinclude:: ../../pyevolve_ex10_g1dbinstr.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex10_g1dbinstr.py
 
 Example 11 - The use of alleles
 -------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ Filename: :file:`examples/pyevolve_ex11_allele.py`
 
 This example shows the use of alleles: 
 
-.. literalinclude:: ../../pyevolve_ex11_allele.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex11_allele.py
 
 Example 12 - The Travelling Salesman Problem (TSP)
 -------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ Filename: :file:`examples/pyevolve_ex12_tsp.py`
 
 This example shows the use of Pyevolve to solve the `TSP <http://en.wikipedia.org/wiki/Traveling_salesman_problem>`_:
 
-.. literalinclude:: ../../pyevolve_ex12_tsp.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex12_tsp.py
 
 This example will plot a file called :file:`tsp_result.png` in the same
 directory of the execution, this image will be the best result of the
@@ -142,7 +142,7 @@ Filename: :file:`examples/pyevolve_ex13_sphere.py`
 
 This is the GA to solve the sphere function: 
 
-.. literalinclude:: ../../pyevolve_ex13_sphere.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex13_sphere.py
 
 Example 14 - The Ackley function
 -------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ Filename: :file:`examples/pyevolve_ex14_ackley.py`
 
 This example minimizes the Ackley F1 function, a deceptive function: 
 
-.. literalinclude:: ../../pyevolve_ex14_ackley.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex14_ackley.py
 
 Example 15 - The Rosenbrock function
 -------------------------------------------------------------------------------
@@ -160,5 +160,5 @@ Filename: :file:`examples/pyevolve_ex15_rosenbrock.py`
 
 This example minimizes the Rosenbrock function, another deceptive function: 
 
-.. literalinclude:: ../../pyevolve_ex15_rosenbrock.py
+.. literalinclude:: ../../examples_rel_0_5/pyevolve_ex15_rosenbrock.py
 
