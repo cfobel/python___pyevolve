@@ -2,7 +2,7 @@
 Introduction
 ============================================================
 
-This is the documentation of the Pyevolve release |release|. Since the version 0.4, Pyevolve has changed too much, many new features was added and **many** bugs was fixed, this documentation describes those changes, the new API and new features.
+This is the documentation of the Pyevolve release |release|. Since the version 0.5, Pyevolve has changed too much, many new features was added and **many** bugs was fixed, this documentation describes those changes, the new API and new features.
 
 Pyevolve was developed to be a *complete genetic algorithm framework written in python*, the main objectives of Pyevolve is:
 
@@ -47,10 +47,10 @@ Windows
 
 Installers for Microsoft Windows platform:
 
-`Pyevolve v.0.5 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5.win32-py2.5.exe?use_mirror=>`_ (*installer*) for Python 2.5
+`Pyevolve v.0.6 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5.win32-py2.5.exe?use_mirror=>`_ (*installer*) for Python 2.5
    *This is an .exe installer for Microsoft Windows XP/Vista*
 
-`Pyevolve v.0.5 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5.win32-py2.6.exe?use_mirror=>`_ (*installer*) for Python 2.6
+`Pyevolve v.0.6 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5.win32-py2.6.exe?use_mirror=>`_ (*installer*) for Python 2.6
    *This is an .exe installer for Microsoft Windows XP/Vista*
 
 Linux
@@ -58,22 +58,22 @@ Linux
 
 Installation package for Linux platform:
 
-`Pyevolve v.0.5 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-py2.5.egg?use_mirror=>`_ (*egg package*) for Python 2.5
+`Pyevolve v.0.6 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-py2.5.egg?use_mirror=>`_ (*egg package*) for Python 2.5
    *This is an egg package file*
 
-`Pyevolve v.0.5 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-py2.6.egg?use_mirror=>`_ (*egg package*) for Python 2.6
+`Pyevolve v.0.6 <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-py2.6.egg?use_mirror=>`_ (*egg package*) for Python 2.6
    *This is an egg package file*
 
 
 Examples and Source code 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
-Examples and source code for Pyevolve 0.5:
+Examples and source code for Pyevolve |release|:
 
-`Pyevolve v.0.5 source code <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-source.zip?use_mirror=>`_ (*package*)
+`Pyevolve v.0.6 source code <http://downloads.sourceforge.net/pyevolve/Pyevolve-0.5-source.zip?use_mirror=>`_ (*package*)
    *This is an package with the Pyevolve source code*
 
-`Examples for Pyevolve v.0.5 <http://downloads.sourceforge.net/pyevolve/ex_pyevolve0_5.zip?use_mirror=>`_ (*package*)
+`Examples for Pyevolve v.0.6 <http://downloads.sourceforge.net/pyevolve/ex_pyevolve0_5.zip?use_mirror=>`_ (*package*)
    *This is an package with the Pyevolve examples*
 
 
@@ -100,7 +100,7 @@ This command will automatic search, download and install a suitable version of p
 
    >>> import pyevolve
    >>> print pyevolve.__version__
-   '0.5'
+   '0.6'
 
 *easy_install* utility is part of `setuptools <http://pypi.python.org/pypi/setuptools>`_. Once you have installed setuptools, you will find the easy_install.exe program in your Python Scripts subdirectory.
 

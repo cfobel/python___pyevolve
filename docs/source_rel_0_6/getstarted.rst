@@ -168,7 +168,7 @@ See this session example: ::
    Loading module pylab (matplotlib)...  done!
    Loading module numpy...  done!
 
-   ## Pyevolve v.0.5 - Interactive Mode ##
+   ## Pyevolve v.0.6 - Interactive Mode ##
    Press CTRL-D to quit interactive mode.
    >>>
 
@@ -187,7 +187,7 @@ Inspecting the population
 
 This is a session example: ::
 
-   ## Pyevolve v.0.5 - Interactive Mode ##
+   ## Pyevolve v.0.6 - Interactive Mode ##
    Press CTRL-Z to quit interactive mode.
    >>> dir()
    ['__builtins__', 'ga_engine', 'it', 'population', 'pyevolve']

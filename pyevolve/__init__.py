@@ -9,7 +9,7 @@ is above this namespace, for example, to import :mod:`Mutators`:
 
 
 """
-__version__=  '0.5'
+__version__=  '0.6'
 __author__ =  'Christian S. Perone'
 
 import Consts
