@@ -5,7 +5,7 @@ from pyevolve import __version__, __author__
 setup(
    name = "Pyevolve",
    version = __version__,
-   packages = find_packages(),
+   packages = find_packages(exclude=['pyevolve_rel_0_5']),
    scripts = ['pyevolve_graph.py'],
    package_data = {
       'pyevolve': ['*.txt']

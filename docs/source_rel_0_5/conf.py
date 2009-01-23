@@ -22,11 +22,11 @@ import sys, os
 #sys.path.append(os.path.abspath('.'))
 
 if sys.platform[:5]:
-   sys.path.append(os.path.abspath("../../") + "/pyevolve")
+   sys.path.append(os.path.abspath("../../") + "/pyevolve_rel_0_5")
    sys.path.append(os.path.abspath("../../"))
 
 elif sys.platform[:3] == "win":
-   sys.path.append(os.path.abspath("../../") + "\\pyevolve")
+   sys.path.append(os.path.abspath("../../") + "\\pyevolve_rel_0_5")
    sys.path.append(os.path.abspath("../../"))
 
 # General configuration
