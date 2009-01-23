@@ -11,10 +11,6 @@ Welcome to Pyevolve documentation !
 
 \- **Charles R. Darwin**
 
-This is the documentation of the new Pyevolve release |release|. Since the version 0.4,
-Pyevolve has changed too much, many new features was added and **many** bugs was
-fixed, this documentation describes those changes, the new API and new features.
-
 See some plot screenshots on the :ref:`graphs_screens` section.
 
 .. centered:: Contents
@@ -22,6 +18,7 @@ See some plot screenshots on the :ref:`graphs_screens` section.
 .. toctree::
    :maxdepth: 4
 
+   whatsnew
    intro
    getstarted
    modules

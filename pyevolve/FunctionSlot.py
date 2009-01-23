@@ -29,6 +29,13 @@ class FunctionSlot:
       Slot [Evaluation Function] (Count: 0)
                 No function
 
+   You can add weight to functions when using the `rand_apply` paramter:
+      >>> genome.evaluator.set(eval_main, 0.9)
+      >>> genome.evaluator.add(eval_sec,  0.3)
+      >>> genome.evaluator.setRandomApply()
+
+   In the above example, the function *eval_main* will be called with 90% of
+   probability and the *eval_sec* will be called with 30% of probability.
 
    :param name: the slot name
    :param rand_apply: if True, just one of the functions in the slot
@@ -85,6 +92,9 @@ class FunctionSlot:
       :param weight: used when you enable the *random apply*, it's the weight
                      of the function for the random selection
 
+      .. versionadded:: 0.6
+         The `weight` parameter.
+
       """
       self.funcList.append(func)
       self.funcWeights.append(weight)
@@ -97,6 +107,11 @@ class FunctionSlot:
       """ Used to clear all functions in the slot and add one
 
       :param func: the function to be added in the slot
+      :param weight: used when you enable the *random apply*, it's the weight
+                     of the function for the random selection
+
+      .. versionadded:: 0.6
+         The `weight` parameter.
 
       .. note:: the method *set* of the function slot remove all previous
                 functions added to the slot.
