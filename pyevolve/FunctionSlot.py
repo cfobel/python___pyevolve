@@ -12,7 +12,7 @@ you'll find the class :class:`FunctionSlot.FunctionSlot`, which is the slot clas
 """
 
 import Util
-from random import choice as rand_choice
+from random import choice as rand_choice, uniform as rand_uniform
 
 class FunctionSlot:
    """ FunctionSlot Class - The function slot
@@ -31,13 +31,16 @@ class FunctionSlot:
 
 
    :param name: the slot name
-   :param rand_apply: if True, just one of the functions in the slot will be applied, this function is randomly picked.
+   :param rand_apply: if True, just one of the functions in the slot
+                      will be applied, this function is randomly picked based
+                      on the weight of the function added.
 
    """
 
    def __init__(self, name="Anonymous Function", rand_apply=False):
       """ The creator of the FunctionSlot Class """
       self.funcList = []
+      self.funcWeights = []
       self.slotName = name
       self.rand_apply = rand_apply
 
@@ -75,19 +78,22 @@ class FunctionSlot:
       if len(self.funcList) > 0:
          del self.funcList[:]
 
-   def add(self, func):
+   def add(self, func, weight=0.5):
       """ Used to add a function to the slot
 
       :param func: the function to be added in the slot
+      :param weight: used when you enable the *random apply*, it's the weight
+                     of the function for the random selection
 
       """
       self.funcList.append(func)
+      self.funcWeights.append(weight)
 
    def isEmpty(self):
       """ Return true if the function slot is empy """
       return (len(self.funcList) == 0)
 
-   def set(self, func):
+   def set(self, func, weight=0.5):
       """ Used to clear all functions in the slot and add one
 
       :param func: the function to be added in the slot
@@ -96,7 +102,7 @@ class FunctionSlot:
                 functions added to the slot.
       """
       self.clear()
-      self.add(func)
+      self.add(func, weight)
 
    def apply(self, index, obj, **args):
       """ Apply the index function
@@ -123,7 +129,13 @@ class FunctionSlot:
          for f in self.funcList:
             yield f(obj, **args)
       else:
-         yield rand_choice(self.funcList)(obj, **args)
+         v = rand_uniform(0, 1)
+         for func, weight in zip(self.funcList, self.funcWeights):
+            if v < weight:
+               break
+            v = v - weight
+
+         yield func(obj, **args)
 
    def __repr__(self):
       """ String representation of FunctionSlot """
@@ -133,8 +145,8 @@ class FunctionSlot:
          strRet += "\t\tNo function\n"
          return strRet
 
-      for f in self.funcList:
-         strRet += "\t\tName: " + f.func_name + "\n"
+      for f, w in zip(self.funcList, self.funcWeights):
+         strRet += "\t\tName: %s - Weight: %.2f\n" % (f.func_name, w)
          if f.func_doc:
             strRet += "\t\tDoc: " + f.func_doc + "\n"
 
