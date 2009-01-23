@@ -223,6 +223,9 @@ class DBSQLite:
       logging.debug("Opening database, dbname=%s", self.dbName)
       self.connection = sqlite3.connect(self.dbName)
 
+      temp_stats = Statistics.Statistics()
+      self.createStructure(temp_stats)
+
       if self.resetDB:
          self.resetStructure(Statistics.Statistics())
 

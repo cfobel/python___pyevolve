@@ -45,7 +45,7 @@ if __name__ == "__main__":
    # the database and erase all data every run, you should use this flag
    # just in the first time, after the pyevolve.db was created, you can
    # omit it.
-   sqlite_adapter = DBAdapters.DBSQLite(identify="ex1", resetDB=True)
+   sqlite_adapter = DBAdapters.DBSQLite(identify="ex1")
    ga.setDBAdapter(sqlite_adapter)
 
    # Do the evolution, with stats dump
