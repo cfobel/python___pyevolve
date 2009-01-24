@@ -79,14 +79,14 @@ def GRouletteWheel(population, **args):
    lower = 0
    upper = len(population) - 1
    while(upper >= lower):
-      i = lower + (upper-lower)/2
+      i = lower + ((upper-lower)/2)
       if psum[i] > cutoff: upper = i-1
       else: lower = i+1
 
    lower = min(len(population)-1, lower)
    lower = max(0, lower)
 
-   return population[lower]
+   return population.bestFitness(lower)
 
 GRouletteWheel.cachePopID = None
 GRouletteWheel.cacheWheel = None
@@ -114,13 +114,13 @@ def GRouletteWheel_PrepareWheel(population):
             for i in xrange(1, len_pop):
                psum[i] = population[i].fitness + psum[i-1]
             for i in xrange(len_pop):
-               psum[i] /= psum[len_pop - 1]
+               psum[i] /= float(psum[len_pop - 1])
          else:
             psum[0] = -population[0].fitness + pop_fitMax + pop_fitMin
             for i in xrange(1, len_pop):
                psum[i] = -population[i].fitness + pop_fitMax + pop_fitMin + psum[i-1]
             for i in xrange(len_pop):
-               psum[i] /= psum[len_pop - 1]
+               psum[i] /= float(psum[len_pop - 1])
    else:
       pop_rawMax = population.stats["rawMax"]
       pop_rawMin = population.stats["rawMin"]
@@ -136,12 +136,12 @@ def GRouletteWheel_PrepareWheel(population):
             for i in xrange(1, len_pop):
                psum[i] = population[i].score + psum[i-1]
             for i in xrange(len_pop):
-               psum[i] /= psum[len_pop-1]
+               psum[i] /= float(psum[len_pop-1])
          else:
             psum[0] = - population[0].score + pop_rawMax + pop_rawMin
             for i in xrange(1, len_pop):
                psum[i] = - population[i].score + pop_rawMax + pop_rawMin + psum[i-1]
             for i in xrange(len_pop):
-               psum[i] /= psum[len_pop-1]
+               psum[i] /= float(psum[len_pop-1])
 
    return psum
