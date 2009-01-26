@@ -1,7 +1,8 @@
 
-What's new ?
+What's new on the release |release| ?
 ============================================================
 
+What's new on the release |release|:
 
 **Function Slots - Functions now have weights**
    
@@ -28,13 +29,13 @@ What's new ?
    on the :func:`Scaling.BoltzmannScaling` function.
 
 
-** Selectors - the alternative Tournament Selection**
+**Selectors - the alternative Tournament Selection**
    
    Added an alternative Tournament selection method, the :func:`Selectors.GTournamentAlternative`.
    This new Tournament Selector **don't uses** the Roulette Wheel method to pick individuals.
 
 
-** Statistisc - two new statistical measures**
+**Statistisc - two new statistical measures**
    
    Added the **fitTot** and the **rawTot** parameters to the :class:`Statistics.Statistics`
    class. See the class documentation for more information.

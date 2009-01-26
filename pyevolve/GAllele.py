@@ -226,4 +226,3 @@ class GAlleleRange:
          ret += "\t\t\t Range from [%s] to [%s]\n" % (beg, end)
       ret += "\n"
       return ret
-

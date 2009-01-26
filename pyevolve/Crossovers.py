@@ -207,6 +207,8 @@ def G1DListCrossoverOX(genome, **args):
       P2 = [ c for c in gDad[c2:] + gDad[:c2] if c not in gMom[c1:c2] ]
       brother.genomeList = P2[listSize - c2:] + gMom[c1:c2] + P2[:listSize-c2]
 
+   assert listSize == len(sister)
+
    return (sister, brother)
 
 
