@@ -54,23 +54,37 @@ Selection methods constants (:mod:`Selectors`)
 
 .. attribute:: CDefTournamentPoolSize
 
-   The default pool size for the Tournament Selector (:class:`Selectors.GTournamentSelector`).
+   The default pool size for the Tournament Selector (:func:`Selectors.GTournamentSelector`).
 
 Scaling scheme constants (:mod:`Scaling`)
 ----------------------------------------------------------------------------
 
 .. attribute:: CDefScaleLinearMultiplier
 
-   The multiplier of the Linear (:class:`Scaling.LinearScaling`) scaling scheme.
+   The multiplier of the Linear (:func:`Scaling.LinearScaling`) scaling scheme.
 
 .. attribute:: CDefScaleSigmaTruncMultiplier
 
-   The default Sigma Truncation (:class:`Scaling.SigmaTruncScaling`) scaling scheme.
+   The default Sigma Truncation (:func:`Scaling.SigmaTruncScaling`) scaling scheme.
 
 .. attribute:: CDefScalePowerLawFactor
 
-   The default Power Law (:class:`Scaling.PowerLawScaling`) scaling scheme factor.
+   The default Power Law (:func:`Scaling.PowerLawScaling`) scaling scheme factor.
 
+.. attribute:: CDefScaleBoltzMinTemp
+
+   The default mininum temperature of the (:func:`Scaling.BoltzmannScaling`) scaling scheme factor.
+
+.. attribute:: CDefScaleBoltzFactor
+
+   The default Boltzmann Factor of (:func:`Scaling.BoltzmannScaling`) scaling scheme factor.
+   This is the factor that the temperature will be subtracted.
+
+.. attribute:: CDefScaleBoltzStart
+
+   The default Boltzmann start temperature (:func:`Scaling.BoltzmannScaling`).
+   If you don't set the start temperature parameter, this will be the default initial
+   temperature for the Boltzmann scaling scheme.
 
 Population constants (:class:`GPopulation.GPopulation`)
 ----------------------------------------------------------------------------
@@ -114,19 +128,19 @@ Population constants (:class:`GPopulation.GPopulation`)
 
 .. attribute:: CDefG1DListMutIntMU
 
-   Default *mu* value of the 1D List Gaussian Integer Mutator (:class:`Mutators.G1DListMutatorIntegerGaussian`), the *mu* represents the mean of the distribution.
+   Default *mu* value of the 1D List Gaussian Integer Mutator (:func:`Mutators.G1DListMutatorIntegerGaussian`), the *mu* represents the mean of the distribution.
    
 .. attribute:: CDefG1DListMutIntSIGMA
 
-   Default *sigma* value of the 1D List Gaussian Integer Mutator (:class:`Mutators.G1DListMutatorIntegerGaussian`), the *sigma* represents the standard deviation of the distribution.
+   Default *sigma* value of the 1D List Gaussian Integer Mutator (:func:`Mutators.G1DListMutatorIntegerGaussian`), the *sigma* represents the standard deviation of the distribution.
    
 .. attribute:: CDefG1DListMutRealMU
 
-   Default *mu* value of the 1D List Gaussian Real Mutator (:class:`Mutators.G1DListMutatorRealGaussian`), the *mu* represents the mean of the distribution.
+   Default *mu* value of the 1D List Gaussian Real Mutator (:func:`Mutators.G1DListMutatorRealGaussian`), the *mu* represents the mean of the distribution.
    
 .. attribute:: CDefG1DListMutRealSIGMA
 
-   Default *sigma* value of the 1D List Gaussian Real Mutator (:class:`Mutators.G1DListMutatorRealGaussian`), the *sigma* represents the mean of the distribution.
+   Default *sigma* value of the 1D List Gaussian Real Mutator (:func:`Mutators.G1DListMutatorRealGaussian`), the *sigma* represents the mean of the distribution.
 
 
 2D List chromosome constants (:class:`G2DList.G2DList`)
@@ -134,19 +148,19 @@ Population constants (:class:`GPopulation.GPopulation`)
 
 .. attribute:: CDefG2DListMutRealMU
 
-   Default *mu* value of the 2D List Gaussian Real Mutator (:class:`Mutators.G2DListMutatorRealGaussian`), the *mu* represents the mean of the distribution.
+   Default *mu* value of the 2D List Gaussian Real Mutator (:func:`Mutators.G2DListMutatorRealGaussian`), the *mu* represents the mean of the distribution.
 
 .. attribute:: CDefG2DListMutRealSIGMA
 
-   Default *sigma* value of the 2D List Gaussian Real Mutator (:class:`Mutators.G2DListMutatorRealGaussian`), the *sigma* represents the mean of the distribution.
+   Default *sigma* value of the 2D List Gaussian Real Mutator (:func:`Mutators.G2DListMutatorRealGaussian`), the *sigma* represents the mean of the distribution.
 
 .. attribute:: CDefG2DListMutIntMU
 
-   Default *mu* value of the 2D List Gaussian Integer Mutator (:class:`Mutators.G2DListMutatorIntegerGaussian`), the *mu* represents the mean of the distribution.
+   Default *mu* value of the 2D List Gaussian Integer Mutator (:func:`Mutators.G2DListMutatorIntegerGaussian`), the *mu* represents the mean of the distribution.
    
 .. attribute:: CDefG2DListMutIntSIGMA
 
-   Default *sigma* value of the 2D List Gaussian Integer Mutator (:class:`Mutators.G2DListMutatorIntegerGaussian`), the *sigma* represents the mean of the distribution.
+   Default *sigma* value of the 2D List Gaussian Integer Mutator (:func:`Mutators.G2DListMutatorIntegerGaussian`), the *sigma* represents the mean of the distribution.
 
 .. attribute:: CDefG2DListMutator
 
@@ -162,7 +176,7 @@ Population constants (:class:`GPopulation.GPopulation`)
 
 .. attribute:: CDefG2DListCrossUniformProb
 
-   Default uniform probability for the 2D List Uniform Crossover method (:class:`Crossovers.G2DListCrossoverUniform`).
+   Default uniform probability for the 2D List Uniform Crossover method (:func:`Crossovers.G2DListCrossoverUniform`).
 
 
 GA Engine constants (:class:`GSimpleGA.GSimpleGA`)
@@ -276,6 +290,12 @@ CDefTournamentPoolSize = 2
 CDefScaleLinearMultiplier     = 1.2
 CDefScaleSigmaTruncMultiplier = 2.0
 CDefScalePowerLawFactor       = 1.0005
+CDefScaleBoltzMinTemp         = 1.0
+CDefScaleBoltzFactor          = 0.05
+# 40 temp. = 500 generations
+CDefScaleBoltzStart           = 40.0
+
+
 
 # - Population Defaults
 CDefPopSortType               = sortType["scaled"]

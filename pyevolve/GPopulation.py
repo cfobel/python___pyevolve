@@ -135,12 +135,60 @@ class GPopulation:
       self.scaleMethod.set(Consts.CDefPopScale)
       self.allSlots      = [self.scaleMethod]
 
+      self.internalParams = {}
+      self.multiProcessing = False
+
       # Statistics
       self.statted = False
       self.stats   = Statistics()
 
-   def async_eval(self):
-      pass
+   def setParams(self, **args):
+      """ Set the internal params
+
+      Example:
+         >>> population.setParams(parameter="value")
+
+      :param args: this params will saved in every chromosome for genetic op. use
+
+      .. versionadded: 0.6
+         The method `setParams'
+
+      """
+      self.internalParams.update(args)
+
+   def getParam(self, key, nvl=None):
+      """ Gets an internal parameter
+
+      Example:
+         >>> population.getParam("parameter")
+         "value"
+
+      :param key: the key of param
+      :param nvl: if the key doesn't exist, the nvl will be returned
+
+      .. versionadded: 0.6
+         The method `getParam'
+
+      """
+      return self.internalParams.get(key, nvl)
+      
+
+   def setMultiProcessing(self, flag=True):
+      """ Sets the flag to enable/disable the use of python multiprocessing module.
+      Use this option when you have more than one core on your CPU and when your
+      evaluation function is very slow.
+
+      :param flag: True (default) or False
+
+      .. warning:: Use this option only when your evaluation function is slow, se you
+                   will get a good tradeoff between the process communication speed and the
+                   parallel evaluation.
+
+      .. versionadded:: 0.6
+         The `setMultiProcessing` method.
+
+      """
+      self.multiProcessing = flag
    
    def setMinimax(minimax):
       """ Sets the population minimax
@@ -200,14 +248,18 @@ class GPopulation:
       if self.statted: return
       logging.debug("Running statistical calc.")
       raw_sum = 0
+      fit_sum = 0
 
       len_pop = len(self)
       for ind in xrange(len_pop):
          raw_sum += self[ind].score
+         fit_sum += self[ind].fitness
 
       self.stats["rawMax"] = max(self, key=key_raw_score).score
       self.stats["rawMin"] = min(self, key=key_raw_score).score
       self.stats["rawAve"] = raw_sum / float(len_pop)
+      self.stats["rawTot"] = raw_sum
+      self.stats["fitTot"] = fit_sum
       
       tmpvar = 0.0;
       for ind in xrange(len_pop):
@@ -297,7 +349,7 @@ class GPopulation:
       """
 
       # We have multiprocessing
-      if MULTI_PROCESSING:
+      if self.multiProcessing and MULTI_PROCESSING:
          pop_len = len(self)
          q = Queue()
          p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()
@@ -356,6 +408,8 @@ class GPopulation:
       pop.statted = self.statted
       pop.minimax = self.minimax
       pop.scaleMethod = self.scaleMethod
+      pop.internalParams = self.internalParams.copy()
+      pop.multiProcessing = self.multiProcessing
    
    def clear(self):
       """ Remove all individuals from population """

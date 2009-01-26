@@ -196,6 +196,23 @@ class GSimpleGA:
       ret+="\n"
       return ret
    
+   def setMultiProcessing(self, flag=True):
+      """ Sets the flag to enable/disable the use of python multiprocessing module.
+      Use this option when you have more than one core on your CPU and when your
+      evaluation function is very slow.
+
+      :param flag: True (default) or False
+
+      .. warning:: Use this option only when your evaluation function is slow, se you
+                   will get a good tradeoff between the process communication speed and the
+                   parallel evaluation.
+
+      .. versionadded:: 0.6
+         The `setMultiProcessing` method.
+
+      """
+      self.internalPop.setMultiProcessing(flag)
+
    def setDBAdapter(self, dbadapter):
       """ Sets the DB Adapter of the GA Engine
       

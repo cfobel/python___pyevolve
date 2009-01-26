@@ -79,3 +79,35 @@ def PowerLawScaling(pop):
       pop[i].fitness = f
 
 
+def BoltzmannScaling(pop):
+   """ Boltzmann scaling scheme. You can specify the **boltzTemperature** to the
+   population parameters, this parameter will set the start temperature. You
+   can specify the **boltzFactor** and the **boltzMin** parameters, the **boltzFactor**
+   is the value that the temperature will be subtracted and the **boltzMin** is the
+   mininum temperature of the scaling scheme.
+   
+   .. versionadded: 0.6
+      The `BoltzmannScaling` function.
+
+   """
+   boltz_temperature = pop.getParam("boltzTemperature", Consts.CDefScaleBoltzStart)
+   boltz_factor      = pop.getParam("boltzFactor", Consts.CDefScaleBoltzFactor)
+   boltz_min         = pop.getParam("boltzMin", Consts.CDefScaleBoltzMinTemp)
+
+   boltz_temperature-= boltz_factor
+   boltz_temperature = max(boltz_temperature, boltz_min)
+   pop.setParams(boltzTemperature=boltz_temperature)
+
+   boltz_e = []
+   avg = 0.0
+
+   for i in xrange(len(pop)):
+      val = math.exp(pop[i].score / (boltz_temperature))
+      boltz_e.append(val)
+      avg += val
+      
+   avg /= len(pop)
+
+   for i in xrange(len(pop)):
+      pop[i].fitness = boltz_e[i] / avg
+   

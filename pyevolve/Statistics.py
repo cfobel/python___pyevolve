@@ -24,6 +24,9 @@ class Statistics:
    **fitMax, fitMin, fitAve**
       Maximum, mininum and average of fitness scores
 
+   **rawTot, fitTot**
+      The total (sum) of raw scores and the fitness scores
+
    Example:
       >>> stats = ga_engine.getStatistics()
       >>> st["rawMax"]
@@ -41,7 +44,9 @@ class Statistics:
                               "rawVar"  : 0.0,
                               "fitMax"  : 0.0,
                               "fitMin"  : 0.0,
-                              "fitAve"  : 0.0 }
+                              "fitAve"  : 0.0,
+                              "fitTot"  : 0.0 ,
+                              "rawTot"  : 0.0 }
 
       self.descriptions = {   "rawMax" : "Maximum raw score",
                               "rawMin" : "Minimum raw score",
@@ -50,7 +55,9 @@ class Statistics:
                               "rawVar" : "Raw scores variance",
                               "fitMax" : "Maximum fitness",
                               "fitMin" : "Minimum fitness",
-                              "fitAve" : "Fitness average" }
+                              "fitAve" : "Fitness average",
+                              "fitTot" : "Total fitness",
+                              "rawTot" : "Total raw" }
 
    def __getitem__(self, key):
       """ Return the specific statistic by key """

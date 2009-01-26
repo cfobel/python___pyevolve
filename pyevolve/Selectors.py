@@ -44,16 +44,20 @@ def GUniformSelector(population, **args):
 def GTournamentSelector(population, **args):
    """ The Tournament Selector
    
-   :param args: accepts the *poolSize* parameter
+   It accepts the *tournamentPool* population parameter.
 
    .. note::
       the Tournament Selector uses the Roulette Wheel to
       pick individuals for the pool
 
+   .. versionchanged:: 0.6
+      Changed the parameter `poolSize` to the `tournamentPool`, now the selector
+      gets the pool size from the population.
+
    """
    tournament_pool = []
    choosen = None
-   poolSize = args.get("poolSize", Consts.CDefTournamentPoolSize)
+   poolSize = population.getParam("tournamentPool", Consts.CDefTournamentPoolSize)
 
    for i in xrange(poolSize):
       tournament_pool.append(GRouletteWheel(population, **args))
@@ -64,6 +68,32 @@ def GTournamentSelector(population, **args):
       choosen = max(tournament_pool, key=key_raw_score)
 
    return choosen
+
+def GTournamentAlternative(population, **args):
+   """ The alternative Tournament Selector
+   
+   This Tournament Selector don't uses the Roulette Wheel
+
+   It accepts the *tournamentPool* population parameter.
+
+   .. versionadded: 0.6
+      Added the GTournamentAlternative function.
+
+   """
+   choosen = None
+   best_measure = 0;
+   len_pop = len(population)
+   poolSize = population.getParam("tournamentPool", Consts.CDefTournamentPoolSize)
+
+   for i in xrange(poolSize):
+      tryit = population[random.randint(0, len_pop-1)]
+      measure = tryit.fitness if population.sortType == Consts.sortType["scaled"] else tryit.score
+      if measure > best_measure:
+         choosen = tryit
+         best_measure = measure
+
+   return choosen
+
 
 def GRouletteWheel(population, **args):
    """ The Roulette Wheel selector """
@@ -145,3 +175,13 @@ def GRouletteWheel_PrepareWheel(population):
                psum[i] /= float(psum[len_pop-1])
 
    return psum
+
+def GStochasticUniversalSampling(population):
+   """ Stochasit Universam Sampling Selector (SUS). """
+   population.statistics()
+   gap = population.stats["fitTot"]
+
+   point = random.random() * gap
+
+
+

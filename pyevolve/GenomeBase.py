@@ -90,7 +90,7 @@ class GenomeBase:
       return ret
 
    def setParams(self, **args):
-      """ Set the initializator params
+      """ Set the internal params
 
       Example:
          >>> genome.setParams(rangemin=0, rangemax=100, gauss_mu=0, gauss_sigma=1)
@@ -101,7 +101,7 @@ class GenomeBase:
       self.internalParams.update(args)
    
    def getParam(self, key, nvl=None):
-      """ Gets an initialization parameter
+      """ Gets an internal parameter
 
       Example:
          >>> genome.getParam("rangemax")
