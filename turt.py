@@ -10,8 +10,6 @@ import random
 
 imgOriginal = Image.open("monalisa_small.jpg")
 size_tuple = imgOriginal.size
-h2 = imgOriginal.histogram()
-
 
 def G1DListPolyMutator(genome, **args):
    if args["pmut"] <= 0.0: return 0
@@ -97,18 +95,11 @@ def createImage(individual):
    return imgInd   
 
 def eval_func(chromosome):
-   global imgOriginal, h2
+   global imgOriginal
    score = 0.0
 
    imgInd = createImage(chromosome)
-   
-   h1 = imgInd.histogram()
-   rms = math.sqrt(reduce(operator.add, map(lambda a,b: (a-b)**2, h1, h2))/len(h1))
 
-   return rms
-   ####################
-
-   imgInd = createImage(chromosome)
    oR, oG, oB = imgOriginal.split()
    nR, nG, nB = imgInd.split()
 
@@ -120,16 +111,14 @@ def eval_func(chromosome):
          dRed   = olR[x,y] - nlR[x,y]
          dGreen = olG[x,y] - nlG[x,y]
          dBlue  = olB[x,y] - nlB[x,y]
-     
          pixelFitness = dRed * dRed + dGreen * dGreen + dBlue * dBlue
-
          score += pixelFitness
 
    return score
 
 if __name__ == "__main__":
 
-   size = 50
+   size = 30
 
    genome = G1DList.G1DList(size)
    genome.evaluator.set(eval_func)
@@ -138,15 +127,15 @@ if __name__ == "__main__":
    genome.initializator.set(Initializators.G1DListInitializatorAllele)
    genome.mutator.set(G1DListPolyMutator)
 
-   pallele = PolygonAllele(size_tuple)
+   pallele = PolygonAllele(size_tuple, 80)
    alleleSet = GAllele.GAlleles([pallele], homogeneous=True)
    
    genome.setParams(allele=alleleSet)
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setGenerations(20000)
-   ga.setMutationRate(0.02)
+   ga.setMutationRate(0.2)
    ga.setCrossoverRate(0.9)
-   ga.setPopulationSize(100)
+   ga.setPopulationSize(50)
    ga.setMinimax(Consts.minimaxType["minimize"])
    ga.evolve(freq_stats=10)
 
