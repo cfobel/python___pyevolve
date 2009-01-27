@@ -8,6 +8,24 @@ import math
 import operator
 import random
 
+import gc
+
+def dump_garbage():
+   """
+   show us what's the garbage about
+   """
+     
+   # force collection
+   print "\nGARBAGE:"
+   gc.collect()
+
+   print "\nGARBAGE OBJECTS:"
+   for x in gc.garbage:
+      s = str(x)
+      if len(s) > 80: s = s[:80]
+      print type(x),"\n  ", s
+
+
 imgOriginal = Image.open("monalisa_small.jpg")
 size_tuple = imgOriginal.size
 
@@ -117,6 +135,9 @@ def eval_func(chromosome):
    return score
 
 if __name__ == "__main__":
+   gc.enable()
+   gc.set_debug(gc.DEBUG_LEAK)
+
 
    size = 20
 
@@ -138,6 +159,9 @@ if __name__ == "__main__":
    ga.setPopulationSize(50)
    ga.setMinimax(Consts.minimaxType["minimize"])
    ga.evolve(freq_stats=10)
+
+   dump_garbage()
+
 
    best =  ga.bestIndividual()
    a = createImage(best)
