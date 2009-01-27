@@ -141,6 +141,7 @@ if __name__ == "__main__":
 
    best =  ga.bestIndividual()
    a = createImage(best)
-   a.show()
+   a.save("turt.png")
+
 
 
