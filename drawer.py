@@ -293,6 +293,6 @@ if __name__ == "__main__":
 
    best =  ga.bestIndividual()
    imgCreate = createImage(best)
-   imgCreate.show()
+   imgCreate.save("drawer.png")
 
 
