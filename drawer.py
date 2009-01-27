@@ -270,7 +270,7 @@ def eval_func(chromosome):
 
 if __name__ == "__main__":
 
-   size = 150
+   size = 50
 
    genome = G1DListSafe(size)
    genome.evaluator.set(eval_func)
