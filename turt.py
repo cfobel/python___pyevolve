@@ -118,21 +118,21 @@ def eval_func(chromosome):
 
 if __name__ == "__main__":
 
-   size = 30
+   size = 20
 
    genome = G1DList.G1DList(size)
    genome.evaluator.set(eval_func)
 
-#   genome.crossover.set(Crossovers.G1DListCrossoverUniform)
+   genome.crossover.set(Crossovers.G1DListCrossoverUniform)
    genome.initializator.set(Initializators.G1DListInitializatorAllele)
    genome.mutator.set(G1DListPolyMutator)
 
-   pallele = PolygonAllele(size_tuple, 80)
+   pallele = PolygonAllele(size_tuple, 6)
    alleleSet = GAllele.GAlleles([pallele], homogeneous=True)
    
    genome.setParams(allele=alleleSet)
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(20000)
+   ga.setGenerations(50000)
    ga.setMutationRate(0.2)
    ga.setCrossoverRate(0.9)
    ga.setPopulationSize(50)
