@@ -308,6 +308,7 @@ CDefGAMutationRate   = 0.02
 CDefGACrossoverRate  = 0.9
 CDefGAPopulationSize = 80
 CDefGASelector       = Selectors.GRankSelector
+CDefGAElitismReplacement = 1
 
 # - This is general used by integer/real ranges defaults
 CDefRangeMin = 0

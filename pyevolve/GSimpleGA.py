@@ -163,6 +163,7 @@ class GSimpleGA:
       self.nGenerations = Consts.CDefGAGenerations
       self.pMutation    = Consts.CDefGAMutationRate
       self.pCrossover   = Consts.CDefGACrossoverRate
+      self.nElitismReplacement = Consts.CDefGAElitismReplacement
       self.setPopulationSize(Consts.CDefGAPopulationSize)
       self.minimax      = Consts.minimaxType["maximize"]
       self.elitism      = True
@@ -179,6 +180,32 @@ class GSimpleGA:
       self.currentGeneration = 0
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
+
+   def setElitismReplacement(self, numreplace):
+      """ Set the number of best individuals to copy to the next generation on the elitism
+
+      :param numreplace: the number of individuals
+      
+      .. versionadded:: 0.6
+         The *setElitismReplacement* method.
+
+      """
+      if numreplace < 1:
+         Util.raiseException("Replacement number must be >= 1", ValueError)
+      self.nElitismReplacement = numreplace
+
+
+   def setInteractiveMode(self, flag=True):
+      """ Enable/disable the interactive mode
+      
+      :param flag: True or False
+
+      .. versionadded: 0.6
+         The *setInteractiveMode* method.
+      
+      """
+      self.interactiveMode = flag
+
 
    def __repr__(self):
       """ The string representation of the GA Engine """
@@ -401,6 +428,7 @@ class GSimpleGA:
       newPop.evaluate()
 
       if self.elitism:
+         # use the nElitismReplacement
          logging.debug("Doing elitism.")
          if self.minimax == Consts.minimaxType["maximize"]:
             if self.internalPop.bestRaw().score > newPop.bestRaw().score:

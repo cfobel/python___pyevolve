@@ -127,6 +127,7 @@ class GPopulation:
       logging.debug("New population instance, %s class genomes.", genome.__class__.__name__)
       self.oneSelfGenome = genome
       self.internalPop   = []
+      self.internalPopRaw = []
       self.popSize       = 0
       self.sortType      = Consts.CDefPopSortType
       self.sorted        = False
@@ -283,16 +284,21 @@ class GPopulation:
       self.sort()
       return self.internalPop[index]
 
-   def bestRaw(self):
+   def bestRaw(self, index=0):
       """ Return the best raw score individual of population
 
+      :param index: the *index* best raw individual
       :rtype: the individual
+
+      .. versionadded:: 0.6
+         The parameter `index`.
       
       """
-      if self.minimax == Consts.minimaxType["minimize"]:
-         return min(self, key=key_raw_score)
+      if self.sortType == Consts.sortType["raw"]:
+         return self.internalPop[index]
       else:
-         return max(self, key=key_raw_score)
+         self.sort()
+         return self.internalPopRaw[index]
 
    def sort(self):
       """ Sort the population """
@@ -304,6 +310,8 @@ class GPopulation:
       else:
          self.scale()
          self.internalPop.sort(cmp=cmp_individual_scaled, reverse=rev)
+         self.internalPopRaw = self.internalPop[:]
+         self.internalPopRaw.sort(cmp=cmp_individual_raw, reverse=rev)
 
       self.sorted = True
 
