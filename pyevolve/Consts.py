@@ -349,7 +349,7 @@ CDefSQLiteDBName = "pyevolve.db"
 CDefSQLiteDBTable = "statistics"
 CDefSQLiteDBTablePop = "population"
 CDefSQLiteStatsGenFreq = 1
-CDefSQLiteStatsCommitFreq = 500
+CDefSQLiteStatsCommitFreq = 300
 
 # - DB Adapters URL Post defaults
 CDefURLPostStatsGenFreq = 100

@@ -431,11 +431,11 @@ class GSimpleGA:
          logging.debug("Doing elitism.")
          if self.minimax == Consts.minimaxType["maximize"]:
             for i in xrange(self.nElitismReplacement):
-               if self.internalPop.bestRaw(i).score > newPop.bestRaw().score:
+               if self.internalPop.bestRaw(i).score > newPop.bestRaw(i).score:
                   newPop[len(newPop)-1-i] = self.internalPop.bestRaw(i)
          elif self.minimax == Consts.minimaxType["minimize"]:
             for i in xrange(self.nElitismReplacement):
-               if self.internalPop.bestRaw(i).score < newPop.bestRaw().score:
+               if self.internalPop.bestRaw(i).score < newPop.bestRaw(i).score:
                   newPop[len(newPop)-1-i] = self.internalPop.bestRaw(i)
 
       self.internalPop = newPop

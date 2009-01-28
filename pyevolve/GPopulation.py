@@ -412,7 +412,6 @@ class GPopulation:
       """
       pop.popSize = self.popSize
       pop.sortType = self.sortType
-      pop.sorted = self.sorted
       pop.statted = self.statted
       pop.minimax = self.minimax
       pop.scaleMethod = self.scaleMethod
@@ -422,6 +421,7 @@ class GPopulation:
    def clear(self):
       """ Remove all individuals from population """
       del self.internalPop[:]
+      del self.internalPopRaw[:]
       self.__clear_flags()
       
    def clone(self):
