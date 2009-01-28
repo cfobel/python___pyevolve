@@ -39,3 +39,9 @@ What's new on the release |release|:
    
    Added the **fitTot** and the **rawTot** parameters to the :class:`Statistics.Statistics`
    class. See the class documentation for more information.
+
+**Elitism - replacement option**
+   
+   Added the method :meth:`GSimpleGA.GSimpleGA.setElitismReplacement`. This method is used to set
+   the number of individuals cloned on the elitism.
+
