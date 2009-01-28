@@ -6,6 +6,9 @@ If you have any question or suggestion, you can contact me at:
 
 christian.perone@gmail.com
 
+.. image:: imgs/brasil_flag.jpg
+
+
 Please use the word "pyevolve" in the the subject of mail.
 
 

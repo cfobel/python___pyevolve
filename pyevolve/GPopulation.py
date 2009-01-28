@@ -412,7 +412,6 @@ class GPopulation:
       """
       pop.popSize = self.popSize
       pop.sortType = self.sortType
-      pop.statted = self.statted
       pop.minimax = self.minimax
       pop.scaleMethod = self.scaleMethod
       pop.internalParams = self.internalParams.copy()

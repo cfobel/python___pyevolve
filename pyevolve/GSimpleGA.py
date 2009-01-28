@@ -217,6 +217,7 @@ class GSimpleGA:
       ret += "\tCrossover Rate:\t\t %.2f\n" % (self.pCrossover,)
       ret += "\tMinimax Type:\t\t %s\n" % (Consts.minimaxType.keys()[Consts.minimaxType.values().index(self.minimax)].capitalize(),)
       ret += "\tElitism:\t\t %s\n" % (self.elitism,)
+      ret += "\tElitism Replacement:\t %d\n" % (self.nElitismReplacement,)
       ret += "\tDB Adapter:\t\t %s\n" % (self.dbAdapter,)
       for slot in self.allSlots:
          ret+= "\t" + slot.__repr__()
@@ -385,7 +386,6 @@ class GSimpleGA:
       genomeDad = None
 
       newPop = self.internalPop.clone()
-      newPop.clear()
       logging.debug("Population was cloned.")
       
       size_iterate = len(self.internalPop)
@@ -406,11 +406,11 @@ class GSimpleGA:
                sister = genomeMom.clone()
                brother = genomeDad.clone()
 
+         sister.mutate(pmut=self.pMutation)
+         brother.mutate(pmut=self.pMutation)
+         
          newPop.internalPop.append(sister)
          newPop.internalPop.append(brother)
-
-         for lastInd in newPop.internalPop[-2:]:
-            lastInd.mutate(pmut=self.pMutation)
 
       if len(self.internalPop) % 2 != 0:
          genomeMom = self.select(popID=self.currentGeneration)
@@ -422,7 +422,10 @@ class GSimpleGA:
          else:
             sister = random.choice([genomeMom, genomeDad])
 
-         newPop.internalPop.append(sister.clone())
+            sisterClone = sister.clone()
+            sisterClone.mutate(pmut=self.pMutation)
+
+         newPop.internalPop.append(sisterClone)
 
       logging.debug("Evaluating the new created population.")
       newPop.evaluate()
@@ -477,6 +480,9 @@ class GSimpleGA:
 
       """
 
+      stopFlagCallback = False
+      stopFlagTerminationCriteria = False
+
       self.time_init = time()
 
       if self.dbAdapter: self.dbAdapter.open()
@@ -489,9 +495,6 @@ class GSimpleGA:
 
       try:      
          while not self.step():
-            stopFlagCallback = False
-            stopFlagTerminationCriteria = False
-
             if not self.stepCallback.isEmpty():
                 for it in self.stepCallback.applyFunctions(self):
                   stopFlagCallback = it
@@ -517,7 +520,6 @@ class GSimpleGA:
                logging.debug("Evolution stopped by Step Callback function !")
                print "\n\tEvolution stopped by Step Callback function !\n"
                break
-
 
             if self.interactiveMode:
 
