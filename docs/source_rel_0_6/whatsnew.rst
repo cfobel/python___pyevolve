@@ -1,5 +1,5 @@
 
-What's new on the release |release| ?
+What's new ?
 ============================================================
 
 What's new on the release |release|:
@@ -49,3 +49,7 @@ What's new on the release |release|:
 
    Added the method *resumeString* to all native chromosomes. This method returns a 
    small as possible string representation of the chromosome.
+
+**Optimizations and bug-fixes**
+
+   Added some general optimizations and bug-fixes.
