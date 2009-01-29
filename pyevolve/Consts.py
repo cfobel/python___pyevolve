@@ -48,6 +48,10 @@ General constants
 
    Maximum range. This constant is used as integer and real max/min.
 
+.. attribute:: CDefBroadcastAddress
+   
+   The broadcast address for UDP, 255.255.255.255
+
 
 Selection methods constants (:mod:`Selectors`)
 ----------------------------------------------------------------------------
@@ -358,3 +362,5 @@ CDefURLPostStatsGenFreq = 100
 CDefCSVFileName = "pyevolve.csv"
 CDefCSVFileStatsGenFreq = 1
 
+# Util Consts
+CDefBroadcastAddress = "255.255.255.255"
