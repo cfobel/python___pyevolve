@@ -169,6 +169,14 @@ class G1DList(GenomeBase):
       ret += "\tList:\t\t %s\n\n" % (self.genomeList,) 
       return ret
 
+   def resumeString(self):
+      """ Returns a resumed string representation of the Genome
+      
+      .. versionadded:: 0.6
+         The *resumeString* method.
+      """
+      return str(self.genomeList)
+
    def append(self, value):
       """ Appends an item to the list
       

@@ -178,6 +178,19 @@ class G2DList(GenomeBase):
       ret += "\n"
       return ret
 
+   def resumeString(self):
+      """ Returns a resumed string representation of the Genome
+      
+      .. versionadded:: 0.6
+         The *resumeString* method.
+      """
+      ret = ""
+      for line in self.genomeList:
+         for item in line:
+            ret += "[%s] " % (item)
+         ret += "\n"
+      return ret
+
    def clearList(self):
       """ Remove all genes from Genome """
       del self.genomeList[:]

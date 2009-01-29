@@ -214,6 +214,15 @@ class G1DBinaryString(GenomeBase):
       """ Remove all genes from Genome """
       del self.genomeString[:]
    
+   def resumeString(self):
+      """ Returns a resumed string representation of the Genome
+      
+      .. versionadded:: 0.6
+         The *resumeString* method.
+      """
+      return str(self.genomeString)
+
+
    def copy(self, g):
       """ Copy genome to 'g'
 

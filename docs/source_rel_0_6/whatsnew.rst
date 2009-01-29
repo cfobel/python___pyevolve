@@ -45,3 +45,7 @@ What's new on the release |release|:
    Added the method :meth:`GSimpleGA.GSimpleGA.setElitismReplacement`. This method is used to set
    the number of individuals cloned on the elitism.
 
+**String representation - resumeString**
+
+   Added the method *resumeString* to all native chromosomes. This method returns a 
+   small as possible string representation of the chromosome.
