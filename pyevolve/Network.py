@@ -13,6 +13,7 @@ import threading
 import socket
 import time
 import sys
+import Util
 
 def getMachineIP():
    """ Return all the IPs from current machine.
@@ -32,74 +33,120 @@ def getMachineIP():
    ips = [x[4][0] for x in addresses]
    return ips
 
-class UDPSocketBase:
-   def __init__(self, host, port, broadcast=True):
-      self.recvData = None
+
+
+class UDPThreadClient(threading.Thread):
+   def __init__(self, host, port, broadcast):
+      threading.Thread.__init__(self)
       self.host = host
       self.port = port
+      self.target_host = None
+      self.target_port = None
+      self.broadcast = broadcast
+      self.data = None
+      self.sentBytes = None
+      self.sentBytesLock = threading.Lock()
+
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-      self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+      #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
       if broadcast:
+         self.target_host = Consts.CDefBroadcastAddress
          self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
       self.sock.bind((host, port))     
-
-   def close(self):
-      self.sock.close()
-
-   def broadcast(self, data):
-      return self.sock.sendto(data, (Consts.CDefBroadcastAddress, self.port))
-
-   def getBroadcast(self):
-      self.data, self.sender = self.sock.recvfrom(1024)
-      return (self.sender[0], self.data)
-
-class UDPSocketThreadClient(UDPSocketBase, threading.Thread):
-   def __init__(self, host, port, name=None):
-      if name is not None:
-         thread_name = "UDPSocketThreadClient-%s" % name
-         threading.Thread.__init__(self, name=thread_name)
-      else:
-         threading.Thread.__init__(self)
-      
-      UDPSocketBase.__init__(self, host, port)
-      self.data = None
 
    def setData(self, data):
       self.data = data
 
+   def getData(self):
+      return self.data
+
+   def setTargetHost(self, host, port):
+      self.target_host = host
+      self.target_port = port
+
+   def close(self):
+      self.sock.close()
+
+   def getSentBytes(self):
+      sent = None
+      self.sentBytesLock.acquire()
+      if self.sentBytes is None:
+         Util.raiseException('Bytes sent is None')
+      else: sent = self.sentBytes
+      self.sentBytesLock.release()
+      return sent
+
+   def send(self):
+      if self.broadcast:
+         return self.sock.sendto(self.data, (Consts.CDefBroadcastAddress, self.target_port))
+      else:
+         return self.sock.sendto(self.data, (self.target_host, self.target_port))
+   
    def run(self):
-      print "UDPSocketThreadClient: broadcasting %d bytes... " % len(self.data),
-      ret = self.broadcast(self.data)
-      print "%d bytes sent !" % ret
+      if self.data is None:
+         Util.raiseException('You must set the data with setData method', ValueError)
+      if self.broadcast and self.target_port is None:
+         Util.raiseException('To use the broadcast, you must specify the target port', ValueError)
+      if not self.broadcast and ((not self.target_host) or (not self.target_port)):
+         Util.raiseException('You must specify the target host and port with setTargetHost method', ValueError)
+      self.sentBytesLock.acquire()
+      self.sentBytes = self.send()
+      self.sentBytesLock.release()
       self.close()
 
-class UDPSocketThreadServer(UDPSocketBase, threading.Thread):
+class UDPThreadServer(threading.Thread):
    def __init__(self, host, port):
       threading.Thread.__init__(self)
-      UDPSocketBase.__init__(self, host, port)
-      self.recvData = []
-      self.dataLock = threading.Lock()
+      self.recvPool = []
+      self.recvPoolLock = threading.Lock()
+      self.bufferSize = 4096
+      self.host = host
+      self.port = port
 
-   def run(self):
-      while True:
-         data = self.getBroadcast()
-         self.dataLock.acquire()
-         self.recvData.append(data)
-         self.dataLock.release()
+      self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+      self.sock.bind((host, port))     
+
+   def isReady(self):
+      self.recvPoolLock.acquire()
+      ret = True if len(self.recvPool) >= 1 else False
+      self.recvPoolLock.release()
+      return ret
+    
+   def poolLength(self):
+      self.recvPoolLock.acquire()
+      ret = len(self.recvPool)
+      self.recvPoolLock.release()
+      return ret
 
    def popPool(self):
-      self.dataLock.acquire()
-      if len(self.recvData) >= 1:
-         data = self.recvData.pop()
-      else: data = None
-      self.dataLock.release()
-      return data
+      self.recvPoolLock.acquire()
+      ret = self.recvPool.pop()
+      self.recvPoolLock.release()
+      return ret
 
-   def lenPool(self):
-      self.dataLock.acquire()
-      length = len(self.recvData)
-      self.dataLock.release()
-      return length
+   def close(self):
+      self.sock.close()
+
+   def setBufferSize(self, size):
+      self.bufferSize = size
+
+   def getBufferSize(self):
+      return self.bufferSize
+
+   def getData(self):
+      try:
+         data, sender = self.sock.recvfrom(self.bufferSize)
+      except socket.timeout, a: return None
+      return (sender[0], data)
+      
+   def run(self):
+      while True:
+         data = self.getData()
+         if data == None: continue
+         self.recvPoolLock.acquire()
+         self.recvPool.append(data)
+         self.recvPoolLock.release()
       
 
 if __name__ == "__main__":
@@ -107,19 +154,25 @@ if __name__ == "__main__":
    myself = getMachineIP()
 
    if arg == "server":
-      s = UDPSocketThreadServer(myself[0], 666)
+      s = UDPThreadServer('', 666)
       s.setDaemon(True)
       s.start()
-      data = s.popPool()
-      while data is None:
-         data = s.popPool()
-         if data is not None:
-            print "Recv: %s - %s" % (data[0], data[1])
-
+      
+      while True:
+         print ".",
+         time.sleep(10)
+         if s.isReady():
+            item = s.popPool()
+            print item
+ 
    elif arg == "client":
-      s = UDPSocketThreadClient(myself[0], 666)
+      print "Binding on %s..." % myself[0]
+      s = UDPThreadClient(myself[0], 1500, False)
       s.setData("sldkfslfdk")
+      s.setTargetHost(myself[0], 666)
       s.start()
+      s.join()
+      print s.getSentBytes()
       
 
    print "end..."
