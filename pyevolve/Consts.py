@@ -52,7 +52,6 @@ General constants
    
    The broadcast address for UDP, 255.255.255.255
 
-
 Selection methods constants (:mod:`Selectors`)
 ----------------------------------------------------------------------------
 

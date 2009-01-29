@@ -127,6 +127,9 @@ def getMachineIP():
 
    :rtype: a python list with the string IPs
 
+   .. versionadded:: 0.6
+      The *getMachineIP* function.
+
    """
    hostname = socket.gethostname()
    addresses = socket.getaddrinfo(hostname, None)
