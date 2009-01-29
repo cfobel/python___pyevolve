@@ -24,9 +24,6 @@ def getMachineIP():
 
    :rtype: a python list with the string IPs
 
-   .. versionadded:: 0.6
-      The *getMachineIP* function.
-
    """
    hostname = socket.gethostname()
    addresses = socket.getaddrinfo(hostname, None)
@@ -36,6 +33,23 @@ def getMachineIP():
 
 
 class UDPThreadClient(threading.Thread):
+   """ The UDP client thread class.
+
+   This class is a thread to serve as Pyevolve client on the UDP
+   datagrams, it is used to send data over network lan/wan.
+
+   Example:
+      >>> s = Network.UDPThreadClient('192.168.0.2', 1500, False)
+      >>> s.setData("Test data")
+      >>> s.setTargetHost('192.168.0.50', 666)
+      >>> s.start()
+      >>> s.join()
+
+   :param host: the hostname to bind the socket on sender (this is not the target host)
+   :param port: the sender port (this is not the target port)
+   :param broadcast: True or False
+
+   """
    def __init__(self, host, port, broadcast):
       threading.Thread.__init__(self)
       self.host = host
@@ -55,19 +69,44 @@ class UDPThreadClient(threading.Thread):
       self.sock.bind((host, port))     
 
    def setData(self, data):
+      """ Set the data to send
+
+      :param data: the data to send
+
+      """
       self.data = data
 
    def getData(self):
+      """ Get the data to send
+
+      :rtype: data to send
+
+      """
       return self.data
 
    def setTargetHost(self, host, port):
+      """ Set the host/port of the target, the destination
+
+      :param host: the target host
+      :param port: the target port
+
+      .. note:: the host will be ignored when using broadcast mode
+      
+      """
       self.target_host = host
       self.target_port = port
 
    def close(self):
+      """ Close the internal socket """
       self.sock.close()
 
    def getSentBytes(self):
+      """ Returns the number of sent bytes. The use of this method makes sense 
+      when you already have sent the data
+         
+      :rtype: sent bytes
+
+      """
       sent = None
       self.sentBytesLock.acquire()
       if self.sentBytes is None:
@@ -77,12 +116,14 @@ class UDPThreadClient(threading.Thread):
       return sent
 
    def send(self):
+      """ Send the data; this method will detect if is a broadcast or unicast. """
       if self.broadcast:
          return self.sock.sendto(self.data, (Consts.CDefBroadcastAddress, self.target_port))
       else:
          return self.sock.sendto(self.data, (self.target_host, self.target_port))
    
    def run(self):
+      """ Method called when you call *.start()* of the thread """
       if self.data is None:
          Util.raiseException('You must set the data with setData method', ValueError)
       if self.broadcast and self.target_port is None:
@@ -95,67 +136,129 @@ class UDPThreadClient(threading.Thread):
       self.close()
 
 class UDPThreadServer(threading.Thread):
-   def __init__(self, host, port):
+   """ The UDP server thread class.
+
+   This class is a thread to serve as Pyevolve server on the UDP
+   datagrams, it is used to receive data from network lan/wan.
+
+   Example:
+      >>> s = UDPThreadServer("192.168.0.2", 666)
+      >>> s.start()
+      >>> s.shutdown()
+
+   :param host: the host to bind the server
+   :param port: the server port to bind
+   :param timeout: the socket timeout
+
+   .. note:: this thread implements a pool to keep the received data
+
+   """
+   def __init__(self, host, port, timeout=5):
       threading.Thread.__init__(self)
       self.recvPool = []
       self.recvPoolLock = threading.Lock()
       self.bufferSize = 4096
       self.host = host
       self.port = port
+      self.timeout = timeout
+      self.doshutdown = False
 
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
       #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
       self.sock.bind((host, port))     
+      self.sock.settimeout(self.timeout)
+
+   def shutdown(self):
+      """  Shutdown the server thread, when called, this method will stop
+      the thread on the next socket timeout """
+      self.doshutdown = True
 
    def isReady(self):
+      """ Returns True when there is data on the pool or False when not
+         
+      :rtype: boolean
+      
+      """
       self.recvPoolLock.acquire()
       ret = True if len(self.recvPool) >= 1 else False
       self.recvPoolLock.release()
       return ret
     
    def poolLength(self):
+      """ Returns the size of the pool
+      
+      :rtype: integer
+
+      """
       self.recvPoolLock.acquire()
       ret = len(self.recvPool)
       self.recvPoolLock.release()
       return ret
 
    def popPool(self):
+      """ Return the last data received on the pool
+
+      :rtype: object
+
+      """
       self.recvPoolLock.acquire()
       ret = self.recvPool.pop()
       self.recvPoolLock.release()
       return ret
 
    def close(self):
+      """ Closes the internal socket """
       self.sock.close()
 
    def setBufferSize(self, size):
+      """ Sets the receive buffer size
+      
+      :param size: integer
+
+      """
       self.bufferSize = size
 
    def getBufferSize(self):
+      """ Gets the current receive buffer size
+
+      :rtype: integer
+
+      """
       return self.bufferSize
 
    def getData(self):
+      """ Calls the socket *recvfrom* method and waits for the data,
+      when the data is received, the method will return a tuple
+      with the IP of the sender and the data received. When a timeout
+      exception occurs, the method return None.
+      
+      :rtype: tuple (sender ip, data) or None when timeout exception
+
+      """
       try:
          data, sender = self.sock.recvfrom(self.bufferSize)
       except socket.timeout, a: return None
       return (sender[0], data)
       
    def run(self):
+      """ Called when the thread is started by the user. This method
+      is the main of the thread, when called, it will enter in loop
+      to wait data or shutdown when needed.
+      """
       while True:
+         if self.doshutdown: break
          data = self.getData()
          if data == None: continue
          self.recvPoolLock.acquire()
          self.recvPool.append(data)
          self.recvPoolLock.release()
-      
 
 if __name__ == "__main__":
    arg = sys.argv[1]
    myself = getMachineIP()
 
    if arg == "server":
-      s = UDPThreadServer('', 666)
-      s.setDaemon(True)
+      s = UDPThreadServer(myself[0], 666)
       s.start()
       
       while True:
@@ -164,11 +267,15 @@ if __name__ == "__main__":
          if s.isReady():
             item = s.popPool()
             print item
- 
+         time.sleep(4)
+         s.shutdown()
+         break
+
+
    elif arg == "client":
       print "Binding on %s..." % myself[0]
       s = UDPThreadClient(myself[0], 1500, False)
-      s.setData("sldkfslfdk")
+      s.setData("dsfssdfsfddf")
       s.setTargetHost(myself[0], 666)
       s.start()
       s.join()
