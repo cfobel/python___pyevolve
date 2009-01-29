@@ -15,7 +15,6 @@ import Consts
 import Util
 import random
 import logging
-import Network
 from time import time
 from types import BooleanType
 from sys import exit as sys_exit
@@ -493,22 +492,9 @@ class GSimpleGA:
       self.internalPop.sort()
       logging.debug("Starting loop over evolutionary algorithm.")
 
-
-      myself = Network.getMachineIP()
-      udp_thread = Network.UDPThreadServer(myself[0], 666)
-      udp_thread.setDaemon(True)
-      udp_thread.start()
-      data_udp = []
-
       try:      
          while not self.step():
 
-            if self.currentGeneration % 20 == 0:
-               while udp_thread.isReady():
-                  data_udp.append(udp_thread.popPool())
-               print "Data: %s" % data_udp
-
- 
             if not self.stepCallback.isEmpty():
                 for it in self.stepCallback.applyFunctions(self):
                   stopFlagCallback = it
