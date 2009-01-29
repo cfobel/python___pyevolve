@@ -153,6 +153,8 @@ class GenomeBase:
 
       :param g: the destination genome      
 
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
       """
       g.score = self.score
       g.fitness = self.fitness
@@ -168,6 +170,8 @@ class GenomeBase:
 
       :rtype: the clone genome   
 
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
       """
       newcopy = GenomeBase()
       self.copy(newcopy)
