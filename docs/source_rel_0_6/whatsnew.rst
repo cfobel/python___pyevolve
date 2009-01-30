@@ -53,3 +53,9 @@ What's new on the release |release|:
 **Optimizations and bug-fixes**
 
    Added some general optimizations and bug-fixes.
+
+**The Network module - lan/wan networking**
+   
+   Added the :mod:`Network` module, this module is used to keep all the
+   networking related classes, currently it contains the threaded UDP client/server.
+   
