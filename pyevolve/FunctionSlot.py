@@ -60,8 +60,8 @@ class FunctionSlot:
          .. versionadded:: 0.6
             The __iadd__ method.
       """
-        self.funcList.append(func)
-        return self
+      self.funcList.append(func)
+      return self
 
    def __getitem__(self, index):
       """ Used to retrieve some slot function index """
