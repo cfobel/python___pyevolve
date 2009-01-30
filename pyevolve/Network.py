@@ -143,18 +143,23 @@ class UDPThreadServer(threading.Thread):
    datagrams, it is used to receive data from network lan/wan.
 
    Example:
-      >>> s = UDPThreadServer("192.168.0.2", 666)
+      >>> s = UDPThreadServer("192.168.0.2", 666, 10)
       >>> s.start()
       >>> s.shutdown()
 
    :param host: the host to bind the server
    :param port: the server port to bind
+   :param poolSize: the size of the server pool
    :param timeout: the socket timeout
 
-   .. note:: this thread implements a pool to keep the received data
+   .. note:: this thread implements a pool to keep the received data,
+             the *poolSize* parameter specifies how much individuals
+             we must keep on the pool until the *popPool* method 
+             is called; when the pool is full, the sever will
+             discard the received individuals.
 
    """
-   def __init__(self, host, port, timeout=5):
+   def __init__(self, host, port, poolSize, timeout=5):
       threading.Thread.__init__(self)
       self.recvPool = []
       self.recvPoolLock = threading.Lock()
@@ -163,6 +168,7 @@ class UDPThreadServer(threading.Thread):
       self.port = port
       self.timeout = timeout
       self.doshutdown = False
+      self.poolSize = 10
 
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
       #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -247,11 +253,23 @@ class UDPThreadServer(threading.Thread):
       to wait data or shutdown when needed.
       """
       while True:
+         # Shutdown called
          if self.doshutdown: break
+
+         # Get the data
          data = self.getData()
+
+         # The pool is full
+         if self.poolLength() >= self.poolSize:
+            continue
+
+         # There is no data received
          if data == None: continue
+
+         # It's a packet from myself
          if data[0] == self.host:
             continue
+         
          self.recvPoolLock.acquire()
          self.recvPool.append(data)
          self.recvPoolLock.release()
