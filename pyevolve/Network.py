@@ -14,6 +14,7 @@ import socket
 import time
 import sys
 import Util
+import cPickle, zlib
 
 def getMachineIP():
    """ Return all the IPs from current machine.
@@ -249,9 +250,17 @@ class UDPThreadServer(threading.Thread):
          if self.doshutdown: break
          data = self.getData()
          if data == None: continue
+         if data[0] == self.host:
+            continue
          self.recvPoolLock.acquire()
          self.recvPool.append(data)
          self.recvPoolLock.release()
+
+
+def pickleObject(obj):
+   pickled = cPickle.dumps(obj)
+   pickled_zlib = zlib.compress(pickled, 9)
+   return pickled_zlib
 
 if __name__ == "__main__":
    arg = sys.argv[1]
