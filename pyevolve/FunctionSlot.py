@@ -37,6 +37,9 @@ class FunctionSlot:
    In the above example, the function *eval_main* will be called with 90% of
    probability and the *eval_sec* will be called with 30% of probability.
 
+   There are another way to add functions too:
+      >>> genome.evaluator += eval_func
+
    :param name: the slot name
    :param rand_apply: if True, just one of the functions in the slot
                       will be applied, this function is randomly picked based
@@ -50,6 +53,15 @@ class FunctionSlot:
       self.funcWeights = []
       self.slotName = name
       self.rand_apply = rand_apply
+
+   def __iadd__(self, func):
+      """ To add more functions using the += operator
+      
+         .. versionadded:: 0.6
+            The __iadd__ method.
+      """
+        self.funcList.append(func)
+        return self
 
    def __getitem__(self, index):
       """ Used to retrieve some slot function index """
