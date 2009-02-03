@@ -10,7 +10,6 @@ choosing random data.
 """
 
 from random import randint as rand_randint, uniform as rand_uniform, choice as rand_choice
-import logging
 import Util
 
 #############################

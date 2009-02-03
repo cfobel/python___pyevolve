@@ -9,7 +9,7 @@ This module have the *selection methods*, like roulette wheel, tournament, ranki
 
 import random
 import Consts
-from GPopulation import key_raw_score, key_fitness_score
+from Util import key_raw_score, key_fitness_score
 
 def GRankSelector(population, **args):
    """ The Rank Selector """

@@ -11,8 +11,6 @@ To use this mode, the parameter *interactiveMode* must be enabled in the
 :class:`GSimpleGA.GSimpleGA`.
 
 """
-import Util
-
 try:
    print "Loading module pylab (matplotlib)...",
    import pylab
