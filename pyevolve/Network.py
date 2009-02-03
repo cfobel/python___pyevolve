@@ -9,12 +9,14 @@ In this module you'll find all the network related implementation
    The *Network* module.
 
 """
+from __future__ import with_statement
 import threading
 import socket
 import time
 import sys
 import Util
 import cPickle, zlib
+import Consts
 
 def getMachineIP():
    """ Return all the IPs from current machine.
@@ -109,11 +111,10 @@ class UDPThreadClient(threading.Thread):
 
       """
       sent = None
-      self.sentBytesLock.acquire()
-      if self.sentBytes is None:
-         Util.raiseException('Bytes sent is None')
-      else: sent = self.sentBytes
-      self.sentBytesLock.release()
+      with self.sentBytesLock:
+         if self.sentBytes is None:
+            Util.raiseException('Bytes sent is None')
+         else: sent = self.sentBytes
       return sent
 
    def send(self):
@@ -131,9 +132,9 @@ class UDPThreadClient(threading.Thread):
          Util.raiseException('To use the broadcast, you must specify the target port', ValueError)
       if not self.broadcast and ((not self.target_host) or (not self.target_port)):
          Util.raiseException('You must specify the target host and port with setTargetHost method', ValueError)
-      self.sentBytesLock.acquire()
-      self.sentBytes = self.send()
-      self.sentBytesLock.release()
+
+      with self.sentBytesLock:
+         self.sentBytes = self.send()
       self.close()
 
 class UDPThreadServer(threading.Thread):
@@ -186,9 +187,8 @@ class UDPThreadServer(threading.Thread):
       :rtype: boolean
       
       """
-      self.recvPoolLock.acquire()
-      ret = True if len(self.recvPool) >= 1 else False
-      self.recvPoolLock.release()
+      with self.recvPoolLock:
+         ret = True if len(self.recvPool) >= 1 else False
       return ret
     
    def poolLength(self):
@@ -197,9 +197,8 @@ class UDPThreadServer(threading.Thread):
       :rtype: integer
 
       """
-      self.recvPoolLock.acquire()
-      ret = len(self.recvPool)
-      self.recvPoolLock.release()
+      with self.recvPoolLock:
+         ret = len(self.recvPool)
       return ret
 
    def popPool(self):
@@ -208,9 +207,8 @@ class UDPThreadServer(threading.Thread):
       :rtype: object
 
       """
-      self.recvPoolLock.acquire()
-      ret = self.recvPool.pop()
-      self.recvPoolLock.release()
+      with self.recvPoolLock:
+         ret = self.recvPool.pop()
       return ret
 
    def close(self):
@@ -253,31 +251,34 @@ class UDPThreadServer(threading.Thread):
       to wait data or shutdown when needed.
       """
       while True:
-         # Shutdown called
-         if self.doshutdown: break
-
          # Get the data
          data = self.getData()
-
+         # Shutdown called
+         if self.doshutdown: break
          # The pool is full
          if self.poolLength() >= self.poolSize:
             continue
-
          # There is no data received
          if data == None: continue
-
          # It's a packet from myself
          if data[0] == self.host:
             continue
-         
-         self.recvPoolLock.acquire()
-         self.recvPool.append(data)
-         self.recvPoolLock.release()
+         with self.recvPoolLock:
+            self.recvPool.append(data)
 
 
-def pickleObject(obj):
+def pickleAndCompress(obj, level=9):
+   """ Pickles the object and compress the dumped string with zlib
+   
+      :param obj: the object to be pickled
+      :param level: the compression level, 9 is the best.
+
+   .. versionadded:: 0.6
+      The *pickleAndCompress* function
+
+   """
    pickled = cPickle.dumps(obj)
-   pickled_zlib = zlib.compress(pickled, 9)
+   pickled_zlib = zlib.compress(pickled, level)
    return pickled_zlib
 
 if __name__ == "__main__":

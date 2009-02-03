@@ -34,6 +34,15 @@ class GAlleles:
       self.allele_list.extend(allele_list)
       self.homogeneous = homogeneous
      
+   def __iadd__(self, allele):
+      """ To add more alleles using the += operator
+      
+         .. versionadded:: 0.6
+            The __iadd__ method.
+      """
+      self.add(allele)
+      return self
+
    def add(self, allele):
       """ Appends one allele to the alleles list
       

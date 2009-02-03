@@ -114,11 +114,28 @@ class G1DList(GenomeBase):
       self.mutator.set(Consts.CDefG1DListMutator)
       self.crossover.set(Consts.CDefG1DListCrossover)
 
+   def __iadd__(self, item):
+      """ To add more items using the += operator
+      
+         .. versionadded:: 0.6
+            The __iadd__ method.
+      """
+      self.genomeList.append(item)
+      return self
+
    def __eq__(self, other):
       """ Compares one chromosome with another """
       cond1 = (self.genomeList == other.genomeList)
       cond2 = (self.listSize   == other.listSize)
       return True if cond1 and cond2 else False
+
+   def __contains__(self, value):
+      """ Used on: *value in genome*
+      
+      .. versionadded:: 0.6
+         The *__contains__* method
+      """
+      return value in self.genomeList
 
    def __mul__(self, other):
       """ Multiply every element of G1DList by "other" """
@@ -214,3 +231,13 @@ class G1DList(GenomeBase):
       newcopy = G1DList(self.listSize)
       self.copy(newcopy)
       return newcopy
+
+if __name__ == "__main__":
+   print "Testing G1DList genome..."
+   genome = G1DList(20)
+   for i in xrange(genome.listSize):
+      genome += i
+   print (3 in genome)
+
+
+   
