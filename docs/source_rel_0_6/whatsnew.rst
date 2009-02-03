@@ -59,3 +59,8 @@ What's new on the release |release|:
    Added the :mod:`Network` module, this module is used to keep all the
    networking related classes, currently it contains the threaded UDP client/server.
    
+
+**The Migration module - distributed GA**
+   
+   Added the :mod:`Migration` module, this module is used to control the
+   migration of the distributed GA.

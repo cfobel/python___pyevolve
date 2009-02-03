@@ -11,8 +11,6 @@ use, like list item swap, random utilities and etc.
 from random import random as rand_random
 from sys import platform as sys_platform
 import logging
-import Consts
-
 
 if sys_platform[:5] == "linux":
    import sys, termios
@@ -114,5 +112,157 @@ def raiseException(message, expt=None):
       raise expt, message
 
 
+def key_raw_score(individual):
+   """ A key function to return raw score
+
+   :param individual: the individual instance
+   :rtype: the individual raw score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.score
+
+def key_fitness_score(individual):
+   """ A key function to return fitness score, used by max()/min()
+
+   :param individual: the individual instance
+   :rtype: the individual fitness score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.fitness
+
+def cmp_individual_raw(a, b):
+   """ Compares two individual raw scores
+
+   Example:
+      >>> GPopulation.cmp_individual_raw(a, b)
+   
+   :param a: the A individual instance
+   :param b: the B individual instance
+   :rtype: 0 if the two individuals raw score are the same,
+           -1 if the B individual raw score is greater than A and
+           1 if the A individual raw score is greater than B.
+
+   .. note:: this function is used to sorte the population individuals
+
+   """
+   if a.score < b.score: return -1
+   if a.score > b.score: return 1
+   return 0
+   
+def cmp_individual_scaled(a, b):
+   """ Compares two individual fitness scores, used for sorting population
+
+   Example:
+      >>> GPopulation.cmp_individual_scaled(a, b)
+   
+   :param a: the A individual instance
+   :param b: the B individual instance
+   :rtype: 0 if the two individuals fitness score are the same,
+           -1 if the B individual fitness score is greater than A and
+           1 if the A individual fitness score is greater than B.
+
+   .. note:: this function is used to sorte the population individuals
+
+   """
+   if a.fitness < b.fitness: return -1
+   if a.fitness > b.fitness: return 1
+   return 0
 
 
+class Graph:
+   """ The Graph class
+
+   Example:
+      >>> g = Graph()
+      >>> g.addEdge("a", "b")
+      >>> g.addEdge("b", "c")
+      >>> for node in g:
+      ...    print node
+      a
+      b
+      c
+   
+   .. versionadded:: 0.6
+      The *Graph* class.
+   """
+
+   def __init__(self):
+      """ The constructor """
+      self.adjacent = {}
+
+   def __iter__(self):
+      """ Returns an iterator to the all graph elements """
+      return iter(self.adjacent)
+
+   def addNode(self, node):
+      """ Add the node
+
+      :param node: the node to add
+      """
+      if node not in self.adjacent:
+         self.adjacent[node] = {}
+
+   def __iadd__(self, node):
+      """ Add a node using the += operator """
+      self.addNode(node)
+      return self
+
+   def addEdge(self, a, b):
+      """ Add an edge between two nodes, if the nodes
+      doesn't exists, they will be created
+      
+      :param a: the first node
+      :param b: the second node
+      """
+      if a not in self.adjacent: 
+        self.adjacent[a] = {}
+
+      if b not in self.adjacent: 
+         self.adjacent[b] = {}
+
+      self.adjacent[a][b] = True
+      self.adjacent[b][a] = True
+
+   def getNodes(self):
+      """ Returns all the current nodes on the graph
+      
+      :rtype: the list of nodes
+      """
+      return self.adjacent.keys()
+
+   def reset(self):
+      """ Deletes all nodes of the graph """
+      self.adjacent.clear() 
+
+   def getNeighbors(self, node):
+      """ Returns the neighbors of the node
+      
+      :param node: the node
+      """
+      return self.adjacent[node].keys()
+
+   def __getitem__(self, node):
+      """ Returns the adjacent nodes of the node """
+      return self.adjacent[node].keys()
+
+   def __repr__(self):
+      ret =  "- Graph\n"
+      ret += "\tNode list:\n"
+      for node in self:
+         ret += "\t\tNode [%s] = %s\n" % (node, self.getNeighbors(node))
+      return ret         
+      
+
+if __name__ == "__main__":
+   g = Graph()
+   g.addEdge(("127.0.0.1", 666), ("127.0.0.2", 666))
+   g.addEdge(("127.0.0.3", 666), ("127.0.0.2", 666))
+   g.addEdge(("127.0.0.1", 666), ("127.0.0.5", 666))
+   
+   print g
+
+   

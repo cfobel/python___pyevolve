@@ -14,6 +14,7 @@ Contents:
    module_const
    module_util
    module_network
+   module_migration
    module_interaction
    module_dbadapters
    module_functionslot

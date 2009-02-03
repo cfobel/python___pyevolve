@@ -33,16 +33,91 @@ def getMachineIP():
    ips = [x[4][0] for x in addresses]
    return ips
 
-
-
-class UDPThreadClient(threading.Thread):
-   """ The UDP client thread class.
+class UDPThreadBroadcastClient(threading.Thread):
+   """ The Broadcast UDP client thread class.
 
    This class is a thread to serve as Pyevolve client on the UDP
    datagrams, it is used to send data over network lan/wan.
 
    Example:
-      >>> s = Network.UDPThreadClient('192.168.0.2', 1500, False)
+      >>> s = Network.UDPThreadClient('192.168.0.2', 1500, 666)
+      >>> s.setData("Test data")
+      >>> s.start()
+      >>> s.join()
+
+   :param host: the hostname to bind the socket on sender (this is NOT the target host)
+   :param port: the sender port (this is NOT the target port)
+   :param target_port: the destination port target
+
+   """
+   def __init__(self, host, port, target_port):
+      threading.Thread.__init__(self)
+      self.host = host
+      self.port = port
+      self.targetPort = target_port
+      self.data = None
+      self.sentBytes = None
+      self.sentBytesLock = threading.Lock()
+
+      self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+      self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+      self.sock.bind((host, port))     
+
+   def setData(self, data):
+      """ Set the data to send
+
+      :param data: the data to send
+
+      """
+      self.data = data
+
+   def getData(self):
+      """ Get the data to send
+
+      :rtype: data to send
+
+      """
+      return self.data
+
+   def close(self):
+      """ Close the internal socket """
+      self.sock.close()
+
+   def getSentBytes(self):
+      """ Returns the number of sent bytes. The use of this method makes sense 
+      when you already have sent the data
+         
+      :rtype: sent bytes
+
+      """
+      sent = None
+      with self.sentBytesLock:
+         if self.sentBytes is None:
+            Util.raiseException('Bytes sent is None')
+         else: sent = self.sentBytes
+      return sent
+
+   def send(self):
+      """ Broadcasts the data """
+      return self.sock.sendto(self.data, (Consts.CDefBroadcastAddress, self.targetPort))
+   
+   def run(self):
+      """ Method called when you call *.start()* of the thread """
+      if self.data is None:
+         Util.raiseException('You must set the data with setData method', ValueError)
+
+      with self.sentBytesLock:
+         self.sentBytes = self.send()
+      self.close()
+
+class UDPThreadUnicastClient(threading.Thread):
+   """ The Unicast UDP client thread class.
+
+   This class is a thread to serve as Pyevolve client on the UDP
+   datagrams, it is used to send data over network lan/wan.
+
+   Example:
+      >>> s = Network.UDPThreadClient('192.168.0.2', 1500)
       >>> s.setData("Test data")
       >>> s.setTargetHost('192.168.0.50', 666)
       >>> s.start()
@@ -50,25 +125,19 @@ class UDPThreadClient(threading.Thread):
 
    :param host: the hostname to bind the socket on sender (this is not the target host)
    :param port: the sender port (this is not the target port)
-   :param broadcast: True or False
 
    """
-   def __init__(self, host, port, broadcast):
+   def __init__(self, host, port):
       threading.Thread.__init__(self)
       self.host = host
       self.port = port
-      self.target_host = None
-      self.target_port = None
-      self.broadcast = broadcast
+      self.target = []
       self.data = None
       self.sentBytes = None
       self.sentBytesLock = threading.Lock()
 
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
       #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-      if broadcast:
-         self.target_host = Consts.CDefBroadcastAddress
-         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
       self.sock.bind((host, port))     
 
    def setData(self, data):
@@ -94,10 +163,17 @@ class UDPThreadClient(threading.Thread):
       :param port: the target port
 
       .. note:: the host will be ignored when using broadcast mode
-      
       """
-      self.target_host = host
-      self.target_port = port
+      del self.target[:]
+      self.target.append((host, port))
+
+   def setMultipleTargetHost(self, address_list):
+      """ Sets multiple host/port targets, the destinations
+      
+      :param address_list: a list with tuples (ip, port)
+      """
+      del self.target[:]
+      self.target = address_list
 
    def close(self):
       """ Close the internal socket """
@@ -119,19 +195,17 @@ class UDPThreadClient(threading.Thread):
 
    def send(self):
       """ Send the data; this method will detect if is a broadcast or unicast. """
-      if self.broadcast:
-         return self.sock.sendto(self.data, (Consts.CDefBroadcastAddress, self.target_port))
-      else:
-         return self.sock.sendto(self.data, (self.target_host, self.target_port))
+      bytes = 0
+      for destination in self.target:
+         bytes += self.sock.sendto(self.data, destination)
+      return bytes
    
    def run(self):
       """ Method called when you call *.start()* of the thread """
       if self.data is None:
          Util.raiseException('You must set the data with setData method', ValueError)
-      if self.broadcast and self.target_port is None:
-         Util.raiseException('To use the broadcast, you must specify the target port', ValueError)
-      if not self.broadcast and ((not self.target_host) or (not self.target_port)):
-         Util.raiseException('You must specify the target host and port with setTargetHost method', ValueError)
+      if len(self.target) <= 0:
+         Util.raiseException('You must set the target(s) before send data', ValueError)
 
       with self.sentBytesLock:
          self.sentBytes = self.send()
@@ -302,14 +376,13 @@ if __name__ == "__main__":
 
    elif arg == "client":
       print "Binding on %s..." % myself[0]
-      s = UDPThreadClient(myself[0], 1500, False)
+      s = UDPThreadUnicastClient(myself[0], 1500)
       s.setData("dsfssdfsfddf")
       s.setTargetHost(myself[0], 666)
       s.start()
       s.join()
       print s.getSentBytes()
-      
-
+     
    print "end..."
 
 
