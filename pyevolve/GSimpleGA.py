@@ -17,7 +17,6 @@ import random
 import logging
 from time import time
 from types import BooleanType
-from sys import exit as sys_exit
 from sys import platform as sys_platform
 
 import code
@@ -58,8 +57,6 @@ def RawScoreCriteria(ga_engine):
          return round(bestRawScore, roundDecimal) >= round(ind.score, roundDecimal)
       else:
          return bestRawScore >= ind.score
-
-   return flag
 
 def ConvergenceCriteria(ga_engine):
    """ Terminate the evolution when the population have converged
@@ -169,7 +166,11 @@ class GSimpleGA:
       self.setPopulationSize(Consts.CDefGAPopulationSize)
       self.minimax      = Consts.minimaxType["maximize"]
       self.elitism      = True
+
+      # Adapters
       self.dbAdapter    = None
+      self.migrationAdapter = None
+      
       self.time_init    = None
       self.interactiveMode = interactiveMode
 
@@ -182,6 +183,19 @@ class GSimpleGA:
       self.currentGeneration = 0
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
+
+
+   def __call__(self, *args, **kwargs):
+      """ A method to implement a callable object
+
+      Example:
+         >>> ga_engine(freq_stats=10)
+         
+      """
+      if kwargs.get("freq_stats", None):
+         return self.evolve(kwargs.get("freq_stats"))
+      else:
+         return self.evolve()
 
    def setElitismReplacement(self, numreplace):
       """ Set the number of best individuals to copy to the next generation on the elitism
@@ -243,7 +257,15 @@ class GSimpleGA:
       """
       self.internalPop.setMultiProcessing(flag)
 
-   def setDBAdapter(self, dbadapter):
+   def setMigrationAdapter(self, migration_adapter=None):
+      """ Sets the Migration Adapter
+
+      .. versionadded:: 0.6
+         The `setMigrationAdapter` method.
+      """
+      self.migrationAdapter = migration_adapter
+
+   def setDBAdapter(self, dbadapter=None):
       """ Sets the DB Adapter of the GA Engine
       
       :param dbadapter: one of the :mod:`DBAdapters` classes instance
@@ -391,6 +413,8 @@ class GSimpleGA:
       logging.debug("Population was cloned.")
       
       size_iterate = len(self.internalPop)
+
+      # Odd population size
       if size_iterate % 2 != 0: size_iterate -= 1
 
       for i in xrange(0, size_iterate, 2):
@@ -410,7 +434,7 @@ class GSimpleGA:
 
          sister.mutate(pmut=self.pMutation)
          brother.mutate(pmut=self.pMutation)
-         
+
          newPop.internalPop.append(sister)
          newPop.internalPop.append(brother)
 
@@ -445,6 +469,13 @@ class GSimpleGA:
 
       self.internalPop = newPop
       self.internalPop.sort()
+
+      # Migration
+      #if self.migrationAdapter:
+      #   self.migrationAdapter.exchange(self)
+      #   self.clearFlags()
+      #   self.internalPop.sort()
+
       logging.debug("The generation %d was finished.", self.currentGeneration)
 
       self.currentGeneration += 1
@@ -479,6 +510,10 @@ class GSimpleGA:
 
       :param freq_stats: if greater than 0, the statistics will be
                          printed every freq_stats generation.
+      :rtype: returns the best individual of the evolution
+
+      .. versionadded:: 0.6
+         the return of the best individual
 
       """
 
@@ -551,7 +586,6 @@ class GSimpleGA:
                break
 
             if self.interactiveMode:
-
                if sys_platform[:3] == "win":
                   if msvcrt.kbhit():
                      if ord(msvcrt.getch()) == Consts.CDefESCKey:
@@ -587,6 +621,8 @@ class GSimpleGA:
          if not (self.currentGeneration % self.dbAdapter.statsGenFreq == 0):
             self.dumpStatsDB()
          self.dbAdapter.commitAndClose()
+
+      return self.bestIndividual()
 
       #print "Waiting server thread... ",
       #udp_server.shutdown()
