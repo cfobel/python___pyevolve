@@ -7,14 +7,13 @@ to keep the population and the statistics.
 
 """
 
-import Consts
+import Consts, Util
 from FunctionSlot import FunctionSlot
 from Statistics import Statistics
 from math import sqrt as math_sqrt
 import logging
 
 try:
-   import sys
    from multiprocessing import cpu_count, Queue, Process
    CPU_COUNT = cpu_count()
    MULTI_PROCESSING = True if CPU_COUNT > 1 else False
@@ -25,66 +24,6 @@ def async_eval(population, q):
    for ind in population:
       ind.evaluate()
    q.put(population)
-
-def key_raw_score(individual):
-   """ A key function to return raw score
-
-   :param individual: the individual instance
-   :rtype: the individual raw score
-
-   .. note:: this function is used by the max()/min() python functions
-
-   """
-   return individual.score
-
-def key_fitness_score(individual):
-   """ A key function to return fitness score, used by max()/min()
-
-   :param individual: the individual instance
-   :rtype: the individual fitness score
-
-   .. note:: this function is used by the max()/min() python functions
-
-   """
-   return individual.fitness
-
-def cmp_individual_raw(a, b):
-   """ Compares two individual raw scores
-
-   Example:
-      >>> GPopulation.cmp_individual_raw(a, b)
-   
-   :param a: the A individual instance
-   :param b: the B individual instance
-   :rtype: 0 if the two individuals raw score are the same,
-           -1 if the B individual raw score is greater than A and
-           1 if the A individual raw score is greater than B.
-
-   .. note:: this function is used to sorte the population individuals
-
-   """
-   if a.score < b.score: return -1
-   if a.score > b.score: return 1
-   return 0
-   
-def cmp_individual_scaled(a, b):
-   """ Compares two individual fitness scores, used for sorting population
-
-   Example:
-      >>> GPopulation.cmp_individual_scaled(a, b)
-   
-   :param a: the A individual instance
-   :param b: the B individual instance
-   :rtype: 0 if the two individuals fitness score are the same,
-           -1 if the B individual fitness score is greater than A and
-           1 if the A individual fitness score is greater than B.
-
-   .. note:: this function is used to sorte the population individuals
-
-   """
-   if a.fitness < b.fitness: return -1
-   if a.fitness > b.fitness: return 1
-   return 0
 
 class GPopulation:
    """ GPopulation Class - The container for the population
@@ -191,7 +130,7 @@ class GPopulation:
       """
       self.multiProcessing = flag
    
-   def setMinimax(minimax):
+   def setMinimax(self, minimax):
       """ Sets the population minimax
 
       Example:
@@ -229,9 +168,10 @@ class GPopulation:
    def __setitem__(self, key, value):
       """ Set an individual of population """
       self.internalPop[key] = value
-      self.__clear_flags()
+      self.clearFlags()
 
-   def __clear_flags(self):
+   def clearFlags(self):
+      """ Clear the sorted and statted internal flags """
       self.sorted = False
       self.statted = False
 
@@ -256,8 +196,8 @@ class GPopulation:
          raw_sum += self[ind].score
          fit_sum += self[ind].fitness
 
-      self.stats["rawMax"] = max(self, key=key_raw_score).score
-      self.stats["rawMin"] = min(self, key=key_raw_score).score
+      self.stats["rawMax"] = max(self, key=Util.key_raw_score).score
+      self.stats["rawMin"] = min(self, key=Util.key_raw_score).score
       self.stats["rawAve"] = raw_sum / float(len_pop)
       self.stats["rawTot"] = raw_sum
       self.stats["fitTot"] = fit_sum
@@ -306,12 +246,12 @@ class GPopulation:
       rev = (self.minimax == Consts.minimaxType["maximize"])
 
       if self.sortType == Consts.sortType["raw"]:
-         self.internalPop.sort(cmp=cmp_individual_raw, reverse=rev)
+         self.internalPop.sort(cmp=Util.cmp_individual_raw, reverse=rev)
       else:
          self.scale()
-         self.internalPop.sort(cmp=cmp_individual_scaled, reverse=rev)
+         self.internalPop.sort(cmp=Util.cmp_individual_scaled, reverse=rev)
          self.internalPopRaw = self.internalPop[:]
-         self.internalPopRaw.sort(cmp=cmp_individual_raw, reverse=rev)
+         self.internalPopRaw.sort(cmp=Util.cmp_individual_raw, reverse=rev)
 
       self.sorted = True
 
@@ -340,14 +280,14 @@ class GPopulation:
       self.minimax = args["minimax"]
       for i in xrange(self.popSize):
          self.internalPop.append(self.oneSelfGenome.clone())
-      self.__clear_flags()
+      self.clearFlags()
 
    def initialize(self):
       """ Initialize all individuals of population,
       this calls the initialize() of individuals """
       for gen in self.internalPop:
          gen.initialize()
-      self.__clear_flags()
+      self.clearFlags()
 
    def evaluate(self, **args):
       """ Evaluate all individuals in population, calls the evaluate() method of individuals
@@ -370,7 +310,7 @@ class GPopulation:
          for ind in self.internalPop:
             ind.evaluate(**args)
 
-      self.__clear_flags()
+      self.clearFlags()
 
    def scale(self, **args):
       """ Scale the population using the scaling method
@@ -385,8 +325,8 @@ class GPopulation:
       for ind in xrange(len(self)):
          fit_sum += self[ind].fitness
 
-      self.stats["fitMax"] = max(self, key=key_fitness_score).fitness
-      self.stats["fitMin"] = min(self, key=key_fitness_score).fitness
+      self.stats["fitMax"] = max(self, key=Util.key_fitness_score).fitness
+      self.stats["fitMin"] = min(self, key=Util.key_fitness_score).fitness
       self.stats["fitAve"] = fit_sum / float(len(self))
 
       self.sorted = False
@@ -421,7 +361,7 @@ class GPopulation:
       """ Remove all individuals from population """
       del self.internalPop[:]
       del self.internalPopRaw[:]
-      self.__clear_flags()
+      self.clearFlags()
       
    def clone(self):
       """ Return a brand-new cloned population """

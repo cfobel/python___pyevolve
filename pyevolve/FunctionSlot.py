@@ -11,8 +11,7 @@ you'll find the class :class:`FunctionSlot.FunctionSlot`, which is the slot clas
 
 """
 
-import Util
-from random import choice as rand_choice, uniform as rand_uniform
+from random import uniform as rand_uniform
 
 class FunctionSlot:
    """ FunctionSlot Class - The function slot
@@ -141,7 +140,7 @@ class FunctionSlot:
       """
       if len(self.funcList) <= 0:
          raise Exception("No function defined: " + self.slotName)
-      return funcList[index](obj, **args)
+      return self.funcList[index](obj, **args)
       
    def applyFunctions(self, obj, **args):
       """ Generator to apply all function slots in obj

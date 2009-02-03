@@ -16,7 +16,6 @@ import Consts
 import sys
 
 if sys.version_info < Consts.CDefPythonRequire:
-   import logging
    raise Exception("Python 2.5+ required !")
 else:
    del sys
