@@ -5,6 +5,31 @@
 This module contains the :class:`GPopulation.GPopulation` class, which is reponsible
 to keep the population and the statistics.
 
+Default Parameters
+-------------------------------------------------------------
+
+*Sort Type*
+   
+   >>> Consts.sortType["scaled"]
+
+   The scaled sort type
+
+*Minimax*
+
+   >>> Consts.minimaxType["maximize"]
+
+   Maximize the evaluation function
+
+*Scale Method*
+
+   :func:`Scaling.LinearScaling`
+
+   The Linear Scaling scheme
+
+Class
+-------------------------------------------------------------
+
+
 """
 
 import Consts, Util

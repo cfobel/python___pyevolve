@@ -28,10 +28,11 @@ class GAlleles:
 
    """
 
-   def __init__(self, allele_list = [], homogeneous=False):
+   def __init__(self, allele_list = None, homogeneous=False):
       """ The constructor of GAlleles class """
       self.allele_list = []
-      self.allele_list.extend(allele_list)
+      if allele_list is not None:
+         self.allele_list.extend(allele_list)
       self.homogeneous = homogeneous
      
    def __iadd__(self, allele):
@@ -113,10 +114,11 @@ class GAlleleList:
 
    """
 
-   def __init__(self, options=[]):
+   def __init__(self, options=None):
       """ The constructor of GAlleleList class """
       self.options = []
-      self.options.extend(options)
+      if options is not None:
+         self.options.extend(options)
 
    def clear(self):
       """ Removes all the allele options from the list """

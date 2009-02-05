@@ -7,6 +7,11 @@ In this module we have the genetic operators of initialization for each
 chromosome representation, the most part of initialization is done by
 choosing random data.
 
+.. note:: In Pyevolve, the Initializator defines the data type that will
+          be used on the chromosome, for example, the :func:`G1DListInitializatorInteger`
+          will initialize the G1DList with Integers.
+          
+
 """
 
 from random import randint as rand_randint, uniform as rand_uniform, choice as rand_choice

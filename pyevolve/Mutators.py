@@ -63,7 +63,11 @@ def G1DBinaryStringMutatorFlip(genome, **args):
 ####################
 
 def G1DListMutatorSwap(genome, **args):
-   """ The mutator of G1DList, Swap Mutator """
+   """ The mutator of G1DList, Swap Mutator
+   
+   .. note:: this mutator is :term:`Data Type Independent`
+
+   """
    if args["pmut"] <= 0.0: return 0
    listSize = len(genome) - 1
    mutations = args["pmut"] * (listSize+1)
@@ -284,7 +288,11 @@ def G1DListMutatorAllele(genome, **args):
 ####################
 
 def G2DListMutatorSwap(genome, **args):
-   """ The mutator of G1DList, Swap Mutator """
+   """ The mutator of G1DList, Swap Mutator
+   
+   .. note:: this mutator is :term:`Data Type Independent`
+
+   """
    
    if args["pmut"] <= 0.0: return 0
    height, width = genome.getSize()

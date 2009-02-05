@@ -84,7 +84,7 @@ class Statistics:
 
    def clear(self):
       """ Set all statistics to zero """
-      for k in self.__internalDict.keys():
+      for k in self.internalDict.keys():
          self.internalDict[k] = 0
 
    def items(self):

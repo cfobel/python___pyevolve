@@ -7,6 +7,56 @@ This module contains the GA Engine, the GA Engine class is responsible
 for all the evolutionary process. It contains the GA Engine related
 funtions, like the Termination Criteria functions for convergence analysis, etc.
 
+Default Parameters
+-------------------------------------------------------------
+
+*Number of Generations*
+  
+   Default is 100 generations
+
+*Mutation Rate*
+   
+   Default is 0.02, which represents 0.2%
+
+*Crossover Rate*
+
+   Default is 0.9, which represents 90%
+
+*Elitism Replacement*
+
+   Default is 1 individual
+
+*Population Size*
+
+   Default is 80 individuals
+
+*Minimax*
+
+   >>> Consts.minimaxType["maximize"]
+
+   Maximize the evaluation function
+
+*DB Adapter*
+
+   Default is **None**
+
+*Migration Adapter*
+
+   Default is **None**
+   
+*Interactive Mode*
+
+   Default is **True**
+
+*Selector (Selection Method)*
+
+   :func:`Selectors.GRankSelector`
+
+   The Rank Selection method
+
+Class
+-------------------------------------------------------------
+
 """
 
 from GPopulation import GPopulation

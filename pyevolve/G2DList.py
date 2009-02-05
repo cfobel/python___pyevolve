@@ -7,6 +7,32 @@ integers or any kind of object, by default, we have genetic operators
 for integer and real lists, which can be found on the respective modules.
 This chromosome class extends the :class:`GenomeBase.GenomeBase`.
 
+Default Parameters
+-------------------------------------------------------------
+
+*Initializator*
+   
+   :func:`Initializators.G2DListInitializatorInteger`
+
+   The Integer Initializator for G2DList
+
+*Mutator*
+
+   :func:`Mutators.G2DListMutatorSwap`
+
+   The Swap Mutator for G2DList
+
+*Crossover*
+
+   :func:`Crossovers.G2DListCrossoverUniform`
+
+   The Uniform Crossover for G2DList
+
+
+Class
+-------------------------------------------------------------
+
+
 """
 
 from GenomeBase import GenomeBase

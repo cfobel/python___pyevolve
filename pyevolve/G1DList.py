@@ -8,6 +8,32 @@ numbers or integers or any kind of object, by default, we have
 genetic operators for integer and real lists, which can be found
 on the respective modules. This chromosome class extends the :class:`GenomeBase.GenomeBase` class.
 
+
+Default Parameters
+-------------------------------------------------------------
+
+*Initializator*
+   
+   :func:`Initializators.G1DListInitializatorInteger`
+
+   The Integer Initializator for G1DList
+
+*Mutator*
+
+   :func:`Mutators.G1DListMutatorSwap`
+
+   The Swap Mutator for G1DList
+
+*Crossover*
+
+   :func:`Crossovers.G1DListCrossoverSinglePoint`
+
+   The Single Point Crossover for G1DList
+
+
+Class
+-------------------------------------------------------------
+
 """
 from GenomeBase import GenomeBase
 import Consts
@@ -231,13 +257,5 @@ class G1DList(GenomeBase):
       newcopy = G1DList(self.listSize)
       self.copy(newcopy)
       return newcopy
-
-if __name__ == "__main__":
-   print "Testing G1DList genome..."
-   genome = G1DList(20)
-   for i in xrange(genome.listSize):
-      genome += i
-   print (3 in genome)
-
 
    

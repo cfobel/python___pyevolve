@@ -5,6 +5,32 @@
 This is the classical chromosome representation on GAs, it is the 1D
 Binary String. This string looks like "00011101010".
 
+Default Parameters
+-------------------------------------------------------------
+
+*Initializator*
+   
+   :func:`Initializators.G1DBinaryStringInitializator`
+
+   The Binatry String Initializator for G1DBinaryString
+
+*Mutator*
+
+   :func:`Mutators.G1DBinaryStringMutatorFlip`
+
+   The Flip Mutator for G1DBinaryString
+
+*Crossover*
+
+   :func:`Crossovers.G1DBinaryStringXSinglePoint`
+
+   The Single Point Crossover for G1DBinaryString
+
+
+Class
+-------------------------------------------------------------
+
+
 """
 
 from GenomeBase import GenomeBase
