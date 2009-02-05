@@ -33,9 +33,9 @@ def LinearScaling(pop):
       a = (c - 1.0) * pop_rawAve / delta
       b = pop_rawAve * (pop_rawMax - (c * pop_rawAve)) / delta
    else:
-    delta = pop_rawAve - pop_rawMin
-    a = pop_rawAve / delta
-    b = -pop_rawMin * pop_rawAve / delta
+      delta = pop_rawAve - pop_rawMin
+      a = pop_rawAve / delta
+      b = -pop_rawMin * pop_rawAve / delta
 
    for i in xrange(len(pop)):
       f = pop[i].score

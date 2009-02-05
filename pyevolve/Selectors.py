@@ -55,12 +55,14 @@ def GTournamentSelector(population, **args):
       gets the pool size from the population.
 
    """
-   tournament_pool = []
+   #tournament_pool = []
    choosen = None
    poolSize = population.getParam("tournamentPool", Consts.CDefTournamentPoolSize)
 
-   for i in xrange(poolSize):
-      tournament_pool.append(GRouletteWheel(population, **args))
+   tournament_pool = [GRouletteWheel(population, **args) for i in xrange(poolSize) ] 
+
+#   for i in xrange(poolSize):
+#      tournament_pool.append(GRouletteWheel(population, **args))
 
    if population.sortType == Consts.sortType["scaled"]:
       choosen = max(tournament_pool, key=key_fitness_score)
@@ -81,7 +83,7 @@ def GTournamentAlternative(population, **args):
 
    """
    choosen = None
-   best_measure = 0;
+   best_measure = 0
    len_pop = len(population)
    poolSize = population.getParam("tournamentPool", Consts.CDefTournamentPoolSize)
 
@@ -175,13 +177,3 @@ def GRouletteWheel_PrepareWheel(population):
                psum[i] /= float(psum[len_pop-1])
 
    return psum
-
-def GStochasticUniversalSampling(population):
-   """ Stochasit Universam Sampling Selector (SUS). """
-   population.statistics()
-   gap = population.stats["fitTot"]
-
-   point = random.random() * gap
-
-
-

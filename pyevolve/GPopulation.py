@@ -46,6 +46,7 @@ except:
    MULTI_PROCESSING = False
 
 def async_eval(population, q):
+   """ Internal used by the multiprocessing """
    for ind in population:
       ind.evaluate()
    q.put(population)
@@ -227,7 +228,7 @@ class GPopulation:
       self.stats["rawTot"] = raw_sum
       self.stats["fitTot"] = fit_sum
       
-      tmpvar = 0.0;
+      tmpvar = 0.0
       for ind in xrange(len_pop):
          s = self[ind].score - self.stats["rawAve"]
          s*= s
@@ -303,8 +304,7 @@ class GPopulation:
       """ Clone the example genome to fill the population """
       self.clear()
       self.minimax = args["minimax"]
-      for i in xrange(self.popSize):
-         self.internalPop.append(self.oneSelfGenome.clone())
+      self.internalPop = [self.oneSelfGenome.clone() for i in xrange(self.popSize)]
       self.clearFlags()
 
    def initialize(self):

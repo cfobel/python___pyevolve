@@ -35,8 +35,9 @@ def getch():
 
 def kbhit():
    """ The linux implementation of the kbhit() function """
-   dr,dw,de = select([sys.stdin], [], [], 0)
-   return dr <> []
+   dr = select([sys.stdin], [], [], 0)[0]
+   #dr,dw,de = select([sys.stdin], [], [], 0)
+   return dr != []
 
 def randomFlipCoin(p):
    """ Returns True with the *p* probability. If the *p* is 1.0,
@@ -219,7 +220,7 @@ class Graph:
       :param b: the second node
       """
       if a not in self.adjacent: 
-        self.adjacent[a] = {}
+         self.adjacent[a] = {}
 
       if b not in self.adjacent: 
          self.adjacent[b] = {}

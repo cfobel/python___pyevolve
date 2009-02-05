@@ -142,7 +142,7 @@ class FunctionSlot:
          raise Exception("No function defined: " + self.slotName)
       return self.funcList[index](obj, **args)
       
-   def applyFunctions(self, obj, **args):
+   def applyFunctions(self, obj=None, **args):
       """ Generator to apply all function slots in obj
 
       :param obj: this object is passes as parameter to the function
@@ -156,12 +156,14 @@ class FunctionSlot:
             yield f(obj, **args)
       else:
          v = rand_uniform(0, 1)
+         fobj = None
          for func, weight in zip(self.funcList, self.funcWeights):
+            fobj = func
             if v < weight:
                break
             v = v - weight
 
-         yield func(obj, **args)
+         yield fobj(obj, **args)
 
    def __repr__(self):
       """ String representation of FunctionSlot """

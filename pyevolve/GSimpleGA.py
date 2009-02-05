@@ -472,11 +472,11 @@ class GSimpleGA:
          genomeDad = self.select(popID=self.currentGeneration)
          
          if  not genomeMom.crossover.isEmpty() and self.pCrossover >= 1.0:
-            for it in genomeMom.crossover.applyFunctions(genomeMom, mom=genomeMom, dad=genomeDad, count=2):
+            for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=2):
                (sister, brother) = it
          else:
             if not genomeMom.crossover.isEmpty() and Util.randomFlipCoin(self.pCrossover):
-               for it in genomeMom.crossover.applyFunctions(genomeMom, mom=genomeMom, dad=genomeDad, count=2):
+               for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=2):
                   (sister, brother) = it
             else:
                sister = genomeMom.clone()
@@ -493,7 +493,7 @@ class GSimpleGA:
          genomeDad = self.select(popID=self.currentGeneration)
 
          if Util.randomFlipCoin(self.pCrossover):
-            for it in genomeMom.crossover.applyFunctions(genomeMom, mom=genomeMom, dad=genomeDad, count=1):
+            for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=1):
                (sister, brother) = it
          else:
             sister = random.choice([genomeMom, genomeDad])
@@ -610,11 +610,11 @@ class GSimpleGA:
 
 
             if not self.stepCallback.isEmpty():
-                for it in self.stepCallback.applyFunctions(self):
+               for it in self.stepCallback.applyFunctions(self):
                   stopFlagCallback = it
 
             if not self.terminationCriteria.isEmpty():
-                for it in self.terminationCriteria.applyFunctions(self):
+               for it in self.terminationCriteria.applyFunctions(self):
                   stopFlagTerminationCriteria = it
 
             if freq_stats != 0:
@@ -639,23 +639,23 @@ class GSimpleGA:
                if sys_platform[:3] == "win":
                   if msvcrt.kbhit():
                      if ord(msvcrt.getch()) == Consts.CDefESCKey:
-                        import pyevolve.Interaction
+                        from pyevolve import Interaction
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-Z to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
                                            "population" : self.getPopulation(),
                                            "pyevolve"   : pyevolve,
-                                           "it"         : pyevolve.Interaction}
+                                           "it"         : Interaction}
                         print
                         code.interact(interact_banner, local=session_locals)
                elif sys_platform[:5] == "linux":
                   if Util.kbhit():
                      if ord(Util.getch()) == Consts.CDefESCKey:
-                        import pyevolve.Interaction
+                        from pyevolve import Interaction
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-D to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
                                            "population" : self.getPopulation(),
                                            "pyevolve"   : pyevolve,
-                                           "it"         : pyevolve.Interaction}
+                                           "it"         : Interaction}
                         print
                         code.interact(interact_banner, local=session_locals)
 

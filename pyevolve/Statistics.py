@@ -7,9 +7,6 @@ This module have the class which is reponsible to keep statistics of each
 generation. This class is used by the adapters and other statistics dump objects.
 
 """
-
-import Consts
-
 class Statistics:
    """ Statistics Class - A class bean-like to store the statistics
 

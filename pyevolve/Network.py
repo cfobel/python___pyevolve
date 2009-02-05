@@ -234,7 +234,7 @@ class UDPThreadServer(threading.Thread):
              discard the received individuals.
 
    """
-   def __init__(self, host, port, poolSize, timeout=5):
+   def __init__(self, host, port, poolSize=10, timeout=5):
       threading.Thread.__init__(self)
       self.recvPool = []
       self.recvPoolLock = threading.Lock()
@@ -243,7 +243,7 @@ class UDPThreadServer(threading.Thread):
       self.port = port
       self.timeout = timeout
       self.doshutdown = False
-      self.poolSize = 10
+      self.poolSize = poolSize
 
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
       #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -316,7 +316,8 @@ class UDPThreadServer(threading.Thread):
       """
       try:
          data, sender = self.sock.recvfrom(self.bufferSize)
-      except socket.timeout, a: return None
+      except socket.timeout:
+         return None
       return (sender[0], data)
       
    def run(self):
