@@ -314,6 +314,7 @@ class GSimpleGA:
          The `setMigrationAdapter` method.
       """
       self.migrationAdapter = migration_adapter
+      self.migrationAdapter.setGAEngine(self)
 
    def setDBAdapter(self, dbadapter=None):
       """ Sets the DB Adapter of the GA Engine
@@ -574,6 +575,8 @@ class GSimpleGA:
 
       if self.dbAdapter: self.dbAdapter.open()
 
+      if self.migrationAdapter: self.migrationAdapter.start()
+
       self.initialize()
       self.internalPop.evaluate()
       self.internalPop.sort()
@@ -589,6 +592,9 @@ class GSimpleGA:
 
       try:      
          while not self.step():
+
+            if self.migrationAdapter:
+               self.migrationAdapter.exchange()
 
             #if self.currentGeneration % 50 == 0:
             #   print "Sending best... ",
@@ -617,7 +623,7 @@ class GSimpleGA:
                for it in self.terminationCriteria.applyFunctions(self):
                   stopFlagTerminationCriteria = it
 
-            if freq_stats != 0:
+            if freq_stats:
                if (self.currentGeneration % freq_stats == 0) or (self.currentGeneration == 1):
                   self.printStats()
 
@@ -627,12 +633,14 @@ class GSimpleGA:
 
             if stopFlagTerminationCriteria:
                logging.debug("Evolution stopped by the Termination Criteria !")
-               print "\n\tEvolution stopped by Termination Criteria function !\n"
+               if freq_stats:
+                  print "\n\tEvolution stopped by Termination Criteria function !\n"
                break
 
             if stopFlagCallback:
                logging.debug("Evolution stopped by Step Callback function !")
-               print "\n\tEvolution stopped by Step Callback function !\n"
+               if freq_stats:
+                  print "\n\tEvolution stopped by Step Callback function !\n"
                break
 
             if self.interactiveMode:
@@ -661,7 +669,7 @@ class GSimpleGA:
 
       except KeyboardInterrupt:
          logging.debug("CTRL-C detected, finishing evolution.")
-         print "\n\tA break was detected, you have interrupted the evolution !\n"
+         if freq_stats: print "\n\tA break was detected, you have interrupted the evolution !\n"
 
       if freq_stats != 0:
          self.printStats()
@@ -671,6 +679,11 @@ class GSimpleGA:
          if not (self.currentGeneration % self.dbAdapter.statsGenFreq == 0):
             self.dumpStatsDB()
          self.dbAdapter.commitAndClose()
+   
+      if self.migrationAdapter:
+         if freq_stats: print "Stopping the migration adapter... ",
+         self.migrationAdapter.stop()
+         if freq_stats: print "done !"
 
       return self.bestIndividual()
 

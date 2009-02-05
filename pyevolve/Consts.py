@@ -252,6 +252,13 @@ CSV File DB Adapter Constants (:class:`DBAdapters.DBFileCSV`)
 
    Default generational frequency for dump statistics.
 
+Migration Constants (:mod:`Migration`)
+----------------------------------------------------------------------------
+.. attribute:: CDefGenMigrationRate
+   
+   The default generations supposed to migrate and receive individuals
+
+
 """
 import Scaling
 import Selectors
@@ -363,3 +370,6 @@ CDefCSVFileStatsGenFreq = 1
 
 # Util Consts
 CDefBroadcastAddress = "255.255.255.255"
+
+# Migration Consts
+CDefGenMigrationRate = 20

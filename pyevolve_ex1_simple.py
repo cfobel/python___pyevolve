@@ -3,6 +3,7 @@ from pyevolve import GSimpleGA
 from pyevolve import Selectors
 from pyevolve import Statistics
 from pyevolve import DBAdapters
+from pyevolve import Migration
 import pyevolve
 import cPickle
 import zlib
@@ -44,6 +45,10 @@ if __name__ == "__main__":
    ga.setGenerations(800)
    ga.terminationCriteria += GSimpleGA.ConvergenceCriteria
 
+
+   mig = Migration.WANMigration('127.0.0.1', 666)
+   ga.setMigrationAdapter(mig)
+
    # Sets the DB Adapter, the resetDB flag will make the Adapter recreate
    # the database and erase all data every run, you should use this flag
    # just in the first time, after the pyevolve.db was created, you can
@@ -55,6 +60,7 @@ if __name__ == "__main__":
    # frequency of 20 generations
 
    ga(freq_stats=10)
+   #ga()
    #ga.evolve(freq_stats=10)
 
    #best = ga.bestIndividual()
