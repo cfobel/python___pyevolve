@@ -509,23 +509,17 @@ class GSimpleGA:
 
       if self.elitism:
          logging.debug("Doing elitism.")
-         if self.minimax == Consts.minimaxType["maximize"]:
+         if self.getMinimax() == Consts.minimaxType["maximize"]:
             for i in xrange(self.nElitismReplacement):
                if self.internalPop.bestRaw(i).score > newPop.bestRaw(i).score:
                   newPop[len(newPop)-1-i] = self.internalPop.bestRaw(i)
-         elif self.minimax == Consts.minimaxType["minimize"]:
+         elif self.getMinimax() == Consts.minimaxType["minimize"]:
             for i in xrange(self.nElitismReplacement):
                if self.internalPop.bestRaw(i).score < newPop.bestRaw(i).score:
                   newPop[len(newPop)-1-i] = self.internalPop.bestRaw(i)
 
       self.internalPop = newPop
       self.internalPop.sort()
-
-      # Migration
-      #if self.migrationAdapter:
-      #   self.migrationAdapter.exchange(self)
-      #   self.clearFlags()
-      #   self.internalPop.sort()
 
       logging.debug("The generation %d was finished.", self.currentGeneration)
 
@@ -582,38 +576,13 @@ class GSimpleGA:
       self.internalPop.sort()
       logging.debug("Starting loop over evolutionary algorithm.")
 
-      #myself = Network.getMachineIP()
-      #print myself
-
-      #udp_server = Network.UDPThreadServer(myself[1], 666)
-      #udp_server.start()
-
-      #recv_pool = []
-
       try:      
          while not self.step():
 
             if self.migrationAdapter:
                self.migrationAdapter.exchange()
-
-            #if self.currentGeneration % 50 == 0:
-            #   print "Sending best... ",
-            #   udp_client = Network.UDPThreadClient(myself[1], 1500, False)
-            #   best = self.bestIndividual()
-            #   pickled = Network.pickleObject(best)      
-            #   udp_client.setData(pickled)
-            #   udp_client.setTargetHost('192.168.0.94', 666)
-            #   udp_client.start()
-            #   udp_client.join()
-            #   print " done !"
-            
-            #if udp_server.isReady():
-            #   print "Receiving... ",
-            #   while udp_server.isReady():
-            #      recv_pool.append(udp_server.popPool())
-            #   print " done ! len = %d" % (len(recv_pool),)
-            #   print "IND: %s" % recv_pool
-
+               self.internalPop.clearFlags()
+               self.internalPop.sort()
 
             if not self.stepCallback.isEmpty():
                for it in self.stepCallback.applyFunctions(self):
@@ -686,11 +655,6 @@ class GSimpleGA:
          if freq_stats: print "done !"
 
       return self.bestIndividual()
-
-      #print "Waiting server thread... ",
-      #udp_server.shutdown()
-      #udp_server.join()
-      #print "done !"
 
    def select(self, **args):
       """ Select one individual from population

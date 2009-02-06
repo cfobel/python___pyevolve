@@ -258,6 +258,23 @@ Migration Constants (:mod:`Migration`)
    
    The default generations supposed to migrate and receive individuals
 
+.. attribute:: CDefMigrationNIndividuals
+
+   The default number of individuals that will migrate at the *CDefGenMigrationRate*
+   interval
+
+.. attribute:: CDefNetworkIndividual
+
+   A migration code for network individual data
+
+.. attribute:: CDefNetworkInfo
+
+   A migration code for network info data
+
+.. attribute:: CDefGenMigrationReplacement
+
+   The default number of individuals to be replaced at the migration stage
+
 
 """
 import Scaling
@@ -373,3 +390,8 @@ CDefBroadcastAddress = "255.255.255.255"
 
 # Migration Consts
 CDefGenMigrationRate = 20
+CDefMigrationNIndividuals = 3
+CDefGenMigrationReplacement = 3
+
+CDefNetworkIndividual = 1
+CDefNetworkInfo = 2

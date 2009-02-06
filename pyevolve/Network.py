@@ -125,36 +125,73 @@ class UDPThreadUnicastClient(threading.Thread):
 
    :param host: the hostname to bind the socket on sender (this is not the target host)
    :param port: the sender port (this is not the target port)
+   :param pool_size: the size of send pool
+   :param timeout: the time interval to check if the client have data to send
 
    """
-   def __init__(self, host, port):
+   def __init__(self, host, port, pool_size=10, timeout=1):
       threading.Thread.__init__(self)
       self.host = host
       self.port = port
       self.target = []
-      self.data = None
-      self.sentBytes = None
-      self.sentBytesLock = threading.Lock()
+      self.sendPool = []
+      self.poolSize = pool_size
+      self.sendPoolLock = threading.Lock()
+      self.timeout = timeout
+
+      self.doshutdown = False
 
       self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
       #self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
       self.sock.bind((host, port))     
 
-   def setData(self, data):
+   def poolLength(self):
+      """ Returns the size of the pool
+      
+      :rtype: integer
+
+      """
+      with self.sendPoolLock:
+         ret = len(self.sendPool)
+      return ret
+
+   def popPool(self):
+      """ Return the last data received on the pool
+
+      :rtype: object
+
+      """
+      with self.sendPoolLock:
+         ret = self.sendPool.pop()
+      return ret
+
+   def isReady(self):
+      """ Returns True when there is data on the pool or False when not
+         
+      :rtype: boolean
+      
+      """
+      with self.sendPoolLock:
+         ret = True if len(self.sendPool) >= 1 else False
+      return ret
+
+   def shutdown(self):
+      """  Shutdown the server thread, when called, this method will stop
+      the thread on the next socket timeout """
+      self.doshutdown = True
+
+   def addData(self, data):
       """ Set the data to send
 
       :param data: the data to send
 
       """
-      self.data = data
+      if self.poolLength() >= self.poolSize:
+         print "warning: the send pool is full, consider increasing the pool size or decreasing the timeout !"
+         return
 
-   def getData(self):
-      """ Get the data to send
-
-      :rtype: data to send
-
-      """
-      return self.data
+      with self.sendPoolLock:
+         self.sendPool.append(data)
 
    def setTargetHost(self, host, port):
       """ Set the host/port of the target, the destination
@@ -173,42 +210,37 @@ class UDPThreadUnicastClient(threading.Thread):
       :param address_list: a list with tuples (ip, port)
       """
       del self.target[:]
-      self.target = address_list
+      self.target = address_list[:]
 
    def close(self):
       """ Close the internal socket """
       self.sock.close()
 
-   def getSentBytes(self):
-      """ Returns the number of sent bytes. The use of this method makes sense 
-      when you already have sent the data
-         
-      :rtype: sent bytes
+   def send(self, data):
+      """ Send the data
 
+      :param data: the data to send
+      :rtype: bytes sent to each destination
       """
-      sent = None
-      with self.sentBytesLock:
-         if self.sentBytes is None:
-            Util.raiseException('Bytes sent is None')
-         else: sent = self.sentBytes
-      return sent
-
-   def send(self):
-      """ Send the data; this method will detect if is a broadcast or unicast. """
-      bytes = 0
+      bytes = -1
       for destination in self.target:
-         bytes += self.sock.sendto(self.data, destination)
+         bytes = self.sock.sendto(data, destination)
       return bytes
    
    def run(self):
       """ Method called when you call *.start()* of the thread """
-      if self.data is None:
-         Util.raiseException('You must set the data with setData method', ValueError)
       if len(self.target) <= 0:
          Util.raiseException('You must set the target(s) before send data', ValueError)
 
-      with self.sentBytesLock:
-         self.sentBytes = self.send()
+      while True:
+         if self.doshutdown: break
+
+         while self.isReady():
+            data = self.popPool()
+            self.send(data)
+
+         time.sleep(self.timeout)
+      
       self.close()
 
 class UDPThreadServer(threading.Thread):
@@ -341,20 +373,32 @@ class UDPThreadServer(threading.Thread):
          with self.recvPoolLock:
             self.recvPool.append(data)
 
+      self.close()
 
 def pickleAndCompress(obj, level=9):
    """ Pickles the object and compress the dumped string with zlib
    
-      :param obj: the object to be pickled
-      :param level: the compression level, 9 is the best.
-
-   .. versionadded:: 0.6
-      The *pickleAndCompress* function
+   :param obj: the object to be pickled
+   :param level: the compression level, 9 is the best
+                    and -1 is to not compress
 
    """
    pickled = cPickle.dumps(obj)
-   pickled_zlib = zlib.compress(pickled, level)
-   return pickled_zlib
+   if level < 0: return pickled
+   else:
+      pickled_zlib = zlib.compress(pickled, level)
+      return pickled_zlib
+
+def unpickleAndDecompress(obj_dump, decompress=True):
+   """ Decompress a zlib compressed string and unpickle the data
+   
+   :param obj: the object to be decompressend and unpickled
+   """
+   if decompress:
+      obj_decompress = zlib.decompress(obj_dump)
+   else:
+      obj_decompress = obj_dump
+   return cPickle.loads(obj_decompress)
 
 if __name__ == "__main__":
    arg = sys.argv[1]
