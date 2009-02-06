@@ -4,6 +4,10 @@ What's new ?
 
 What's new on the release |release|:
 
+**Optimizations and bug-fixes**
+
+   Added some general optimizations and bug-fixes. The code is more *pythonic* now.
+
 **Function Slots - Functions now have weights**
    
    Added a new `weight` parameter to the `add` method of the
@@ -50,9 +54,6 @@ What's new on the release |release|:
    Added the method *resumeString* to all native chromosomes. This method returns a 
    small as possible string representation of the chromosome.
 
-**Optimizations and bug-fixes**
-
-   Added some general optimizations and bug-fixes.
 
 **The Network module - lan/wan networking**
    
@@ -64,3 +65,4 @@ What's new on the release |release|:
    
    Added the :mod:`Migration` module, this module is used to control the
    migration of the distributed GA.
+
