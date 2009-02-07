@@ -11,9 +11,14 @@ Welcome to Pyevolve documentation !
 
 \- **Charles R. Darwin**
 
+Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*.
+
 See some plot screenshots on the :ref:`graphs_screens` section.
 
-.. centered:: Contents
+Visit the project `blog site <http://pyevolve.sourceforge.net/wordpress>`_ and leave your comment.
+
+Contents
+--------------------------------------------------
 
 .. toctree::
    :maxdepth: 4

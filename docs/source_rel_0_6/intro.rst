@@ -4,7 +4,7 @@ Introduction
 
 This is the documentation of the Pyevolve release |release|. Since the version 0.5, Pyevolve has changed too much, many new features was added and **many** bugs was fixed, this documentation describes those changes, the new API and new features.
 
-Pyevolve was developed to be a *complete genetic algorithm framework written in python*, the main objectives of Pyevolve is:
+Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*, the main objectives of Pyevolve is:
 
 * **written in pure python**, to maximize the cross-platform issue;
 * **easy to use API**, the API must be easy for end-user;

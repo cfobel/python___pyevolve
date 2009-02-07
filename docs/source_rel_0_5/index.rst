@@ -15,9 +15,14 @@ This is the documentation of the new Pyevolve release |release|. Since the versi
 Pyevolve has changed too much, many new features was added and **many** bugs was
 fixed, this documentation describes those changes, the new API and new features.
 
+Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*.
+
 See some plot screenshots on the :ref:`graphs_screens` section.
 
-.. centered:: Contents
+Visit the project `blog site <http://pyevolve.sourceforge.net/wordpress>`_ and leave your comment.
+
+Contents
+--------------------------------------------------
 
 .. toctree::
    :maxdepth: 4
