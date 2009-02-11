@@ -25,6 +25,8 @@ import datetime
 import Statistics
 import urllib
 import csv
+import xmlrpclib
+
 
 class DBFileCSV:
    """ DBFileCSV Class - Adapter to dump statistics in CSV format
@@ -336,4 +338,81 @@ class DBSQLite:
       if (generation % self.commitFreq == 0):
          self.commit()
 
+class DBXMLRPC:
+   """ DBXMLRPC Class - Adapter to dump statistics to a XML Remote Procedure Call
+
+   Example:
+      >>> adapter = DBXMLRPC(url="http://localhost:8000/", identify="run_01",
+                             frequency = 1)
+
+      :param url: the URL of the XML RPC
+      :param identify: the identify of the run
+      :param frequency: the generational dump frequency
+
+
+   .. note:: The XML RPC Server must implement the *insert* method, wich receives
+             a python dictionary as argument.
+   
+   Example of an server in Python: ::
+
+      import xmlrpclib
+      from SimpleXMLRPCServer import SimpleXMLRPCServer
+
+      def insert(l):
+          print "Received statistics: %s" % l
+
+      server = SimpleXMLRPCServer(("localhost", 8000), allow_none=True)
+      print "Listening on port 8000..."
+      server.register_function(insert, "insert")
+      server.serve_forever()
+
+   .. versionadded:: 0.6
+      The :class:`DBXMLRPC` class.
+
+   """
+   def __init__(self, url, identify=None, frequency = Consts.CDefXMLRPCStatsGenFreq):
+      """ The creator of DBXMLRPC Class """
+
+      if identify is None:
+         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
+      else:
+         self.identify = identify
+
+      self.url = url
+      self.statsGenFreq = frequency
+      self.proxy = None
+
+   def __repr__(self):
+      """ The string representation of adapter """
+      ret = "DBXMLRPC DB Adapter [URL='%s', identify='%s']" % (self.url, self.identify)
+      return ret
+
+   def open(self):
+      """ Open the XML RPC Server proxy """
+      logging.debug("Opening the XML RPC Server Proxy on %s", self.url)
+      self.proxy = xmlrpclib.ServerProxy(self.url, allow_none=True)
+
+   def close(self):
+      """ Stub """
+      pass
+
+   def commitAndClose(self):
+      """ Stub """
+      pass
+
+   def commit(self):
+      """ Stub """
+      pass
+
+   def insert(self, stats, population, generation):
+      """ Calls the XML RPC procedure
+
+      :param stats: statistics object (:class:`Statistics.Statistics`)
+      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
+      :param generation: the generation of the insert
+
+      """
+      di = stats.internalDict.copy()
+      di.update({"identify": self.identify, "generation": generation})
+      self.proxy.insert(di)
 

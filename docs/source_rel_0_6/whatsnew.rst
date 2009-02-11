@@ -54,6 +54,10 @@ What's new on the release |release|:
    Added the method *resumeString* to all native chromosomes. This method returns a 
    small as possible string representation of the chromosome.
 
+**DB Adapter - XML RPC**
+   
+   Added a new DB Adapter to send Pyevolve statistics, the XML RPC, to see more information,
+   access the docs of the :class:`DBAdapters.DBXMLRPC`.
 
 **The Network module - lan/wan networking**
    

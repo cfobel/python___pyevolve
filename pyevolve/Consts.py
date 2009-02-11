@@ -252,6 +252,14 @@ CSV File DB Adapter Constants (:class:`DBAdapters.DBFileCSV`)
 
    Default generational frequency for dump statistics.
 
+
+XMP RPC DB Adapter Constants (:class:`DBAdapters.DBXMLRPC`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. attribute:: CDefXMLRPCStatsGenFreq
+
+   Default generational frequency for dump statistics.
+
 Migration Constants (:mod:`Migration`)
 ----------------------------------------------------------------------------
 .. attribute:: CDefGenMigrationRate
@@ -384,6 +392,9 @@ CDefURLPostStatsGenFreq = 100
 # - DB Adapters CSV File defaults
 CDefCSVFileName = "pyevolve.csv"
 CDefCSVFileStatsGenFreq = 1
+
+# - DB Adapter XML RPC
+CDefXMLRPCStatsGenFreq = 20
 
 # Util Consts
 CDefBroadcastAddress = "255.255.255.255"
