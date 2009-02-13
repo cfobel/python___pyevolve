@@ -18,6 +18,7 @@ module, you'll find the adapters above cited.
 """
 
 import Consts
+import Util
 import sqlite3
 import logging
 import types
@@ -27,8 +28,77 @@ import urllib
 import csv
 import xmlrpclib
 
+class DBBaseAdapter:
+   """ DBBaseAdapter Class - The base class for all DB Adapters
+   
+   If you want to create your own DB Adapter, you must subclass this
+   class.
 
-class DBFileCSV:
+   :param frequency: the the generational dump frequency
+
+   .. versionadded:: 0.6
+      Added the :class:`DBBaseAdapter` class.
+   """
+   def __init__(self, frequency, identify):
+      """ The class constructor """
+      self.statsGenFreq = frequency
+
+      if identify is None:
+         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
+      else:
+         self.identify = identify
+
+   def setIdentify(self, identify):
+      """ Sets the identify of the statistics
+      
+      :param identify: the id string
+      """
+      if identify is None:
+         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
+      else:
+         self.identify = identify
+
+   def getIdentify(self):
+      """ Return the statistics identify
+      
+      :rtype: identify string
+      """
+      return self.identify
+
+   def getStatsGenFreq(self):
+      """ Returns the frequency of statistical dump
+      
+      :rtype: the generation interval of statistical dump
+      """
+      return self.statsGenFreq
+
+   def setStatsGenFreq(self, statsGenFreq):
+      """ Set the frequency of statistical dump
+      
+      :param statsGenFreq: the generation interval of statistical dump
+      """
+      self.statsGenFreq = statsGenFreq
+
+   def open(self):
+      """ This method is called one time to do the initialization of
+      the DB Adapter """
+      pass
+
+   def commitAndClose(self):
+      """ This method is called at the end of the evolution, to closes the
+      DB Adapter and commit the changes """
+      pass
+
+   def insert(self, stats, population, generation):
+      """ Insert the stats
+
+      :param stats: statistics object (:class:`Statistics.Statistics`)
+      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
+      :param generation: the generation of the insert
+      """
+      Util.raiseException("This method is not implemented on the ABC", NotImplementedError)
+
+class DBFileCSV(DBBaseAdapter):
    """ DBFileCSV Class - Adapter to dump statistics in CSV format
 
    Example:
@@ -40,25 +110,24 @@ class DBFileCSV:
       :param frequency: the generational dump frequency
       :param reset: if is True, the file old data will be overwrite with the new
 
+   .. versionadded:: 0.6
+      Removed the stub methods and subclassed the :class:`DBBaseAdapter` class.
+
    """
    def __init__(self, filename=Consts.CDefCSVFileName, identify=None,
                 frequency = Consts.CDefCSVFileStatsGenFreq, reset=True):
       """ The creator of DBFileCSV Class """
 
-      if identify is None:
-         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
-      else:
-         self.identify = identify
-
+      DBBaseAdapter.__init__(self, frequency, identify)
+      
       self.filename = filename
-      self.statsGenFreq = frequency
       self.csvWriter = None
       self.fHandle = None
       self.reset = reset
 
    def __repr__(self):
       """ The string representation of adapter """
-      ret = "DBFileCSV DB Adapter [File='%s', identify='%s']" % (self.filename, self.identify)
+      ret = "DBFileCSV DB Adapter [File='%s', identify='%s']" % (self.filename, self.getIdentify())
       return ret
 
    def open(self):
@@ -76,12 +145,7 @@ class DBFileCSV:
 
    def commitAndClose(self):
       """ Commits and closes """
-      self.commit()
       self.close()
-
-   def commit(self):
-      """ Stub """
-      pass
 
    def insert(self, stats, population, generation):
       """ Inserts the stats into the CSV file
@@ -91,11 +155,11 @@ class DBFileCSV:
       :param generation: the generation of the insert
 
       """
-      line = [self.identify, generation]
+      line = [self.getIdentify(), generation]
       line.extend(stats.asTuple())
       self.csvWriter.writerow(line)
 
-class DBURLPost:
+class DBURLPost(DBBaseAdapter):
    """ DBURLPost Class - Adapter to call an URL with statistics
 
    Example:
@@ -118,41 +182,24 @@ class DBURLPost:
    :param frequency: the generational dump frequency
    :param post: if True, the POST method will be used, otherwise GET will be used.
 
+   .. versionadded:: 0.6
+      Removed the stub methods and subclassed the :class:`DBBaseAdapter` class.
    """
    
    def __init__(self, url, identify=None,
                 frequency = Consts.CDefURLPostStatsGenFreq, post=True):
       """ The creator of the DBURLPost Class. """
 
-      if identify is None:
-         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
-      else:
-         self.identify = identify
+      DBBaseAdapter.__init__(self, frequency, identify)
 
       self.url = url
-      self.statsGenFreq = frequency
       self.post = post
 
    def __repr__(self):
       """ The string representation of adapter """
-      ret = "DBURLPost DB Adapter [URL='%s', identify='%s']" % (self.url, self.identify)
+      ret = "DBURLPost DB Adapter [URL='%s', identify='%s']" % (self.url, self.getIdentify())
       return ret
 
-   def open(self):
-      """ Stub """
-   
-   def close(self):
-      """ Stub """
-      pass
-
-   def commitAndClose(self):
-      """ Stub """
-      pass
-
-   def commit(self):
-      """ Stube """
-      pass
-   
    def insert(self, stats, population, generation):
       """ Sends the data to the URL using POST or GET
    
@@ -165,14 +212,14 @@ class DBURLPost:
       response = None
       params = stats.internalDict.copy()
       params["generation"] = generation
-      params["identify"] = self.identify
+      params["identify"] = self.getIdentify()
       if self.post: # POST
          response = urllib.urlopen(self.url, urllib.urlencode(params))
       else: # GET
          response = urllib.urlopen(self.url + "?%s" % (urllib.urlencode(params)))
       if response: response.close()
 
-class DBSQLite:
+class DBSQLite(DBBaseAdapter):
    """ DBSQLite Class - Adapter to dump data in SQLite3 database format
    
    Example:
@@ -201,23 +248,19 @@ class DBSQLite:
                 commit_freq=Consts.CDefSQLiteStatsCommitFreq):
       """ The creator of the DBSQLite Class """
 
-      if identify is None:
-         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
-      else:
-         self.identify = identify
+      DBBaseAdapter.__init__(self, frequency, identify)
 
       self.connection = None
       self.resetDB = resetDB
       self.resetIdentify = resetIdentify
       self.dbName = dbname
       self.typeDict = { types.FloatType : "real" }
-      self.statsGenFreq = frequency
       self.cursorPool = None
       self.commitFreq = commit_freq
 
    def __repr__(self):
       """ The string representation of adapter """
-      ret = "DBSQLite DB Adapter [File='%s', identify='%s']" % (self.dbName, self.identify)
+      ret = "DBSQLite DB Adapter [File='%s', identify='%s']" % (self.dbName, self.getIdentify())
       return ret
 
    def open(self):
@@ -291,8 +334,8 @@ class DBSQLite:
       stmt2 = "delete from %s where identify = ?" % (Consts.CDefSQLiteDBTablePop)
 
       try:
-         c.execute(stmt, (self.identify,))
-         c.execute(stmt2, (self.identify,))
+         c.execute(stmt, (self.getIdentify(),))
+         c.execute(stmt2, (self.getIdentify(),))
       except sqlite3.OperationalError, expt:
          if expt.message.find("no such table") >= 0:
             print "\n ## The DB Adapter can't find the tables ! Consider enable the parameter resetDB ! ##\n"
@@ -326,19 +369,19 @@ class DBSQLite:
       for i in xrange(len(stats)):
          pstmt += "?, "
       pstmt = pstmt[:-2] + ")" 
-      c.execute(pstmt, (self.identify, generation) + stats.asTuple())
+      c.execute(pstmt, (self.getIdentify(), generation) + stats.asTuple())
 
       pstmt = "insert into %s values(?, ?, ?, ?, ?)" % (Consts.CDefSQLiteDBTablePop,)
       tups = []
       for i in xrange(len(population)):
          ind = population[i]
-         tups.append((self.identify, generation, i, ind.fitness, ind.score))
+         tups.append((self.getIdentify(), generation, i, ind.fitness, ind.score))
 
       c.executemany(pstmt, tups)
       if (generation % self.commitFreq == 0):
          self.commit()
 
-class DBXMLRPC:
+class DBXMLRPC(DBBaseAdapter):
    """ DBXMLRPC Class - Adapter to dump statistics to a XML Remote Procedure Call
 
    Example:
@@ -373,36 +416,20 @@ class DBXMLRPC:
    def __init__(self, url, identify=None, frequency = Consts.CDefXMLRPCStatsGenFreq):
       """ The creator of DBXMLRPC Class """
 
-      if identify is None:
-         self.identify = datetime.datetime.strftime(datetime.datetime.now(), "%d/%m/%y-%H:%M")
-      else:
-         self.identify = identify
+      DBBaseAdapter.__init__(self, frequency, identify)
 
       self.url = url
-      self.statsGenFreq = frequency
       self.proxy = None
 
    def __repr__(self):
       """ The string representation of adapter """
-      ret = "DBXMLRPC DB Adapter [URL='%s', identify='%s']" % (self.url, self.identify)
+      ret = "DBXMLRPC DB Adapter [URL='%s', identify='%s']" % (self.url, self.getIdentify())
       return ret
 
    def open(self):
       """ Open the XML RPC Server proxy """
       logging.debug("Opening the XML RPC Server Proxy on %s", self.url)
       self.proxy = xmlrpclib.ServerProxy(self.url, allow_none=True)
-
-   def close(self):
-      """ Stub """
-      pass
-
-   def commitAndClose(self):
-      """ Stub """
-      pass
-
-   def commit(self):
-      """ Stub """
-      pass
 
    def insert(self, stats, population, generation):
       """ Calls the XML RPC procedure
@@ -413,6 +440,6 @@ class DBXMLRPC:
 
       """
       di = stats.internalDict.copy()
-      di.update({"identify": self.identify, "generation": generation})
+      di.update({"identify": self.getIdentify(), "generation": generation})
       self.proxy.insert(di)
 

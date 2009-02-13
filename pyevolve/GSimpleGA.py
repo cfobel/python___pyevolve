@@ -61,6 +61,10 @@ Class
 
 from GPopulation import GPopulation
 from FunctionSlot import FunctionSlot
+from DBAdapters import DBBaseAdapter
+from Migration import MigrationScheme
+from GenomeBase import GenomeBase
+
 import Consts
 import Util
 import random
@@ -72,8 +76,7 @@ from sys import platform as sys_platform
 import code
 import pyevolve
 
-#import Network
-
+# Platform dependant code for the Interactive Mode
 if sys_platform[:3] == "win":
    import msvcrt
 elif sys_platform[:5] == "linux":
@@ -208,6 +211,13 @@ class GSimpleGA:
    def __init__(self, genome, seed=None, interactiveMode=True):
       """ Initializator of GSimpleGA """
       random.seed(seed)
+
+      if type(interactiveMode) != BooleanType:
+         Util.raiseException("Interactive Mode option must be True or False", TypeError)
+      
+      if not isinstance(genome, GenomeBase):
+         Util.raiseException("The genome must be a GenomeBase subclass", TypeError)
+
       self.internalPop  = GPopulation(genome)
       self.nGenerations = Consts.CDefGAGenerations
       self.pMutation    = Consts.CDefGAMutationRate
@@ -218,22 +228,21 @@ class GSimpleGA:
       self.elitism      = True
 
       # Adapters
-      self.dbAdapter    = None
+      self.dbAdapter        = None
       self.migrationAdapter = None
       
-      self.time_init    = None
+      self.time_init       = None
       self.interactiveMode = interactiveMode
 
-      self.selector = FunctionSlot("Selector")
-      self.stepCallback = FunctionSlot("Generation Step Callback")
+      self.selector            = FunctionSlot("Selector")
+      self.stepCallback        = FunctionSlot("Generation Step Callback")
       self.terminationCriteria = FunctionSlot("Termination Criteria")
       self.selector.set(Consts.CDefGASelector)
-      self.allSlots = [ self.selector, self.stepCallback, self.terminationCriteria ]
+      self.allSlots            = [ self.selector, self.stepCallback, self.terminationCriteria ]
       
       self.currentGeneration = 0
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
-
 
    def __call__(self, *args, **kwargs):
       """ A method to implement a callable object
@@ -241,6 +250,8 @@ class GSimpleGA:
       Example:
          >>> ga_engine(freq_stats=10)
          
+      .. versionadded:: 0.6
+         The callable method.
       """
       if kwargs.get("freq_stats", None):
          return self.evolve(kwargs.get("freq_stats"))
@@ -270,6 +281,8 @@ class GSimpleGA:
          The *setInteractiveMode* method.
       
       """
+      if type(flag) != BooleanType:
+         Util.raiseException("Interactive Mode option must be True or False", TypeError)
       self.interactiveMode = flag
 
 
@@ -295,16 +308,33 @@ class GSimpleGA:
       Use this option when you have more than one core on your CPU and when your
       evaluation function is very slow.
 
+      Pyevolve will automaticly check if your Python version has **multiprocessing**
+      support and if you have more than one single CPU core. If you don't have support
+      or have just only one core, Pyevolve will not use the **multiprocessing**
+      feature.
+
+      Pyevolve uses the **multiprocessing** to execute the evaluation function over
+      the individuals, so the use of this feature will make sense if you have a
+      truly slow evaluation function (which is commom in GAs).      
+
       :param flag: True (default) or False
 
-      .. warning:: Use this option only when your evaluation function is slow, se you
-                   will get a good tradeoff between the process communication speed and the
-                   parallel evaluation.
+      .. warning:: Use this option only when your evaluation function is slow, so you'll
+                   get a good tradeoff between the process communication speed and the
+                   parallel evaluation. The use of the **multiprocessing** doesn't means
+                   always a better performance.
+
+      .. note:: To enable the multiprocessing option, you **MUST** add the *__main__* check
+                on your application, otherwise, it will result in errors. See more on the
+                `Python Docs <http://docs.python.org/library/multiprocessing.html#multiprocessing-programming>`__
+                site.
 
       .. versionadded:: 0.6
          The `setMultiProcessing` method.
 
       """
+      if type(flag) != BooleanType:
+         Util.raiseException("Multiprocessing option must be True or False", TypeError)
       self.internalPop.setMultiProcessing(flag)
 
    def setMigrationAdapter(self, migration_adapter=None):
@@ -313,8 +343,12 @@ class GSimpleGA:
       .. versionadded:: 0.6
          The `setMigrationAdapter` method.
       """
+      if (migration_adapter is not None) and (not isinstance(migration_adapter, MigrationScheme)):
+         Util.raiseException("The Migration Adapter must be a MigrationScheme subclass", TypeError)
+
       self.migrationAdapter = migration_adapter
-      self.migrationAdapter.setGAEngine(self)
+      if self.migrationAdapter is not None:
+         self.migrationAdapter.setGAEngine(self)
 
    def setDBAdapter(self, dbadapter=None):
       """ Sets the DB Adapter of the GA Engine
@@ -324,6 +358,8 @@ class GSimpleGA:
       .. warning:: the use the of a DB Adapter can reduce the speed performance of the
                    Genetic Algorithm.
       """
+      if (dbadapter is not None) and (not isinstance(dbadapter, DBBaseAdapter)):
+         Util.raiseException("The DB Adapter must be a DBBaseAdapter subclass", TypeError)
       self.dbAdapter = dbadapter
 
    def setPopulationSize(self, size):
@@ -597,7 +633,7 @@ class GSimpleGA:
                   self.printStats()
 
             if self.dbAdapter:
-               if self.currentGeneration % self.dbAdapter.statsGenFreq == 0:
+               if self.currentGeneration % self.dbAdapter.getStatsGenFreq() == 0:
                   self.dumpStatsDB()
 
             if stopFlagTerminationCriteria:
@@ -645,7 +681,7 @@ class GSimpleGA:
          self.printTimeElapsed()
 
       if self.dbAdapter:
-         if not (self.currentGeneration % self.dbAdapter.statsGenFreq == 0):
+         if not (self.currentGeneration % self.dbAdapter.getStatsGenFreq() == 0):
             self.dumpStatsDB()
          self.dbAdapter.commitAndClose()
    

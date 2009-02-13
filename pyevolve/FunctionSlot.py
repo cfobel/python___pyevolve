@@ -12,6 +12,7 @@ you'll find the class :class:`FunctionSlot.FunctionSlot`, which is the slot clas
 """
 
 from random import uniform as rand_uniform
+import Util
 
 class FunctionSlot:
    """ FunctionSlot Class - The function slot
@@ -150,7 +151,7 @@ class FunctionSlot:
 
       """
       if len(self.funcList) <= 0:
-         raise Exception("No function defined: " + self.slotName)
+         Util.raiseException("No function defined: " + self.slotName)
       if not self.rand_apply:
          for f in self.funcList:
             yield f(obj, **args)
