@@ -12,16 +12,12 @@ To use this mode, the parameter *interactiveMode* must be enabled in the
 
 """
 try:
-   print "Loading module pylab (matplotlib)...",
    import pylab
-   print " done!"
 except:
    print "\nWarning: cannot import Matplotlib ! Plots will not be available !"
 
 try:
-   print "Loading module numpy...",
    import numpy
-   print " done!"
 except:
    print "\nWarning: cannot import Numpy ! Some functions will not be available !"
 
