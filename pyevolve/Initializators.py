@@ -23,9 +23,7 @@ import Util
 
 def G1DBinaryStringInitializator(genome, **args):
    """ 1D Binary String initializator """
-   genome.clearString()
-   for i in xrange(len(genome)):
-      genome.append(rand_choice((0,1)))
+   genome.genomeString = [ rand_choice((0,1)) for i in xrange(len(genome)) ]
 
 ####################
 ##     1D List    ##
@@ -43,11 +41,7 @@ def G1DListInitializatorAllele(genome, **args):
    if allele is None:
       Util.raiseException("to use the G1DListInitializatorAllele, you must specify the 'allele' parameter")
 
-   genome.clearList()
-   
-   for i in xrange(genome.listSize):
-      random_allele = allele[i].getRandomAllele()
-      genome.append(random_allele)
+   genome.genomeList = [ allele[i].getRandomAllele() for i in xrange(genome.listSize)  ]
 
 def G1DListInitializatorInteger(genome, **args):
    """ Integer initialization function of G1DList
@@ -55,13 +49,10 @@ def G1DListInitializatorInteger(genome, **args):
    This initializator accepts the *rangemin* and *rangemax* genome parameters.
 
    """
-   genome.clearList()
-   
-   for i in xrange(genome.listSize):
-      randomInteger = rand_randint(genome.getParam("rangemin", 0),
-                                   genome.getParam("rangemax", 100))
-      genome.append(randomInteger)
+   range_min = genome.getParam("rangemin", 0)
+   range_max = genome.getParam("rangemax", 100)
 
+   genome.genomeList = [rand_randint(range_min, range_max) for i in xrange(genome.listSize)]
 
 def G1DListInitializatorReal(genome, **args):
    """ Real initialization function of G1DList
@@ -69,12 +60,11 @@ def G1DListInitializatorReal(genome, **args):
    This initializator accepts the *rangemin* and *rangemax* genome parameters.
 
    """
-   genome.clearList()
+   range_min = genome.getParam("rangemin", 0)
+   range_max = genome.getParam("rangemax", 100)
 
-   for i in xrange(genome.listSize):
-      randomReal = rand_uniform(genome.getParam("rangemin", 0),
-                                genome.getParam("rangemax", 100))
-      genome.append(randomReal)
+   genome.genomeList = [rand_uniform(range_min, range_max) for i in xrange(genome.listSize)]
+
 
 ####################
 ##     2D List    ##

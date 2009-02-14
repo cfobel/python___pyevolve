@@ -90,8 +90,8 @@ class GPopulation:
       """ The GPopulation Class creator """
 
       logging.debug("New population instance, %s class genomes.", genome.__class__.__name__)
-      self.oneSelfGenome = genome
-      self.internalPop   = []
+      self.oneSelfGenome  = genome
+      self.internalPop    = []
       self.internalPopRaw = []
       self.popSize       = 0
       self.sortType      = Consts.CDefPopSortType
