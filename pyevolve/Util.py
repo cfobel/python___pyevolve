@@ -72,9 +72,7 @@ def listSwapElement(lst, indexa, indexb):
    :rtype: None
 
    """
-   temp = lst[indexa]
-   lst[indexa] = lst[indexb]
-   lst[indexb] = temp
+   lst[indexa], lst[indexb] = lst[indexb], lst[indexa]
 
 def list2DSwapElement(lst, indexa, indexb):
    """ Swaps elements A and B in a 2D list (matrix).
