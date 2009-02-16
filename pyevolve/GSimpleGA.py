@@ -61,7 +61,6 @@ Class
 
 from GPopulation import GPopulation
 from FunctionSlot import FunctionSlot
-from DBAdapters import DBBaseAdapter
 from Migration import MigrationScheme
 from GenomeBase import GenomeBase
 
@@ -358,8 +357,9 @@ class GSimpleGA:
       .. warning:: the use the of a DB Adapter can reduce the speed performance of the
                    Genetic Algorithm.
       """
-      if (dbadapter is not None) and (not isinstance(dbadapter, DBBaseAdapter)):
-         Util.raiseException("The DB Adapter must be a DBBaseAdapter subclass", TypeError)
+      # Removed to don't break the compatibility with IronPython and Jython
+      #if (dbadapter is not None) and (not isinstance(dbadapter, DBBaseAdapter)):
+      #   Util.raiseException("The DB Adapter must be a DBBaseAdapter subclass", TypeError)
       self.dbAdapter = dbadapter
 
    def setPopulationSize(self, size):
