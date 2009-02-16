@@ -20,11 +20,19 @@ Pyevolve was developed to be a *complete genetic algorithm framework written in 
 Requirements
 -----------------------------------
 
-Pyevolve can be executed on **Windows**, **Linux** and *possible* Mac platform (but not yet tested).
+Pyevolve can be executed on **Windows**, **Linux** and **Mac** platforms.
+
+.. note:: On the Mac platform, it's reported that *Pyevolve 0.5* can't enter on the
+          :term:`Interactive Mode`.
 
 Pyevolve can be executed under `Jython 2.5b1+ <http://www.jython.org>`_, but with some restrictions:
    * You can't use some features like the *SQLite3* adapter to dump statistics and *graphs*
      (unless you install Matplotlib on Jython, but I think that still is not possible).
+
+Pyevolve can be executed under `IronPython 2.x <http://www.codeplex.com/IronPython>`_, but with some restrictions:
+   * You can't use some features like the *SQLite3* adapter to dump statistics and *graphs*
+     (unless you install Matplotlib on Jython, but I think that still is not possible).
+   * You must install a `zlib module <https://svn.sourceforge.net/svnroot/fepy/trunk/lib/zlib.py>`_ for IronPython.
 
 Pyevolve requires the follow modules:
 
