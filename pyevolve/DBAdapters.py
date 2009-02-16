@@ -140,6 +140,7 @@ class DBFileCSV(DBBaseAdapter):
 
    def close(self):
       """ Closes the CSV file handle """
+      logging.debug("Closing the CSV file [%s]", self.filename)
       if self.fHandle:
          self.fHandle.close()
 
@@ -324,6 +325,7 @@ class DBSQLite(DBBaseAdapter):
 
       pstmt = """create table if not exists %s(identify text, generation integer,
               individual integer, fitness real, raw real)""" % (Consts.CDefSQLiteDBTablePop)
+      logging.debug("Creating table %s: %s.", Consts.CDefSQLiteDBTablePop, pstmt)
       c.execute(pstmt)
       self.commit()
 
@@ -333,6 +335,7 @@ class DBSQLite(DBBaseAdapter):
       stmt  = "delete from %s where identify = ?" % (Consts.CDefSQLiteDBTable)
       stmt2 = "delete from %s where identify = ?" % (Consts.CDefSQLiteDBTablePop)
 
+      logging.debug("Erasing data from the tables with the identify = %s", self.getIdentify())
       try:
          c.execute(stmt, (self.getIdentify(),))
          c.execute(stmt2, (self.getIdentify(),))

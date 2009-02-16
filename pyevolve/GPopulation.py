@@ -42,6 +42,7 @@ try:
    from multiprocessing import cpu_count, Queue, Process
    CPU_COUNT = cpu_count()
    MULTI_PROCESSING = True if CPU_COUNT > 1 else False
+   logging.debug("The multiprocessing state is: %s", MULTI_PROCESSING)
 except:
    MULTI_PROCESSING = False
 
@@ -213,7 +214,7 @@ class GPopulation:
    def statistics(self):
       """ Do statistical analysis of population and set 'statted' to True """
       if self.statted: return
-      logging.debug("Running statistical calc.")
+      logging.debug("Running statistical calculations")
       raw_sum = 0
       fit_sum = 0
 
@@ -310,6 +311,7 @@ class GPopulation:
    def initialize(self):
       """ Initialize all individuals of population,
       this calls the initialize() of individuals """
+      logging.debug("Initializing the population")
       for gen in self.internalPop:
          gen.initialize()
       self.clearFlags()
@@ -323,6 +325,7 @@ class GPopulation:
 
       # We have multiprocessing
       if self.multiProcessing and MULTI_PROCESSING:
+         logging.debug("Evaluating the population using the multiprocessing method")
          pop_len = len(self)
          q = Queue()
          p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()

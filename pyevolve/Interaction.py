@@ -11,14 +11,18 @@ To use this mode, the parameter *interactiveMode* must be enabled in the
 :class:`GSimpleGA.GSimpleGA`.
 
 """
+import logging
+
 try:
    import pylab
 except:
+   logging.debug("cannot import Matplotlib ! Plots will not be available !")
    print "\nWarning: cannot import Matplotlib ! Plots will not be available !"
 
 try:
    import numpy
 except:
+   logging.debug("cannot import Numpy ! Some functions will not be available !")
    print "\nWarning: cannot import Numpy ! Some functions will not be available !"
 
 def getPopScores(population, fitness=False):

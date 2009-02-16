@@ -578,6 +578,7 @@ class GSimpleGA:
    
    def dumpStatsDB(self):
       """ Dumps the current statistics to database adapter """
+      logging.debug("Dumping stats to the DB Adapter")
       self.internalPop.statistics()
       self.dbAdapter.insert(self.getStatistics(), self.internalPop, self.currentGeneration)
 
@@ -603,8 +604,8 @@ class GSimpleGA:
 
       self.time_init = time()
 
+      logging.debug("Starting the DB Adapter and the Migration Adapter if any")
       if self.dbAdapter: self.dbAdapter.open()
-
       if self.migrationAdapter: self.migrationAdapter.start()
 
       self.initialize()
@@ -616,6 +617,7 @@ class GSimpleGA:
          while not self.step():
 
             if self.migrationAdapter:
+               logging.debug("Migration adapter: exchange")
                self.migrationAdapter.exchange()
                self.internalPop.clearFlags()
                self.internalPop.sort()
@@ -652,6 +654,7 @@ class GSimpleGA:
                if sys_platform[:3] == "win":
                   if msvcrt.kbhit():
                      if ord(msvcrt.getch()) == Consts.CDefESCKey:
+                        logging.debug("Windows Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
                         from pyevolve import Interaction
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-Z to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
@@ -663,6 +666,7 @@ class GSimpleGA:
                elif sys_platform[:5] == "linux":
                   if Util.kbhit():
                      if ord(Util.getch()) == Consts.CDefESCKey:
+                        logging.debug("Linux Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
                         from pyevolve import Interaction
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-D to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
@@ -681,11 +685,13 @@ class GSimpleGA:
          self.printTimeElapsed()
 
       if self.dbAdapter:
+         logging.debug("Closing the DB Adapter")
          if not (self.currentGeneration % self.dbAdapter.getStatsGenFreq() == 0):
             self.dumpStatsDB()
          self.dbAdapter.commitAndClose()
    
       if self.migrationAdapter:
+         logging.debug("Closing the Migration Adapter")
          if freq_stats: print "Stopping the migration adapter... ",
          self.migrationAdapter.stop()
          if freq_stats: print "done !"
