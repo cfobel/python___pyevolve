@@ -19,14 +19,10 @@ module, you'll find the adapters above cited.
 
 import Consts
 import Util
-import sqlite3
 import logging
 import types
 import datetime
 import Statistics
-import urllib
-import csv
-import xmlrpclib
 
 class DBBaseAdapter:
    """ DBBaseAdapter Class - The base class for all DB Adapters
@@ -120,6 +116,8 @@ class DBFileCSV(DBBaseAdapter):
 
       DBBaseAdapter.__init__(self, frequency, identify)
       
+      self.csvmod = None
+
       self.filename = filename
       self.csvWriter = None
       self.fHandle = None
@@ -132,11 +130,16 @@ class DBFileCSV(DBBaseAdapter):
 
    def open(self):
       """ Open the CSV file or creates a new file """
+      if self.csvmod is None:
+         logging.debug("Loading the csv module...")
+         import csv as csvmod
+         self.csvmod = csvmod
+
       logging.debug("Opening the CSV file to dump statistics [%s]", self.filename)
       if self.reset: open_mode = "w"
       else: open_mode = "a"
       self.fHandle = open(self.filename, open_mode)
-      self.csvWriter = csv.writer(self.fHandle, delimiter=';')
+      self.csvWriter = self.csvmod.writer(self.fHandle, delimiter=';')
 
    def close(self):
       """ Closes the CSV file handle """
@@ -192,6 +195,7 @@ class DBURLPost(DBBaseAdapter):
       """ The creator of the DBURLPost Class. """
 
       DBBaseAdapter.__init__(self, frequency, identify)
+      self.urllibmod = None
 
       self.url = url
       self.post = post
@@ -200,6 +204,13 @@ class DBURLPost(DBBaseAdapter):
       """ The string representation of adapter """
       ret = "DBURLPost DB Adapter [URL='%s', identify='%s']" % (self.url, self.getIdentify())
       return ret
+
+   def open(self):
+      """ Load the modules needed """
+      if self.urllibmod is None:
+         logging.debug("Loading urllib module...")
+         import urllib as urllibmod
+         self.urllibmod = urllibmod
 
    def insert(self, stats, population, generation):
       """ Sends the data to the URL using POST or GET
@@ -215,9 +226,9 @@ class DBURLPost(DBBaseAdapter):
       params["generation"] = generation
       params["identify"] = self.getIdentify()
       if self.post: # POST
-         response = urllib.urlopen(self.url, urllib.urlencode(params))
+         response = self.urllibmod.urlopen(self.url, self.urllibmod.urlencode(params))
       else: # GET
-         response = urllib.urlopen(self.url + "?%s" % (urllib.urlencode(params)))
+         response = self.urllibmod.urlopen(self.url + "?%s" % (self.urllibmod.urlencode(params)))
       if response: response.close()
 
 class DBSQLite(DBBaseAdapter):
@@ -251,6 +262,7 @@ class DBSQLite(DBBaseAdapter):
 
       DBBaseAdapter.__init__(self, frequency, identify)
 
+      self.sqlite3mod = None
       self.connection = None
       self.resetDB = resetDB
       self.resetIdentify = resetIdentify
@@ -266,8 +278,13 @@ class DBSQLite(DBBaseAdapter):
 
    def open(self):
       """ Open the database connection """
+      if self.sqlite3mod is None:
+         logging.debug("Loading sqlite3 module...")
+         import sqlite3 as sqlite3mod
+         self.sqlite3mod = sqlite3mod
+
       logging.debug("Opening database, dbname=%s", self.dbName)
-      self.connection = sqlite3.connect(self.dbName)
+      self.connection = self.sqlite3mod.connect(self.dbName)
 
       temp_stats = Statistics.Statistics()
       self.createStructure(temp_stats)
@@ -277,7 +294,9 @@ class DBSQLite(DBBaseAdapter):
 
       if self.resetIdentify:
          self.resetTableIdentify()
-   
+
+
+
    def commitAndClose(self):
       """ Commit changes on database and closes connection """
       self.commit()
@@ -339,7 +358,7 @@ class DBSQLite(DBBaseAdapter):
       try:
          c.execute(stmt, (self.getIdentify(),))
          c.execute(stmt2, (self.getIdentify(),))
-      except sqlite3.OperationalError, expt:
+      except self.sqlite3mod.OperationalError, expt:
          if expt.message.find("no such table") >= 0:
             print "\n ## The DB Adapter can't find the tables ! Consider enable the parameter resetDB ! ##\n"
 
@@ -420,6 +439,7 @@ class DBXMLRPC(DBBaseAdapter):
       """ The creator of DBXMLRPC Class """
 
       DBBaseAdapter.__init__(self, frequency, identify)
+      self.xmlrpclibmod = None
 
       self.url = url
       self.proxy = None
@@ -431,6 +451,11 @@ class DBXMLRPC(DBBaseAdapter):
 
    def open(self):
       """ Open the XML RPC Server proxy """
+      if self.xmlrpclibmod is None:
+         logging.debug("Loding the xmlrpclib module...")
+         import xmlrpclib as xmlrpclibmod
+         self.xmlrpclibmod = xmlrpclibmod
+
       logging.debug("Opening the XML RPC Server Proxy on %s", self.url)
       self.proxy = xmlrpclib.ServerProxy(self.url, allow_none=True)
 
