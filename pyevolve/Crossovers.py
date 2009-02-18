@@ -285,3 +285,93 @@ def G2DListCrossoverSingleHPoint(genome, **args):
          brother[i][:] = gMom[i][:]
 
    return (sister, brother)
+
+
+#############################
+##     2D Binary String    ##
+#############################
+
+
+def G2DBinaryStringXUniform(genome, **args):
+   """ The G2DBinaryString Uniform Crossover
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringXUniform* function
+   """
+   sister = None
+   brother = None
+   gMom = args["mom"]
+   gDad = args["dad"]
+
+   sister = gMom.clone()
+   brother = gDad.clone()
+   sister.resetStats()
+   brother.resetStats()
+   
+   h, w = gMom.getSize()
+   
+   for i in xrange(h):
+      for j in xrange(w):
+         if Util.randomFlipCoin(Consts.CDefG2DBinaryStringUniformProb):
+            temp = sister.getItem(i, j)
+            sister.setItem(i, j, brother.getItem(i, j))
+            brother.setItem(i, j, temp)
+
+   return (sister, brother)
+
+
+def G2DBinaryStringXSingleVPoint(genome, **args):
+   """ The crossover of G2DBinaryString, Single Vertical Point
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringXSingleVPoint* function
+   """
+   sister = None
+   brother = None
+   gMom = args["mom"]
+   gDad = args["dad"]
+
+   cut = rand_randint(1, gMom.getWidth()-1)
+
+   if args["count"] >= 1:
+      sister = gMom.clone()
+      sister.resetStats()
+      for i in xrange(sister.getHeight()):
+         sister[i][cut:] = gDad[i][cut:]
+
+   if args["count"] == 2:
+      brother = gDad.clone()
+      brother.resetStats()
+      for i in xrange(brother.getHeight()):
+         brother[i][cut:] = gMom[i][cut:]
+
+   return (sister, brother)
+
+def G2DBinaryStringXSingleHPoint(genome, **args):
+   """ The crossover of G2DBinaryString, Single Horizontal Point
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringXSingleHPoint* function
+  
+   """
+   sister = None
+   brother = None
+   gMom = args["mom"]
+   gDad = args["dad"]
+
+   cut = rand_randint(1, gMom.getHeight()-1)
+
+   if args["count"] >= 1:
+      sister = gMom.clone()
+      sister.resetStats()
+      for i in xrange(cut, sister.getHeight()):
+         sister[i][:] = gDad[i][:]
+
+   if args["count"] == 2:
+      brother = gDad.clone()
+      brother.resetStats()
+      for i in xrange(brother.getHeight()):
+         brother[i][:] = gMom[i][:]
+
+   return (sister, brother)
+

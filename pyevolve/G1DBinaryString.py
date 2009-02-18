@@ -41,7 +41,7 @@ class G1DBinaryString(GenomeBase):
    """ G1DBinaryString Class - The 1D Binary String chromosome
    
    Example:
-      >>> g = G1DBinaryString(5)
+      >>> genome = G1DBinaryString.G1DBinaryString(5)
 
    :param length: the 1D Binary String size
 

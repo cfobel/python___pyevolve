@@ -25,6 +25,24 @@ def G1DBinaryStringInitializator(genome, **args):
    """ 1D Binary String initializator """
    genome.genomeString = [ rand_choice((0,1)) for i in xrange(len(genome)) ]
 
+#############################
+##     2D Binary String    ##
+#############################
+
+def G2DBinaryStringInitializator(genome, **args):
+   """ Integer initialization function of 2D Binary String
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringInitializator* function
+   """
+   genome.clearString()
+   
+   for i in xrange(genome.getHeight()):
+      for j in xrange(genome.getWidth()):
+         random_gene = rand_choice((0,1))
+         genome.setItem(i, j, random_gene)
+
+
 ####################
 ##     1D List    ##
 ####################

@@ -125,6 +125,25 @@ Population constants (:class:`GPopulation.GPopulation`)
    The default uniform probability used for some uniform genetic operators for the 1D Binary String (:class:`G1DBinaryString.G1DBinaryString`) chromosome.
 
 
+2D Binary String Defaults (:class:`G2DBinaryString.G2DBinaryString`)
+----------------------------------------------------------------------------
+
+.. attribute:: CDefG2DBinaryStringMutator
+
+   The default mutator for the 2D Binary String (:class:`G2DBinaryString.G2DBinaryString`) chromosome.
+
+.. attribute:: CDefG2DBinaryStringCrossover
+
+   The default crossover method for the 2D Binary String (:class:`G2DBinaryString.G2DBinaryString`) chromosome.
+
+.. attribute:: CDefG2DBinaryStringInit
+
+   The default initializator for the 2D Binary String (:class:`G2DBinaryString.G2DBinaryString`) chromosome.
+
+.. attribute:: CDefG2DBinaryStringUniformProb
+
+   The default uniform probability used for some uniform genetic operators for the 2D Binary String (:class:`G2DBinaryString.G2DBinaryString`) chromosome.
+
 
 1D List chromosome constants (:class:`G1DList.G1DList`)
 ----------------------------------------------------------------------------
@@ -354,6 +373,12 @@ CDefG1DBinaryStringMutator   = Mutators.G1DBinaryStringMutatorFlip
 CDefG1DBinaryStringCrossover = Crossovers.G1DBinaryStringXSinglePoint
 CDefG1DBinaryStringInit      = Initializators.G1DBinaryStringInitializator
 CDefG1DBinaryStringUniformProb = 0.5
+
+# - G2DBinaryString defaults
+CDefG2DBinaryStringMutator    = Mutators.G2DBinaryStringMutatorFlip
+CDefG2DBinaryStringCrossover = Crossovers.G2DBinaryStringXUniform
+CDefG2DBinaryStringInit      = Initializators.G2DBinaryStringInitializator
+CDefG2DBinaryStringUniformProb = 0.5
 
 # - G1DList defaults
 CDefG1DListMutIntMU = 2

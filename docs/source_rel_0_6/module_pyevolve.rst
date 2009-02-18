@@ -50,6 +50,7 @@ Chromosomes/Representation Modules
    module_genomebase
    module_allele
    module_g1dbinarystring
+   module_g2dbinarystring
    module_g1dlist
    module_g2dlist
 

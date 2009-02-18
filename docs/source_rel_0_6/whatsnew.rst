@@ -32,14 +32,12 @@ What's new on the release |release|:
    spread between the high and low fitnesses increases. See the description
    on the :func:`Scaling.BoltzmannScaling` function.
 
-
 **Selectors - the alternative Tournament Selection**
    
    Added an alternative Tournament selection method, the :func:`Selectors.GTournamentAlternative`.
    This new Tournament Selector **don't uses** the Roulette Wheel method to pick individuals.
 
-
-**Statistisc - two new statistical measures**
+**Statistics - two new statistical measures**
    
    Added the **fitTot** and the **rawTot** parameters to the :class:`Statistics.Statistics`
    class. See the class documentation for more information.
@@ -74,3 +72,7 @@ What's new on the release |release|:
    Added the :mod:`Migration` module, this module is used to control the
    migration of the distributed GA.
 
+**The G2DBinaryString module - the 2D Binary String**
+
+   Added the :mod:`G2DBinaryString` module. This module contains
+   the 2D Binary String chromosome representation.

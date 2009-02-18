@@ -459,3 +459,70 @@ def G2DListMutatorRealGaussian(genome, **args):
          genome.setItem(which_y, which_x, final_value)
 
    return mutations
+
+
+#############################
+##     2D Binary String    ##
+#############################
+
+def G2DBinaryStringMutatorSwap(genome, **args):
+   """ The mutator of G2DBinaryString, Swap Mutator
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringMutatorSwap* function
+   """
+   
+   if args["pmut"] <= 0.0: return 0
+   height, width = genome.getSize()
+   elements = height * width
+
+   mutations = args["pmut"] * elements
+
+   if mutations < 1.0:
+      mutations = 0
+      for i in xrange(height):
+         for j in xrange(width):
+            if Util.randomFlipCoin(args["pmut"]):
+               index_b = (rand_randint(0, height-1), rand_randint(0, width-1))
+               Util.list2DSwapElement(genome.genomeString, (i,j), index_b)
+               mutations+=1
+   else:
+      for it in xrange(int(round(mutations))):
+         index_a = (rand_randint(0, height-1), rand_randint(0, width-1))
+         index_b = (rand_randint(0, height-1), rand_randint(0, width-1))
+         Util.list2DSwapElement(genome.genomeString, index_a, index_b)
+
+   return mutations
+
+
+def G2DBinaryStringMutatorFlip(genome, **args):
+   """ A flip mutator for G2DBinaryString
+   
+   .. versionadded:: 0.6
+      The *G2DBinaryStringMutatorFlip* function
+   """
+   if args["pmut"] <= 0.0: return 0
+   height, width = genome.getSize()
+   elements = height * width
+
+   mutations = args["pmut"] * elements
+
+   if mutations < 1.0:
+      mutations = 0
+      
+      for i in xrange(genome.getHeight()):
+         for j in xrange(genome.getWidth()):
+            if Util.randomFlipCoin(args["pmut"]):
+               if genome[i][j] == 0: genome.setItem(i, j, 1)
+               else:                 genome.setItem(i, j, 0)
+               mutations += 1
+   else: 
+
+      for it in xrange(int(round(mutations))):
+         which_x = rand_randint(0, genome.getWidth()-1)
+         which_y = rand_randint(0, genome.getHeight()-1)
+
+         if genome[i][j] == 0: genome.setItem(which_y, which_x, 1)
+         else:                 genome.setItem(which_y, which_x, 0)
+
+   return mutations
