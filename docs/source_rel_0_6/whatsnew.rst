@@ -76,3 +76,8 @@ What's new on the release |release|:
 
    Added the :mod:`G2DBinaryString` module. This module contains
    the 2D Binary String chromosome representation.
+
+**1D chromosomes - new base class**
+
+   All the 1D choromsomes representation is now extending the
+   :class:`GenomeBase.G1DBase` base class.

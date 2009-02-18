@@ -35,10 +35,10 @@ Class
 -------------------------------------------------------------
 
 """
-from GenomeBase import GenomeBase
+from GenomeBase import GenomeBase, G1DBase
 import Consts
 
-class G1DList(GenomeBase):
+class G1DList(GenomeBase, G1DBase):
    """ G1DList Class - The 1D List chromosome representation
    
    **Examples**
@@ -130,38 +130,14 @@ class G1DList(GenomeBase):
       genome.crossover.set(Crossovers.G1DListCrossoverUniform)
    """
 
-   def __init__(self, size):
+   def __init__(self, size=10):
       """ The initializator of G1DList representation,
       size parameter must be specified """
       GenomeBase.__init__(self)
-      self.genomeList = []
-      self.listSize = size
+      G1DBase.__init__(self, size)
       self.initializator.set(Consts.CDefG1DListInit)
       self.mutator.set(Consts.CDefG1DListMutator)
       self.crossover.set(Consts.CDefG1DListCrossover)
-
-   def __iadd__(self, item):
-      """ To add more items using the += operator
-      
-         .. versionadded:: 0.6
-            The __iadd__ method.
-      """
-      self.genomeList.append(item)
-      return self
-
-   def __eq__(self, other):
-      """ Compares one chromosome with another """
-      cond1 = (self.genomeList == other.genomeList)
-      cond2 = (self.listSize   == other.listSize)
-      return True if cond1 and cond2 else False
-
-   def __contains__(self, value):
-      """ Used on: *value in genome*
-      
-      .. versionadded:: 0.6
-         The *__contains__* method
-      """
-      return value in self.genomeList
 
    def __mul__(self, other):
       """ Multiply every element of G1DList by "other" """
@@ -184,57 +160,14 @@ class G1DList(GenomeBase):
          newObj[i] -= other
       return newObj
 
-   def __getslice__(self, a, b):
-      """ Return the sliced part of chromosome """
-      return self.genomeList[a:b]
-
-   def __getitem__(self, key):
-      """ Return the specified gene of List """
-      return self.genomeList[key]
-
-   def __setitem__(self, key, value):
-      """ Set the specified value for an gene of List """
-      self.genomeList[key] = value
-
-   def __iter__(self):
-      """ Iterator support to the list """
-      return iter(self.genomeList)
-   
-   def __len__(self):
-      """ Return the size of the List """
-      return len(self.genomeList)
-      
    def __repr__(self):
       """ Return a string representation of Genome """
       ret = GenomeBase.__repr__(self)
       ret += "- G1DList\n"
-      ret += "\tList size:\t %s\n" % (self.listSize,)
+      ret += "\tList size:\t %s\n" % (self.getListSize(),)
       ret += "\tList:\t\t %s\n\n" % (self.genomeList,) 
       return ret
 
-   def resumeString(self):
-      """ Returns a resumed string representation of the Genome
-      
-      .. versionadded:: 0.6
-         The *resumeString* method.
-      """
-      return str(self.genomeList)
-
-   def append(self, value):
-      """ Appends an item to the list
-      
-      Example:
-         >>> genome.append(44)
-
-      :param value: value to be added
-      
-      """
-      self.genomeList.append(value)
-
-   def clearList(self):
-      """ Remove all genes from Genome """
-      del self.genomeList[:]
-   
    def copy(self, g):
       """ Copy genome to 'g'
       
@@ -245,8 +178,7 @@ class G1DList(GenomeBase):
 
       """
       GenomeBase.copy(self, g)
-      g.listSize = self.listSize
-      g.genomeList = self.genomeList[:]
+      G1DBase.copy(self, g)
    
    def clone(self):
       """ Return a new instace copy of the genome
@@ -254,7 +186,7 @@ class G1DList(GenomeBase):
       :rtype: the G1DList clone instance
 
       """
-      newcopy = G1DList(self.listSize)
+      newcopy = G1DList(self.genomeSize)
       self.copy(newcopy)
       return newcopy
 

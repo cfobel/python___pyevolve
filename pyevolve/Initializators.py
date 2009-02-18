@@ -59,7 +59,7 @@ def G1DListInitializatorAllele(genome, **args):
    if allele is None:
       Util.raiseException("to use the G1DListInitializatorAllele, you must specify the 'allele' parameter")
 
-   genome.genomeList = [ allele[i].getRandomAllele() for i in xrange(genome.listSize)  ]
+   genome.genomeList = [ allele[i].getRandomAllele() for i in xrange(genome.getListSize())  ]
 
 def G1DListInitializatorInteger(genome, **args):
    """ Integer initialization function of G1DList
@@ -70,7 +70,7 @@ def G1DListInitializatorInteger(genome, **args):
    range_min = genome.getParam("rangemin", 0)
    range_max = genome.getParam("rangemax", 100)
 
-   genome.genomeList = [rand_randint(range_min, range_max) for i in xrange(genome.listSize)]
+   genome.genomeList = [rand_randint(range_min, range_max) for i in xrange(genome.getListSize())]
 
 def G1DListInitializatorReal(genome, **args):
    """ Real initialization function of G1DList
@@ -81,7 +81,7 @@ def G1DListInitializatorReal(genome, **args):
    range_min = genome.getParam("rangemin", 0)
    range_max = genome.getParam("rangemax", 100)
 
-   genome.genomeList = [rand_uniform(range_min, range_max) for i in xrange(genome.listSize)]
+   genome.genomeList = [rand_uniform(range_min, range_max) for i in xrange(genome.getListSize())]
 
 
 ####################
