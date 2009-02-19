@@ -23,12 +23,13 @@ genome.setParams(rangemin=0, rangemax=10)
 genome.evaluator.set(eval_func)
 
 # Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
+ga = GSimpleGA.GSimpleGA(genome, 666)
 ga.setGenerations(80)
+ga.setMutationRate(0.2)
 
 # Create DB Adapter and set as adapter
-sqlite_adapter = DBAdapters.DBSQLite(identify="ex6")
-ga.setDBAdapter(sqlite_adapter)
+#sqlite_adapter = DBAdapters.DBSQLite(identify="ex6", resetDB=True)
+#ga.setDBAdapter(sqlite_adapter)
 
 # Using CSV Adapter
 #csvfile_adapter = DBAdapters.DBFileCSV()
@@ -43,4 +44,4 @@ ga.setDBAdapter(sqlite_adapter)
 ga.evolve(freq_stats=10)
 
 # Best individual
-print ga.bestIndividual()
+#print ga.bestIndividual()

@@ -12,6 +12,9 @@ you'll find the class :class:`FunctionSlot.FunctionSlot`, which is the slot clas
 """
 
 from random import uniform as rand_uniform
+import inspect
+from types import BooleanType
+
 import Util
 
 class FunctionSlot:
@@ -54,12 +57,17 @@ class FunctionSlot:
       self.slotName = name
       self.rand_apply = rand_apply
 
+   def __typeCheck(self, func):
+      if not (inspect.isfunction(func) or inspect.ismethod(func)):
+         Util.raiseException("The function must be a method or function", TypeError)
+
    def __iadd__(self, func):
       """ To add more functions using the += operator
       
          .. versionadded:: 0.6
             The __iadd__ method.
       """
+      self.__typeCheck(func)
       self.funcList.append(func)
       return self
 
@@ -69,11 +77,20 @@ class FunctionSlot:
 
    def __setitem__(self, index, value):
       """ Used to set the index slot function """
+      self.__typeCheck(value)
       self.funcList[index] = value      
 
    def __iter__(self):
       """ Return the function list iterator """
       return iter(self.funcList)
+
+   def __len__(self):
+      """ Return the number of functions on the slot
+
+      .. versionadded:: 0.6
+         The *__len__* method
+      """
+      return len(self.funcList)
 
    def setRandomApply(self, flag=True):
       """ Sets the random function application, in this mode, the
@@ -82,16 +99,11 @@ class FunctionSlot:
       :param flag: True or False
 
       """
+      if type(flag) != BooleanType:
+         Util.raiseException("Random option must be True or False", TypeError)
+
       self.rand_apply = flag
    
-   def getFunction(self, index=0):
-      """ Return the function handle at index
-
-      :param index: the index of the function
-
-      """
-      return self.funcList[index]
-
    def clear(self):
       """ Used to clear the functions in the slot """
       if len(self.funcList) > 0:
@@ -108,6 +120,7 @@ class FunctionSlot:
          The `weight` parameter.
 
       """
+      self.__typeCheck(func)
       self.funcList.append(func)
       self.funcWeights.append(weight)
 
@@ -129,6 +142,7 @@ class FunctionSlot:
                 functions added to the slot.
       """
       self.clear()
+      self.__typeCheck(func)
       self.add(func, weight)
 
    def apply(self, index, obj, **args):
