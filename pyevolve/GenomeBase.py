@@ -210,6 +210,10 @@ class G1DBase:
       """ Return the sliced part of chromosome """
       return self.genomeList[a:b]
 
+   def __setslice__(self, a, b, val):
+      """ Sets the slice part of chromosome """
+      self.genomeList[a:b] = val
+
    def __getitem__(self, key):
       """ Return the specified gene of List """
       return self.genomeList[key]

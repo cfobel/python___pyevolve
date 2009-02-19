@@ -165,7 +165,7 @@ class G1DList(GenomeBase, G1DBase):
       ret = GenomeBase.__repr__(self)
       ret += "- G1DList\n"
       ret += "\tList size:\t %s\n" % (self.getListSize(),)
-      ret += "\tList:\t\t %s\n\n" % (self.genomeList,) 
+      ret += "\tList:\t\t %s\n\n" % (self.genomeList,)
       return ret
 
    def copy(self, g):

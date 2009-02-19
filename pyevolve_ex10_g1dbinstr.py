@@ -16,7 +16,7 @@ def eval_func(chromosome):
    return score
 
 # Genome instance
-genome = G1DBinaryString.G1DBinaryString(60)
+genome = G1DBinaryString.G1DBinaryString(50)
 
 # The evaluator function (objective function)
 genome.evaluator.set(eval_func)
@@ -26,7 +26,7 @@ genome.mutator.set(Mutators.G1DBinaryStringMutatorFlip)
 ga = GSimpleGA.GSimpleGA(genome)
 ga.selector.set(Selectors.GTournamentSelector)
 
-ga.setGenerations(100)
+ga.setGenerations(70)
 
 # Do the evolution, with stats dump
 # frequency of 10 generations

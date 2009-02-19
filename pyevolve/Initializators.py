@@ -23,7 +23,7 @@ import Util
 
 def G1DBinaryStringInitializator(genome, **args):
    """ 1D Binary String initializator """
-   genome.genomeString = [ rand_choice((0,1)) for i in xrange(len(genome)) ]
+   genome.genomeList = [ rand_choice((0,1)) for i in xrange(genome.getListSize()) ]
 
 #############################
 ##     2D Binary String    ##
