@@ -1,10 +1,10 @@
 import inspect
+import random
 
-NODE_CONSTANT = 0
-NODE_VARIABLE = 1
-NODE_OPERATOR = 2
+NODE_TERMINAL = 0
+NODE_NONTERMINAL = 1
 
-NODE_TYPE = ["Constant", "Variable", "Operator"]
+NODE_TYPE = ["Terminal", "Non Terminal"]
 
 class GTreeNodeBase:
    def __init__(self, parent):
@@ -30,18 +30,23 @@ class GTreeNodeBase:
 
 
 class GTreeNodeGP(GTreeNodeBase):
-   def __init__(self, data, node_type=NODE_OPERATOR, parent=None):
+   def __init__(self, data, node_type=NODE_NONTERMINAL, parent=None):
       GTreeNodeBase.__init__(self, parent)
       self.node_type = node_type
       self.node_data = data
 
-   def newNode(self, data, node_type=NODE_OPERATOR):
+   def newNode(self, data, node_type=NODE_NONTERMINAL):
       node = GTreeNodeGP(data, node_type, self)
       self.addChild(node)
       return node
 
    def __repr__(self):
       str_repr = "GTreeNode [%s @ %s]" % (NODE_TYPE[self.node_type], self.node_data)
+      if len(self) > 0:
+         str_repr += " - Childs: %d" % len(self)
+      if self.getParent() is not None:
+         str_repr += " - Parent: OK"
+
       return str_repr
 
 
@@ -97,23 +102,49 @@ class GTreeGP(GTreeBase):
       GTreeBase.__init__(self, root_node)
 
 
-def show(node):
-   print node
+TERMINALS = ['x', 'y', '1', '666']
+FUNCTIONS = ['+', '-', '*', '/']
+FUNCTIONS_OP = {'+' : 2, '-' : 2, '*':2, '/':2}
+
+def buildTree(depth, max_depth):
+
+   if depth == max_depth:
+      random_terminal = random.choice(TERMINALS)
+      n = GTreeNodeGP(random_terminal, NODE_TERMINAL)
+      return n
+   else:
+      fchoice = random.choice([FUNCTIONS, TERMINALS])
+      random_node = random.choice(fchoice)
+      if random_node in TERMINALS:
+         n = GTreeNodeGP(random_node, NODE_TERMINAL)
+      else:
+         n = GTreeNodeGP(random_node, NODE_NONTERMINAL)
+
+   if n.node_type == NODE_NONTERMINAL:
+      for i in xrange(FUNCTIONS_OP[n.node_data]):
+         child = buildTree(depth+1, max_depth)
+         child.setParent(n)
+         n.addChild(child)
+
+   return n
+
 
 if __name__ == "__main__":
-   root = GTreeNodeGP("root")
+
+
+   root = buildTree(1, 20)
    t = GTreeGP(root)
-   n2 = root.newNode("teste2")
-   n3 = root.newNode("teste3")
-   n4 = n3.newNode("teste4")
-   n5 = n3.newNode("teste5")
-   n6 = n5.newNode("teste6")
-   n7 = root.newNode("teste7")
-
-
    print t
-   print "Len:", len(t)
-   t.traversal(show)
+
+
+
+
+
+
+
+
+
+
 
 
 
