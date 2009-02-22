@@ -1,6 +1,9 @@
 import inspect
 import random
 
+import networkx as nx
+import matplotlib.pyplot as plt
+
 NODE_TERMINAL = 0
 NODE_NONTERMINAL = 1
 
@@ -25,6 +28,11 @@ class GTreeNodeBase:
    def getParent(self):
       return self.parent
 
+   def __repr__(self):
+      parent = "None" if self.getParent() is None else "Present"
+      str_repr = "GTreeNodeBase [Childs=%d, Parent=%s]" % (len(self), parent)
+      return str_repr
+
    def __len__(self):
       return len(self.childs)
 
@@ -40,14 +48,14 @@ class GTreeNodeGP(GTreeNodeBase):
       self.addChild(node)
       return node
 
-   def __repr__(self):
-      str_repr = "GTreeNode [%s @ %s]" % (NODE_TYPE[self.node_type], self.node_data)
-      if len(self) > 0:
-         str_repr += " - Childs: %d" % len(self)
-      if self.getParent() is not None:
-         str_repr += " - Parent: OK"
+   def __hash__(self):
+      return id(self)
 
-      return str_repr
+   def __repr__(self):
+      #str_repr  = GTreeNodeBase.__repr__(self)
+      #str_repr += " - [%s @ %s]" % (NODE_TYPE[self.node_type], self.node_data)
+      #return str_repr
+      return self.node_data
 
 
 class GTreeBase:
@@ -100,6 +108,19 @@ class GTreeGP(GTreeBase):
    
    def __init__(self, root_node=None):
       GTreeBase.__init__(self, root_node)
+      self.graph = None
+
+   def drawTree(self):
+      self.graph = nx.RootedTree(self.getRoot())
+      self.drawTreeRecursive()
+      nx.draw_shell(self.graph)
+
+   def drawTreeRecursive(self, start_node=None):
+      if start_node is None:
+         start_node = self.getRoot()
+      for i in start_node.getChilds():
+         self.graph.add_edge(start_node, i)
+         self.drawTreeRecursive(i)
 
 
 TERMINALS = ['x', 'y', '1', '666']
@@ -107,7 +128,6 @@ FUNCTIONS = ['+', '-', '*', '/']
 FUNCTIONS_OP = {'+' : 2, '-' : 2, '*':2, '/':2}
 
 def buildTree(depth, max_depth):
-
    if depth == max_depth:
       random_terminal = random.choice(TERMINALS)
       n = GTreeNodeGP(random_terminal, NODE_TERMINAL)
@@ -115,6 +135,7 @@ def buildTree(depth, max_depth):
    else:
       fchoice = random.choice([FUNCTIONS, TERMINALS])
       random_node = random.choice(fchoice)
+
       if random_node in TERMINALS:
          n = GTreeNodeGP(random_node, NODE_TERMINAL)
       else:
@@ -132,9 +153,11 @@ def buildTree(depth, max_depth):
 if __name__ == "__main__":
 
 
-   root = buildTree(1, 20)
+   root = buildTree(1, 10)
    t = GTreeGP(root)
    print t
+   t.drawTree()
+   plt.show()
 
 
 
