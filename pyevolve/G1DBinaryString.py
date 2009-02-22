@@ -5,6 +5,7 @@
 This is the classical chromosome representation on GAs, it is the 1D
 Binary String. This string looks like "00011101010".
 
+
 Default Parameters
 -------------------------------------------------------------
 
@@ -39,6 +40,9 @@ import Util
     
 class G1DBinaryString(GenomeBase, G1DBase):
    """ G1DBinaryString Class - The 1D Binary String chromosome
+   
+   This chromosome class extends the :class:`GenomeBase.GenomeBase`
+   and :class:`GenomeBase.G1DBase` classes.
    
    Example:
       >>> genome = G1DBinaryString.G1DBinaryString(5)

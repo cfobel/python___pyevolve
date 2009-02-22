@@ -81,3 +81,9 @@ What's new on the release |release|:
 
    All the 1D choromsomes representation is now extending the
    :class:`GenomeBase.G1DBase` base class.
+
+**Tree chromosome - new Tree representation chromosome**
+
+   Added the module :mod:`GTree`, this module contains the
+   new GTree chromosome representation and all tree related
+   functions.

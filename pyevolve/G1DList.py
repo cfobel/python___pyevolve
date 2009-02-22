@@ -6,8 +6,7 @@
 This is the 1D List representation, this list can carry real
 numbers or integers or any kind of object, by default, we have
 genetic operators for integer and real lists, which can be found
-on the respective modules. This chromosome class extends the :class:`GenomeBase.GenomeBase` class.
-
+on the respective modules. 
 
 Default Parameters
 -------------------------------------------------------------
@@ -40,6 +39,9 @@ import Consts
 
 class G1DList(GenomeBase, G1DBase):
    """ G1DList Class - The 1D List chromosome representation
+   
+   This chromosome class extends the :class:`GenomeBase.GenomeBase`
+   and :class:`GenomeBase.G1DBase` classes.
    
    **Examples**
 
@@ -190,4 +192,8 @@ class G1DList(GenomeBase, G1DBase):
       self.copy(newcopy)
       return newcopy
 
-   
+
+
+if __name__ == "__main__":
+   a = G1DList(10)
+   print a

@@ -15,6 +15,7 @@ choosing random data.
 """
 
 from random import randint as rand_randint, uniform as rand_uniform, choice as rand_choice
+import GTree
 import Util
 
 #############################
@@ -140,3 +141,48 @@ def G2DListInitializatorAllele(genome, **args):
       for j in xrange(genome.getWidth()):
          random_allele = allele[0].getRandomAllele()
          genome.setItem(i, j, random_allele)
+
+####################
+##      Tree      ##
+####################
+
+def GTreeInitInteger(genome, **args):
+   """ Integer initialization function of GTree
+
+   This initializator accepts the *rangemin* and *rangemax* genome parameters.
+   It accepts the following parameters too:
+      
+   *max_depth*
+      The max depth of the tree
+
+   *max_sister*
+      The number of maximum sisters of an node
+
+   *method*
+      The method, accepts "grow" or "full"
+
+   """
+   max_depth = genome.getParam("max_depth", 5)
+   max_sister = genome.getParam("max_sister", 2)
+
+   range_min = genome.getParam("rangemin", 0)
+   range_max = genome.getParam("rangemax", 100)
+   lambda_generator = lambda: rand_randint(range_min, range_max)
+
+   method = genome.getParam("method", "grow")
+
+   if method == "grow":
+      root = GTree.buildTreeGrow(0, lambda_generator, max_sister, max_depth)
+   else:
+      root = GTree.buildTreeFull(0, lambda_generator, max_sister, max_depth)
+
+   genome.setRoot(root)
+
+
+
+
+
+
+
+
+

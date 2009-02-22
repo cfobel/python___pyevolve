@@ -53,4 +53,5 @@ Chromosomes/Representation Modules
    module_g2dbinarystring
    module_g1dlist
    module_g2dlist
+   module_gtree
 
