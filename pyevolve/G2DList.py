@@ -74,6 +74,8 @@ class G2DList(GenomeBase):
          [1, 3, 4, 1]
          [666, 666, 666, 666]
          [9, 0, 1, 2]
+         >>> genome[1][1] = 2
+         (...)
 
    :param height: the number of rows
    :param width: the number of columns
@@ -140,6 +142,7 @@ class G2DList(GenomeBase):
       Example:
          >>> genome.getItem(3, 1)
          666
+         >>> genome[3][1]
       
       :param x: the x index, the column
       :param y: the y index, the row
@@ -153,6 +156,7 @@ class G2DList(GenomeBase):
 
       Example:
          >>> genome.setItem(3, 1, 666)
+         >>> genome[3][1] = 666
       
       :param x: the x index, the column
       :param y: the y index, the row
@@ -247,3 +251,11 @@ class G2DList(GenomeBase):
       self.copy(newcopy)
       return newcopy
 
+
+
+if __name__ == "__main__":
+   a = G2DList(3,3)
+   a.setItem(2,2, "s")
+   a[1][1] = 2
+
+   print a
