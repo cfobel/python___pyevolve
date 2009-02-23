@@ -165,6 +165,22 @@ Population constants (:class:`GPopulation.GPopulation`)
    Default *sigma* value of the 1D List Gaussian Real Mutator (:func:`Mutators.G1DListMutatorRealGaussian`), the *sigma* represents the mean of the distribution.
 
 
+Tree chromosome constants (:class:`GTree.GTree`)
+----------------------------------------------------------------------------
+
+.. attribute:: CDefGTreeInit
+
+   Default initializator of the tree chromosome.
+   
+.. attribute:: CDefGGTreeMutator
+
+   Default mutator of the tree chromosome.
+   
+.. attribute:: CDefGTreeCrossover
+
+   Default crossover of the tree chromosome.
+  
+
 2D List chromosome constants (:class:`G2DList.G2DList`)
 ----------------------------------------------------------------------------
 
@@ -369,16 +385,21 @@ CDefRangeMin = 0
 CDefRangeMax = 100
 
 # - G1DBinaryString defaults
-CDefG1DBinaryStringMutator   = Mutators.G1DBinaryStringMutatorFlip
-CDefG1DBinaryStringCrossover = Crossovers.G1DBinaryStringXSinglePoint
-CDefG1DBinaryStringInit      = Initializators.G1DBinaryStringInitializator
+CDefG1DBinaryStringMutator     = Mutators.G1DBinaryStringMutatorFlip
+CDefG1DBinaryStringCrossover   = Crossovers.G1DBinaryStringXSinglePoint
+CDefG1DBinaryStringInit        = Initializators.G1DBinaryStringInitializator
 CDefG1DBinaryStringUniformProb = 0.5
 
 # - G2DBinaryString defaults
-CDefG2DBinaryStringMutator    = Mutators.G2DBinaryStringMutatorFlip
-CDefG2DBinaryStringCrossover = Crossovers.G2DBinaryStringXUniform
-CDefG2DBinaryStringInit      = Initializators.G2DBinaryStringInitializator
+CDefG2DBinaryStringMutator     = Mutators.G2DBinaryStringMutatorFlip
+CDefG2DBinaryStringCrossover   = Crossovers.G2DBinaryStringXUniform
+CDefG2DBinaryStringInit        = Initializators.G2DBinaryStringInitializator
 CDefG2DBinaryStringUniformProb = 0.5
+
+# - GTree defaults
+CDefGTreeInit      = Initializators.GTreeInitInteger
+CDefGGTreeMutator  = None
+CDefGTreeCrossover = None
 
 # - G1DList defaults
 CDefG1DListMutIntMU = 2

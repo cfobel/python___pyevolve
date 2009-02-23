@@ -10,7 +10,10 @@ Default Parameters
 -------------------------------------------------------------
 
 *Initializator*
-   TODO
+
+  :func:`Initializators.GTreeInitInteger`
+
+   The Integer Initializator for GTree
 
 *Mutator*
    TODO
@@ -69,9 +72,9 @@ class GTree(GenomeBase, GTreeBase):
    def __init__(self, root_node=None):
       GenomeBase.__init__(self)
       GTreeBase.__init__(self, root_node)
-      #self.initializator.set(Consts.)
-      #self.mutator.set(Consts.)
-      #self.crossover.set(Consts.)
+      self.initializator.set(Consts.CDefGTreeInit)
+      #self.mutator.set(Consts.CDefGGTreeMutator)
+      #self.crossover.set(Consts.CDefGTreeCrossover)
 
    def __repr__(self):
       """ Return a string representation of Genome """
