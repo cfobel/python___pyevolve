@@ -531,5 +531,29 @@ Using two or more :term:`evaluation function`
    .. note:: the method *set* of the function slot remove all previous
              functions added to the slot.
 
+Real-time statistics visualization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   You have three options to view the statistics while in the course
+   of the evolution:
+
+   **Console statistics**
+      
+      You can view the statistics by setting the *freq_stats* parameter
+      of the :meth:`GSimpleGA.GSimpleGA.evolve` method. It will dump
+      the statistics in the console.
+
+   **Using the sqlite3 DB Adapter**
+
+      You can use the :class:`DBAdapters.DBSQLite` DB Adapter and set
+      the *commit_freq* to a low value, so you can use the Graphical
+      Plotting Tool of Pyevolve to create graphics while evolving.
+
+
+   **Using the VPython DB Adapter**
+
+      Use the :class:`DBAdapters.DBVPythonGraph` DB Adapter, this DB
+      Adapter will show four statistical graphs, it is fast and
+      easy to use.
 
 
