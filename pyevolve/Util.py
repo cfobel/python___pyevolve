@@ -11,6 +11,7 @@ use, like list item swap, random utilities and etc.
 from random import random as rand_random
 from sys import platform as sys_platform
 import logging
+import Consts
 
 if sys_platform[:5] == "linux":
    import sys, termios
@@ -171,6 +172,21 @@ def cmp_individual_scaled(a, b):
    if a.fitness > b.fitness: return 1
    return 0
 
+def importSpecial(name):
+   """ This function will import the *name* module, if fails,
+   it will raise an ImportError exception and a message
+
+   :param name: the module name
+   :rtype: the module object
+   
+   .. versionadded:: 0.6
+      The *import_special* function
+   """
+   try:
+      imp_mod = __import__(name)
+   except ImportError:
+      raiseException("Cannot import module %s: %s" % (name, Consts.CDefImportList[name]), expt=ImportError)
+   return imp_mod 
 
 class Graph:
    """ The Graph class
@@ -255,13 +271,5 @@ class Graph:
          ret += "\t\tNode [%s] = %s\n" % (node, self.getNeighbors(node))
       return ret         
       
-
-if __name__ == "__main__":
-   g = Graph()
-   g.addEdge(("127.0.0.1", 666), ("127.0.0.2", 666))
-   g.addEdge(("127.0.0.3", 666), ("127.0.0.2", 666))
-   g.addEdge(("127.0.0.1", 666), ("127.0.0.5", 666))
-   
-   print g
 
    

@@ -417,6 +417,16 @@ class GSimpleGA:
          Util.raiseException("Number of generations must be >= 1", ValueError)
       self.nGenerations = num_gens
 
+   def getGenerations(self):
+      """ Return the number of generations to evolve
+
+      :rtype: the number of generations
+
+      .. versionadded:: 0.6
+         Added the *getGenerations* method
+      """
+      return self.nGenerations
+
    def getMinimax(self):
       """ Gets the minimize/maximize mode
 
@@ -580,7 +590,8 @@ class GSimpleGA:
       """ Dumps the current statistics to database adapter """
       logging.debug("Dumping stats to the DB Adapter")
       self.internalPop.statistics()
-      self.dbAdapter.insert(self.getStatistics(), self.internalPop, self.currentGeneration)
+      #self.dbAdapter.insert(self.getStatistics(), self.internalPop, self.currentGeneration)
+      self.dbAdapter.insert(self)
 
    def evolve(self, freq_stats=0):
       """ Do all the generations until the termination criteria, accepts
@@ -605,7 +616,7 @@ class GSimpleGA:
       self.time_init = time()
 
       logging.debug("Starting the DB Adapter and the Migration Adapter if any")
-      if self.dbAdapter: self.dbAdapter.open()
+      if self.dbAdapter: self.dbAdapter.open(self)
       if self.migrationAdapter: self.migrationAdapter.start()
 
       self.initialize()

@@ -17,12 +17,14 @@ module, you'll find the adapters above cited.
 
 """
 
+from pyevolve import __version__
 import Consts
 import Util
 import logging
 import types
 import datetime
 import Statistics
+
 
 class DBBaseAdapter:
    """ DBBaseAdapter Class - The base class for all DB Adapters
@@ -75,9 +77,12 @@ class DBBaseAdapter:
       """
       self.statsGenFreq = statsGenFreq
 
-   def open(self):
+   def open(self, ga_engine):
       """ This method is called one time to do the initialization of
-      the DB Adapter """
+      the DB Adapter
+
+      :param ga_engine: the GA Engine
+      """
       pass
 
    def commitAndClose(self):
@@ -85,12 +90,10 @@ class DBBaseAdapter:
       DB Adapter and commit the changes """
       pass
 
-   def insert(self, stats, population, generation):
+   def insert(self, ga_engine):
       """ Insert the stats
 
-      :param stats: statistics object (:class:`Statistics.Statistics`)
-      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
-      :param generation: the generation of the insert
+      :param ga_engine: the GA Engine
       """
       Util.raiseException("This method is not implemented on the ABC", NotImplementedError)
 
@@ -128,12 +131,17 @@ class DBFileCSV(DBBaseAdapter):
       ret = "DBFileCSV DB Adapter [File='%s', identify='%s']" % (self.filename, self.getIdentify())
       return ret
 
-   def open(self):
-      """ Open the CSV file or creates a new file """
+   def open(self, ga_engine):
+      """ Open the CSV file or creates a new file
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
       if self.csvmod is None:
          logging.debug("Loading the csv module...")
-         import csv as csvmod
-         self.csvmod = csvmod
+         self.csvmod = Util.importSpecial("csv")
 
       logging.debug("Opening the CSV file to dump statistics [%s]", self.filename)
       if self.reset: open_mode = "w"
@@ -151,14 +159,16 @@ class DBFileCSV(DBBaseAdapter):
       """ Commits and closes """
       self.close()
 
-   def insert(self, stats, population, generation):
+   def insert(self, ga_engine):
       """ Inserts the stats into the CSV file
 
-      :param stats: statistics object (:class:`Statistics.Statistics`)
-      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
-      :param generation: the generation of the insert
+      :param ga_engine: the GA Engine
 
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
       """
+      stats = ga_engine.getStatistics()
+      generation = ga_engine.getCurrentGeneration()
       line = [self.getIdentify(), generation]
       line.extend(stats.asTuple())
       self.csvWriter.writerow(line)
@@ -205,25 +215,31 @@ class DBURLPost(DBBaseAdapter):
       ret = "DBURLPost DB Adapter [URL='%s', identify='%s']" % (self.url, self.getIdentify())
       return ret
 
-   def open(self):
-      """ Load the modules needed """
+   def open(self, ga_engine):
+      """ Load the modules needed
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
       if self.urllibmod is None:
          logging.debug("Loading urllib module...")
-         import urllib as urllibmod
-         self.urllibmod = urllibmod
+         self.urllibmod = Util.importSpecial("urllib")
 
-   def insert(self, stats, population, generation):
+   def insert(self, ga_engine):
       """ Sends the data to the URL using POST or GET
-   
-      :param stats: statistics object (:class:`Statistics.Statistics`)
-      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
-      :param generation: the generation of the insert
 
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
       """
       logging.debug("Sending http request to %s.", self.url)
+      stats = ga_engine.getStatistics()
       response = None
       params = stats.internalDict.copy()
-      params["generation"] = generation
+      params["generation"] = ga_engine.getCurrentGeneration()
       params["identify"] = self.getIdentify()
       if self.post: # POST
          response = self.urllibmod.urlopen(self.url, self.urllibmod.urlencode(params))
@@ -276,12 +292,17 @@ class DBSQLite(DBBaseAdapter):
       ret = "DBSQLite DB Adapter [File='%s', identify='%s']" % (self.dbName, self.getIdentify())
       return ret
 
-   def open(self):
-      """ Open the database connection """
+   def open(self, ga_engine):
+      """ Open the database connection
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
       if self.sqlite3mod is None:
          logging.debug("Loading sqlite3 module...")
-         import sqlite3 as sqlite3mod
-         self.sqlite3mod = sqlite3mod
+         self.sqlite3mod = Util.importSpecial("sqlite3")
 
       logging.debug("Opening database, dbname=%s", self.dbName)
       self.connection = self.sqlite3mod.connect(self.dbName)
@@ -294,8 +315,6 @@ class DBSQLite(DBBaseAdapter):
 
       if self.resetIdentify:
          self.resetTableIdentify()
-
-
 
    def commitAndClose(self):
       """ Commit changes on database and closes connection """
@@ -378,14 +397,18 @@ class DBSQLite(DBBaseAdapter):
       self.commit()
       self.createStructure(stats)
       
-   def insert(self, stats, population, generation):
+   def insert(self, ga_engine):
       """ Inserts the statistics data to database
 
-      :param stats: statistics object (:class:`Statistics.Statistics`)
-      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
-      :param generation: the generation of the insert
+      :param ga_engine: the GA Engine
 
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
       """
+      stats      = ga_engine.getStatistics()
+      population = ga_engine.getPopulation()
+      generation = ga_engine.getCurrentGeneration()
+
       c = self.getCursor()
       pstmt = "insert into %s values (?, ?, " % (Consts.CDefSQLiteDBTable)
       for i in xrange(len(stats)):
@@ -449,25 +472,91 @@ class DBXMLRPC(DBBaseAdapter):
       ret = "DBXMLRPC DB Adapter [URL='%s', identify='%s']" % (self.url, self.getIdentify())
       return ret
 
-   def open(self):
-      """ Open the XML RPC Server proxy """
+   def open(self, ga_engine):
+      """ Open the XML RPC Server proxy
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
       if self.xmlrpclibmod is None:
          logging.debug("Loding the xmlrpclib module...")
-         import xmlrpclib as xmlrpclibmod
-         self.xmlrpclibmod = xmlrpclibmod
+         self.xmlrpclibmod = Util.importSpecial("xmlrpclib")
 
       logging.debug("Opening the XML RPC Server Proxy on %s", self.url)
       self.proxy = xmlrpclib.ServerProxy(self.url, allow_none=True)
 
-   def insert(self, stats, population, generation):
+   def insert(self, ga_engine):
       """ Calls the XML RPC procedure
 
-      :param stats: statistics object (:class:`Statistics.Statistics`)
-      :param population: population to insert stats (:class:`GPopulation.GPopulation`)
-      :param generation: the generation of the insert
+      :param ga_engine: the GA Engine
 
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
       """
+      stats = ga_engine.getStatistics()
+      generation = ga_engine.getCurrentGeneration()
       di = stats.internalDict.copy()
       di.update({"identify": self.getIdentify(), "generation": generation})
       self.proxy.insert(di)
 
+class DBVPythonGraph(DBBaseAdapter):
+   """ The DBVPythonGraph Class - A DB Adapter for real-time visualization using VPython
+
+   .. note:: to use this DB Adapter, you **must** install VPython first.
+
+   Example:
+      >>> adapter = DBAdapters.DBVPythonGraph(identify="run_01", frequency = 1)
+      >>> ga_engine.setDBAdapter(adapter)
+   
+   :param identify: the identify of the run
+   :param frequency: the generational dump frequency
+
+   .. versionadded:: 0.6
+      The *DBVPythonGraph* class.
+   """
+
+   def __init__(self, identify=None, frequency = 20):
+      DBBaseAdapter.__init__(self, frequency, identify)
+      self.vtkGraph = None
+
+   def makeDisplay(self, title_sec, x, y, ga_engine):
+      title = "Pyevolve v.%s - %s - id [%s]" % (__version__, title_sec, self.identify)
+      disp = self.vtkGraph.gdisplay(title=title, xtitle='Generation', ytitle=title_sec,
+                                    xmax=ga_engine.getGenerations(), xmin=0., width=500,
+                                    height=250, x=x, y=y)
+      return disp
+
+   def open(self, ga_engine):
+      """ Imports the VPython module and creates the four graph windows
+
+      :param ga_engine: the GA Engine
+      """
+      logging.debug("Loading visual.graph (VPython) module...")
+      if self.vtkGraph is None:
+         self.vtkGraph = Util.importSpecial("visual.graph").graph
+
+      display_rawmin = self.makeDisplay("Raw Score (min)",       0,   0,   ga_engine)
+      display_rawmax = self.makeDisplay("Raw Score (max)",       0,   250, ga_engine)
+      display_rawdev = self.makeDisplay("Raw Score (std. dev.)", 500, 0,   ga_engine)
+      display_rawavg = self.makeDisplay("Raw Score (avg)",       500, 250, ga_engine)
+
+      self.curveMin = self.vtkGraph.gcurve(color=self.vtkGraph.color.red,    gdisplay=display_rawmin)
+      self.curveMax = self.vtkGraph.gcurve(color=self.vtkGraph.color.green,  gdisplay=display_rawmax)
+      self.curveDev = self.vtkGraph.gcurve(color=self.vtkGraph.color.blue,   gdisplay=display_rawdev)
+      self.curveAvg = self.vtkGraph.gcurve(color=self.vtkGraph.color.orange, gdisplay=display_rawavg)
+
+   def insert(self, ga_engine):
+      """ Plot the current statistics to the graphs
+
+      :param ga_engine: the GA Engine
+      """
+      stats = ga_engine.getStatistics()
+      generation = ga_engine.getCurrentGeneration()
+
+      self.curveMin.plot(pos=(generation, stats["rawMin"]))
+      self.curveMax.plot(pos=(generation, stats["rawMax"]))
+      self.curveDev.plot(pos=(generation, stats["rawDev"]))
+      self.curveAvg.plot(pos=(generation, stats["rawAve"]))
+      

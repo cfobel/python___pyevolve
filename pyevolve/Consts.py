@@ -52,6 +52,10 @@ General constants
    
    The broadcast address for UDP, 255.255.255.255
 
+.. attribute:: CDefImportList
+   
+   The import list and messages
+
 Selection methods constants (:mod:`Selectors`)
 ----------------------------------------------------------------------------
 
@@ -349,6 +353,13 @@ minimaxType = { "minimize" : 0,
                }
 
 CDefESCKey = 27
+
+CDefImportList = {"visual.graph": "you must install VPython !",
+                  "csv" : "csv module not found !",
+                  "urllib" : "urllib module not found !",
+                  "sqlite3": "sqlite3 module not found, are you using Jython or IronPython ?",
+                  "xmlrpclib" : "xmlrpclib module not found !"}
+
 ####################
 # Defaults section #
 ####################
@@ -364,8 +375,6 @@ CDefScaleBoltzMinTemp         = 1.0
 CDefScaleBoltzFactor          = 0.05
 # 40 temp. = 500 generations
 CDefScaleBoltzStart           = 40.0
-
-
 
 # - Population Defaults
 CDefPopSortType               = sortType["scaled"]
@@ -452,3 +461,4 @@ CDefGenMigrationReplacement = 3
 
 CDefNetworkIndividual = 1
 CDefNetworkInfo = 2
+
