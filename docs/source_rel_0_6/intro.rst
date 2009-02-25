@@ -142,7 +142,8 @@ GA Features
       Real Gaussian Mutator, Integer Binary Mutator, Allele Mutator
 
    **2D List**
-      Swap Mutator, Integer Gaussian Mutator, Real Gaussian Mutator, Allele Mutator
+      Swap Mutator, Integer Gaussian Mutator, Real Gaussian Mutator, Allele Mutator,
+      Integer Range Mutator
 
 **Initializators**
 
