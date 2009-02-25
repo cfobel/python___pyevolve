@@ -316,6 +316,39 @@ def G2DListMutatorSwap(genome, **args):
 
    return mutations
 
+def G2DListMutatorIntegerRange(genome, **args):
+   """ Simple integer range mutator for G2DList
+
+   Accepts the *rangemin* and *rangemax* genome parameters, both optional.
+
+   """
+   if args["pmut"] <= 0.0: return 0
+   height, width = genome.getSize()
+   elements = height * width
+
+   mutations = args["pmut"] * elements
+
+   range_min = genome.getParam("rangemin", Consts.CDefRangeMin)
+   range_max = genome.getParam("rangemax", Consts.CDefRangeMax)
+
+   if mutations < 1.0:
+      mutations = 0
+      for i in xrange(genome.getHeight()):
+         for j in xrange(genome.getWidth()):
+            if Util.randomFlipCoin(args["pmut"]):
+               random_int = rand_randint(range_min, range_max)
+               genome.setItem(i, j, random_int)
+               mutations += 1
+
+   else: 
+      for it in xrange(int(round(mutations))):
+         which_x = rand_randint(0, genome.getWidth()-1)
+         which_y = rand_randint(0, genome.getHeight()-1)
+         random_int = rand_randint(range_min, range_max)
+         genome.setItem(which_y, which_x, random_int)
+
+   return mutations
+
 
 def G2DListMutatorIntegerGaussian(genome, **args):
    """ A gaussian mutator for G2DList of Integers 
