@@ -142,9 +142,10 @@ class GenomeBase:
       """ Called to mutate the genome
 
       :param args: this parameters will be passed to the mutator
+      :rtype: the number of mutations returned by mutation operator
 
       """
-      nmuts = 0 
+      nmuts = 0
       for it in self.mutator.applyFunctions(self, **args):
          nmuts+=it
       return nmuts
