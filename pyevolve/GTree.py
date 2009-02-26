@@ -30,6 +30,7 @@ Classes
 import copy
 from random import randint as rand_randint
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
+import Consts
 
 class GTree(GenomeBase, GTreeBase):
    """ The GTree class - The tree chromosome representation

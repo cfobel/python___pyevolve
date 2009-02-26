@@ -370,6 +370,30 @@ class GTreeBase:
          Util.raiseException("The root must be a node", TypeError)
       self.root_node = root
 
+   def getNodeDepth(self, node):
+      """ Returns the depth of a node
+
+      :rtype: the depth of the node, the depth of root node is 0
+      """
+      count = 1
+      if node==self.getRoot():
+         return 0
+      count += self.getNodeDepth(node.getParent())
+      return count
+
+   def getNodeHeight(self, node):
+      """ Returns the height of a node
+
+      :rtype: the height of the node
+      """
+      heights = []
+      if len(node) <= 0:
+         return 0
+      for child in node.getChilds():
+         heights.append(self.getNodeHeight(child)+1)
+      return max(heights)
+
+
    def getNodesCount(self, start_node=None):
       """ Return the number of the nodes on the tree
       starting at the *start_node*, if *start_node* is None,
@@ -416,6 +440,9 @@ class GTreeBase:
       for child_node in start_node.getChilds():
          callback(child_node)
          self.traversal(callback, child_node)
+
+   
+
 
    def __repr__(self):
       return "- GTree\n" + self.getTraversalString()
