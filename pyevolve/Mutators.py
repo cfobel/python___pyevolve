@@ -34,7 +34,7 @@ def G1DBinaryStringMutatorSwap(genome, **args):
          Util.listSwapElement(genome, rand_randint(0, stringLength-1),
                                       rand_randint(0, stringLength-1))
 
-   return mutations
+   return int(mutations)
 
 def G1DBinaryStringMutatorFlip(genome, **args):
    """ The classical flip mutator for binary strings """
@@ -56,7 +56,7 @@ def G1DBinaryStringMutatorFlip(genome, **args):
          if genome[which] == 0: genome[which] = 1
          else: genome[which] = 0
 
-   return mutations
+   return int(mutations)
 
 ####################
 ##     1D List    ##
@@ -82,7 +82,7 @@ def G1DListMutatorSwap(genome, **args):
       for it in xrange(int(round(mutations))):
          Util.listSwapElement(genome, rand_randint(0, listSize), rand_randint(0, listSize))
 
-   return mutations
+   return int(mutations)
 
 def G1DListMutatorIntegerRange(genome, **args):
    """ Simple integer range mutator for G1DList
@@ -108,7 +108,7 @@ def G1DListMutatorIntegerRange(genome, **args):
          genome[which_gene] = rand_randint(genome.getParam("rangemin", Consts.CDefRangeMin),
                               genome.getParam("rangemax", Consts.CDefRangeMax))
 
-   return mutations
+   return int(mutations)
 
 
 def G1DListMutatorRealRange(genome, **args):
@@ -135,7 +135,7 @@ def G1DListMutatorRealRange(genome, **args):
          genome[which_gene] = rand_uniform(genome.getParam("rangemin", Consts.CDefRangeMin),
                               genome.getParam("rangemax", Consts.CDefRangeMax))
 
-   return mutations
+   return int(mutations)
 
 def G1DListMutatorIntegerGaussian(genome, **args):
    """ A gaussian mutator for G1DList of Integers
@@ -179,7 +179,7 @@ def G1DListMutatorIntegerGaussian(genome, **args):
 
          genome[which_gene] = final_value
 
-   return mutations
+   return int(mutations)
 
 
 def G1DListMutatorRealGaussian(genome, **args):
@@ -224,7 +224,7 @@ def G1DListMutatorRealGaussian(genome, **args):
 
          genome[which_gene] = final_value
 
-   return mutations
+   return int(mutations)
 
 def G1DListMutatorIntegerBinary(genome, **args):
    """ The mutator of G1DList, the binary mutator
@@ -250,7 +250,7 @@ def G1DListMutatorIntegerBinary(genome, **args):
          if genome[which_gene] == 0: genome[which_gene] = 1
          elif genome[which_gene] == 1: genome[which_gene] = 0
 
-   return mutations
+   return int(mutations)
 
 def G1DListMutatorAllele(genome, **args):
    """ The mutator of G1DList, Allele Mutator
@@ -280,7 +280,7 @@ def G1DListMutatorAllele(genome, **args):
          new_val = allele[which_gene].getRandomAllele()
          genome[which_gene] = new_val
 
-   return mutations
+   return int(mutations)
 
 
 ####################
@@ -314,7 +314,7 @@ def G2DListMutatorSwap(genome, **args):
          index_b = (rand_randint(0, height-1), rand_randint(0, width-1))
          Util.list2DSwapElement(genome.genomeList, index_a, index_b)
 
-   return mutations
+   return int(mutations)
 
 def G2DListMutatorIntegerRange(genome, **args):
    """ Simple integer range mutator for G2DList
@@ -347,7 +347,7 @@ def G2DListMutatorIntegerRange(genome, **args):
          random_int = rand_randint(range_min, range_max)
          genome.setItem(which_y, which_x, random_int)
 
-   return mutations
+   return int(mutations)
 
 
 def G2DListMutatorIntegerGaussian(genome, **args):
@@ -399,7 +399,7 @@ def G2DListMutatorIntegerGaussian(genome, **args):
 
          genome.setItem(which_y, which_x, final_value)
 
-   return mutations
+   return int(mutations)
 
 
 def G2DListMutatorAllele(genome, **args):
@@ -439,7 +439,7 @@ def G2DListMutatorAllele(genome, **args):
          new_val = allele[0].getRandomAllele()
          genome.setItem(which_x, which_y, new_val)
 
-   return mutations
+   return int(mutations)
 
 
 def G2DListMutatorRealGaussian(genome, **args):
@@ -491,7 +491,7 @@ def G2DListMutatorRealGaussian(genome, **args):
 
          genome.setItem(which_y, which_x, final_value)
 
-   return mutations
+   return int(mutations)
 
 
 #############################
@@ -525,7 +525,7 @@ def G2DBinaryStringMutatorSwap(genome, **args):
          index_b = (rand_randint(0, height-1), rand_randint(0, width-1))
          Util.list2DSwapElement(genome.genomeString, index_a, index_b)
 
-   return mutations
+   return int(mutations)
 
 
 def G2DBinaryStringMutatorFlip(genome, **args):
@@ -558,4 +558,70 @@ def G2DBinaryStringMutatorFlip(genome, **args):
          if genome[i][j] == 0: genome.setItem(which_y, which_x, 1)
          else:                 genome.setItem(which_y, which_x, 0)
 
-   return mutations
+   return int(mutations)
+
+#################
+##     Tree    ##
+#################
+def GTreeMutatorSwap(genome, **args):
+   """ The mutator of GTree, Swap Mutator
+   
+   .. versionadded:: 0.6
+      The *GTreeMutatorSwap* function
+   """
+   if args["pmut"] <= 0.0: return 0
+   elements = len(genome)
+   mutations = args["pmut"] * elements
+
+   if mutations < 1.0:
+      mutations = 0
+      for i in xrange(len(genome)):
+         if Util.randomFlipCoin(args["pmut"]):
+            mutations += 1
+            nodeOne = genome.getRandomNode()
+            nodeTwo = genome.getRandomNode()
+            nodeOne.swapNodeData(nodeTwo)
+   else: 
+      for it in xrange(int(round(mutations))):
+         nodeOne = genome.getRandomNode()
+         nodeTwo = genome.getRandomNode()
+         nodeOne.swapNodeData(nodeTwo)
+
+   return int(mutations)
+
+
+def GTreeMutatorIntegerRange(genome, **args):
+   """ The mutator of GTree, Integer Range Mutator
+   
+   Accepts the *rangemin* and *rangemax* genome parameters, both optional.
+
+   .. versionadded:: 0.6
+      The *GTreeMutatorIntegerRange* function
+   """
+   if args["pmut"] <= 0.0: return 0
+   elements = len(genome)
+   mutations = args["pmut"] * elements
+
+   range_min = genome.getParam("rangemin", Consts.CDefRangeMin)
+   range_max = genome.getParam("rangemax", Consts.CDefRangeMax)
+
+   if mutations < 1.0:
+      mutations = 0
+      for i in xrange(len(genome)):
+         if Util.randomFlipCoin(args["pmut"]):
+            mutations += 1
+            rand_node = genome.getRandomNode()
+            random_int = rand_randint(range_min, range_max)
+            rand_node.setData(random_int)
+
+   else: 
+      for it in xrange(int(round(mutations))):
+         rand_node = genome.getRandomNode()
+         random_int = rand_randint(range_min, range_max)
+         rand_node.setData(random_int)
+
+   return int(mutations)
+
+
+
+
