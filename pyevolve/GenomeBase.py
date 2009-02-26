@@ -8,8 +8,13 @@ if you are planning to create a new representation, you must
 take a inside look into this module.
 
 """
+import copy
+from random import randint as rand_randint
+
 from FunctionSlot import FunctionSlot
 import Util
+
+
 
 class GenomeBase:
    """ GenomeBase Class - The base of all chromosome representation """
@@ -302,6 +307,20 @@ class GTreeNodeBase:
             Util.raiseException("Childs must be a list of nodes", TypeError)
          self.childs += childs
 
+   def isLeaf(self):
+      """ Return True if the node is a leaf
+
+      :rtype: True or False
+      """
+      return len(self.childs)==0
+   
+   def getChild(self, index):
+      """ Returns the index-child of the node
+      
+      :rtype: child node
+      """
+      return self.childs[index]
+
    def getChilds(self):
       """ Return the childs of the node
 
@@ -393,6 +412,12 @@ class GTreeBase:
          heights.append(self.getNodeHeight(child)+1)
       return max(heights)
 
+   def getHeight(self):
+      """ Return the tree height
+      
+      :rtype: the tree height
+      """
+      return self.getNodeHeight(self.getRoot())
 
    def getNodesCount(self, start_node=None):
       """ Return the number of the nodes on the tree
@@ -441,8 +466,32 @@ class GTreeBase:
          callback(child_node)
          self.traversal(callback, child_node)
 
-   
+   def getNodeCopy(self, node):
+      """ Returns a safe copy of the node and all of it childs
+      
+      :rtype: a new instance of the node and sub-nodes
+      """
+      new_node = copy.deepcopy(node)
+      return new_node
 
+   def getRandomNode(self):
+      """ Returns a random node from the Tree
+
+      :rtype: random node
+      """
+      node_stack = []
+      count = -1
+      tmp = None
+      rand_node = rand_randint(0, len(self))
+
+      node_stack.append(self.getRoot())
+      while len(node_stack) > 0:
+         count += 1
+         tmp = node_stack.pop()
+         if count == rand_node:
+            return tmp
+         for child in tmp.getChilds():
+            node_stack.append(child)
 
    def __repr__(self):
       return "- GTree\n" + self.getTraversalString()
@@ -450,3 +499,20 @@ class GTreeBase:
    def __len__(self):
       return self.getNodesCount()
    
+   def __getitem__(self, index):
+      node_stack = []
+      count = -1
+      tmp = None
+
+      node_stack.append(self.getRoot())
+      while len(node_stack) > 0:
+         count += 1
+         tmp = node_stack.pop()
+         if count == index:
+            return tmp
+
+         rev_childs = tmp.getChilds()[:]
+         rev_childs.reverse()
+
+         for child in rev_childs:
+            node_stack.append(child)
