@@ -74,7 +74,7 @@ class GTree(GenomeBase, GTreeBase):
       GenomeBase.__init__(self)
       GTreeBase.__init__(self, root_node)
       self.initializator.set(Consts.CDefGTreeInit)
-      #self.mutator.set(Consts.CDefGGTreeMutator)
+      self.mutator.set(Consts.CDefGGTreeMutator)
       #self.crossover.set(Consts.CDefGTreeCrossover)
 
    def __repr__(self):
@@ -111,7 +111,7 @@ class GTreeNode(GTreeNodeBase):
       """
       self.node_data = data
 
-   def getData(self, data):
+   def getData(self):
       """ Return the data of the node
 
       :rtype: the data of the node
@@ -126,6 +126,15 @@ class GTreeNode(GTreeNodeBase):
       node = GTreeNode(data, self)
       self.addChild(node)
       return node
+
+   def swapNodeData(self, node):
+      """ Swaps the node data with another node
+      
+      :param node: the node to do the data swap
+      """
+      tmp_data = self.node_data
+      self.setData(node.getData())
+      node.setData(tmp_data)
 
 #############################
 #     Utility Functions     # 
