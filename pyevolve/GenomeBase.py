@@ -337,6 +337,15 @@ class GTreeNodeBase:
          Util.raiseException("The child must be a node", TypeError)
       self.childs.append(child)
 
+   def replaceChild(self, older, newer):
+      """ Replaces a child of the node
+
+      :param older: the child to be replaces
+      :param newer: the new child which replaces the older
+      """
+      index = self.childs.index(older)
+      self.childs[index] = newer
+
    def setParent(self, parent):
       """ Sets the parent of the node
 
@@ -482,7 +491,7 @@ class GTreeBase:
       node_stack = []
       count = -1
       tmp = None
-      rand_node = rand_randint(0, len(self))
+      rand_node = rand_randint(0, len(self)-1)
 
       node_stack.append(self.getRoot())
       while len(node_stack) > 0:
@@ -492,6 +501,34 @@ class GTreeBase:
             return tmp
          for child in tmp.getChilds():
             node_stack.append(child)
+
+   def getAllNodes(self):
+      node_stack = []
+      count = -1
+      tmp = None
+      all_nodes = []
+
+      node_stack.append(self.getRoot())
+      while len(node_stack) > 0:
+         count += 1
+         tmp = node_stack.pop()
+         all_nodes.append(tmp)
+
+         rev_childs = tmp.getChilds()[:]
+         rev_childs.reverse()
+
+         for child in rev_childs:
+            node_stack.append(child)
+
+      return all_nodes 
+
+   def getCrossNodeList(self):
+      cross_list = []
+      for index in xrange(len(self)):
+         node = self[index]
+         depth, height = self.getNodeDepth(node), self.getNodeHeight(node)
+         cross_list.append((index, depth, height))
+      return cross_list
 
    def __repr__(self):
       return "- GTree\n" + self.getTraversalString()

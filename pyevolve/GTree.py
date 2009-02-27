@@ -75,7 +75,7 @@ class GTree(GenomeBase, GTreeBase):
       GTreeBase.__init__(self, root_node)
       self.initializator.set(Consts.CDefGTreeInit)
       self.mutator.set(Consts.CDefGGTreeMutator)
-      #self.crossover.set(Consts.CDefGTreeCrossover)
+      self.crossover.set(Consts.CDefGTreeCrossover)
 
    def __repr__(self):
       """ Return a string representation of Genome """

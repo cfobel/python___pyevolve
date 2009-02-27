@@ -1,5 +1,7 @@
-from pyevolve import *
+#from pyevolve import *
+from pyevolve import Util, GTree, Crossovers
 
+#from timeit import Timer
 
 def test_run():
    a = GTree.GTree()
@@ -7,21 +9,20 @@ def test_run():
    #a.initializator.set(Initializators.GTreeInitInteger)
    #a.mutator.set(Mutators.GTreeMutatorIntegerRange)
    a.initialize()
-   print a
+   b = a.clone()
+   b.initialize()
    
-   for i in xrange(20000): 
-      for i in xrange(len(a)):
-         x = a[i]
+   
+   sister, brother = Crossovers.GTreeCrossoverSinglePoint(None, mom=a, dad=b, count=2)
 
 
 
-
-
+#   print tlist
 
 if __name__ == "__main__":
-   from timeit import Timer
-   t = Timer("test_run()", "from __main__ import test_run")
-   print t.timeit(1)
+   #t = Timer("test_run()", "from __main__ import test_run")
+   #print t.timeit(1)
+   test_run()
 
 
 

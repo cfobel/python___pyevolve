@@ -8,7 +8,7 @@ use, like list item swap, random utilities and etc.
 
 """
 
-from random import random as rand_random
+from random import random as rand_random, choice as rand_choice
 from sys import platform as sys_platform
 import logging
 import Consts
@@ -187,6 +187,26 @@ def importSpecial(name):
    except ImportError:
       raiseException("Cannot import module %s: %s" % (name, Consts.CDefImportList[name]), expt=ImportError)
    return imp_mod 
+
+def getCrossoverPoint(t1, t2, max_depth):
+   perm = []
+   for x in t1:
+      for y in t2:
+         perm.append([x,y])
+
+   pairs = []
+
+   for p in perm:
+      T1p, T2p = p
+      i1, d1, h1 = T1p
+      i2, d2, h2 = T2p
+      if (i1>0) and (i2>0):
+         if (h1>0) and (h2>0):
+            if (d2+h1<=max_depth) and (d1+h2<=max_depth):
+               pairs.append([T1p, T2p])
+
+   if len(pairs) <=0: return None
+   return rand_choice(pairs)
 
 class Graph:
    """ The Graph class

@@ -375,3 +375,66 @@ def G2DBinaryStringXSingleHPoint(genome, **args):
 
    return (sister, brother)
 
+#############################
+##          Tree           ##
+#############################
+
+def GTreeCrossoverSinglePoint(genome, **args):
+   """ The crossover of Tree, Strict Single Point
+
+   """
+   sister = None
+   brother = None
+   gMom = args["mom"]
+   gDad = args["dad"]
+
+   max_depth = gMom.getParam("max_depth", None)
+   if max_depth is None:
+      Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
+      
+   if max_depth < 2:
+      Util.raiseException("The max_depth must be >= 2, if you want to use GTreeCrossoverSinglePoint crossover !", ValueError)
+
+   if gMom.getHeight() < 1:
+      return (gMom.clone(), gDad.clone())
+
+   if gDad.getHeight() < 1:
+      return (gMom.clone(), gDad.clone())
+
+
+   mom_xo_nodes = gMom.getCrossNodeList()
+   dad_xo_nodes = gDad.getCrossNodeList()
+
+   xo_point     = Util.getCrossoverPoint(mom_xo_nodes, dad_xo_nodes, max_depth)
+   assert xo_point is not None
+   nodeMom, nodeDad = xo_point
+
+   #print xo_point
+
+   mom_clone = gMom.clone()
+   mom_clone.resetStats()
+   
+   dad_clone = gDad.clone()
+   dad_clone.resetStats()
+
+   nodeMom = mom_clone[nodeMom[0]]
+   nodeDad = dad_clone[nodeDad[0]]
+
+   nodeMom_parent = nodeMom.getParent()
+   nodeDad_parent = nodeDad.getParent()
+
+   # Sister
+   if args["count"] >= 1:
+      sister = mom_clone
+      nodeDad.setParent(nodeMom_parent)
+      nodeMom_parent.replaceChild(nodeMom, nodeDad)
+
+   # Brother
+   if args["count"] == 2:
+      brother = dad_clone
+      nodeMom.setParent(nodeDad_parent)
+      nodeDad_parent.replaceChild(nodeDad, nodeMom)
+
+   return (sister, brother)
+
+
