@@ -17,7 +17,7 @@ def eval_func(chromosome):
 
    return score
 
-if __name__ == "__main__":
+def main_run():
 
    genome = GTree.GTree()
    genome.setParams(max_depth=6, max_sister=2, method="grow")
@@ -26,7 +26,7 @@ if __name__ == "__main__":
    ga = GSimpleGA.GSimpleGA(genome)
 
    #ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(30)
+   ga.setGenerations(10)
    
    #sqlite_adapter = DBAdapters.DBSQLite(identify="ex1")
    #ga.setDBAdapter(sqlite_adapter)
@@ -37,3 +37,16 @@ if __name__ == "__main__":
    ga(freq_stats=10)
    best = ga.bestIndividual()
    print best
+
+#import hotshot, hotshot.stats
+#prof = hotshot.Profile("ev.prof")
+#prof.runcall(main_run)
+#prof.close()
+#stats = hotshot.stats.load("ev.prof")
+#stats.strip_dirs()
+#stats.sort_stats('time', 'calls')
+#stats.print_stats(20)
+
+if __name__ == "__main__":
+   main_run()
+
