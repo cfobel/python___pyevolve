@@ -88,7 +88,7 @@ What's new on the release |release|:
    new GTree chromosome representation and all tree related
    functions.
 
-** VPython DB Adapter - real-time graph statistics**
+**VPython DB Adapter - real-time graph statistics**
 
    Added the new :class:`DBAdapters.DBVPythonGraph` class, this DB
    Adapter uses the VPython to create real-time statistics graphs.
