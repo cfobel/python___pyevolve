@@ -409,8 +409,6 @@ def GTreeCrossoverSinglePoint(genome, **args):
    assert xo_point is not None
    nodeMom, nodeDad = xo_point
 
-   #print xo_point
-
    mom_clone = gMom.clone()
    mom_clone.resetStats()
    
