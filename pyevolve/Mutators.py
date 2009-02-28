@@ -580,18 +580,11 @@ def GTreeMutatorSwap(genome, **args):
             mutations += 1
             nodeOne = genome.getRandomNode()
             nodeTwo = genome.getRandomNode()
-            assert nodeOne is not None
-            assert nodeTwo is not None
-
             nodeOne.swapNodeData(nodeTwo)
    else: 
       for it in xrange(int(round(mutations))):
          nodeOne = genome.getRandomNode()
          nodeTwo = genome.getRandomNode()
-         assert nodeOne is not None
-         assert nodeTwo is not None
-
-
          nodeOne.swapNodeData(nodeTwo)
 
    return int(mutations)

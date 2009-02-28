@@ -177,7 +177,7 @@ def GTreeInitInteger(genome, **args):
       root = GTree.buildTreeFull(0, lambda_generator, max_sister, max_depth)
 
    genome.setRoot(root)
-
+   genome.processNodes()
 
 
 

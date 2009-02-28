@@ -9,13 +9,7 @@ def test_run():
    #a.initializator.set(Initializators.GTreeInitInteger)
    #a.mutator.set(Mutators.GTreeMutatorIntegerRange)
    a.initialize()
-   b = a.clone()
-   b.initialize()
-   
-   
-   sister, brother = Crossovers.GTreeCrossoverSinglePoint(None, mom=a, dad=b, count=2)
-
-
+   a.processNodes()
 
 #   print tlist
 

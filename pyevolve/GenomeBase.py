@@ -9,7 +9,7 @@ take a inside look into this module.
 
 """
 import copy
-from random import randint as rand_randint
+from random import randint as rand_randint, choice as rand_choice
 
 from FunctionSlot import FunctionSlot
 import Util
@@ -343,6 +343,9 @@ class GTreeNodeBase:
       :param older: the child to be replaces
       :param newer: the new child which replaces the older
       """
+      if (not isinstance(older, GTreeNodeBase)) or (not isinstance(newer, GTreeNodeBase)):
+         Util.raiseException("The child must be a node", TypeError)
+
       index = self.childs.index(older)
       self.childs[index] = newer
 
@@ -381,7 +384,24 @@ class GTreeBase:
 
    def __init__(self, root_node):
       self.root_node = root_node
+      self.nodes_dict = {}
+      self.nodes_list = None
 
+   def processNodes(self):
+      """ Creates a *cache* on the tree, this method must be called
+      every time you change the shape of the tree. It updates the
+      internal nodes list and the internal nodes properties such as
+      depth and height.
+      """
+      self.nodes_dict.clear()
+      all_nodes = self.getAllNodes()
+
+      for node in all_nodes:
+         depth, height = self.getNodeDepth(node), self.getNodeHeight(node)
+         self.nodes_dict.update({node: (depth, height)})
+
+      self.nodes_list = all_nodes
+   
    def getRoot(self):
       """ Return the tree root node 
 
@@ -488,29 +508,20 @@ class GTreeBase:
 
       :rtype: random node
       """
-      node_stack = []
-      count = -1
-      tmp = None
-      rand_node = rand_randint(0, len(self)-1)
+      return rand_choice(self.nodes_list)
 
-      node_stack.append(self.getRoot())
-      while len(node_stack) > 0:
-         count += 1
-         tmp = node_stack.pop()
-         if count == rand_node:
-            return tmp
-         for child in tmp.getChilds():
-            node_stack.append(child)
 
    def getAllNodes(self):
+      """ Return a new list with all nodes
+      
+      :rtype: the list with all nodes
+      """
       node_stack = []
-      count = -1
       tmp = None
       all_nodes = []
 
       node_stack.append(self.getRoot())
       while len(node_stack) > 0:
-         count += 1
          tmp = node_stack.pop()
          all_nodes.append(tmp)
 
@@ -523,33 +534,26 @@ class GTreeBase:
       return all_nodes 
 
    def getCrossNodeList(self):
+      """ Return a list with possible crossover points
+
+      :rtype: the list with possible crossover points 
+      """
       cross_list = []
-      for index in xrange(len(self)):
-         node = self[index]
-         depth, height = self.getNodeDepth(node), self.getNodeHeight(node)
-         cross_list.append((index, depth, height))
+      for node_index in xrange(len(self.nodes_list)):
+         node = self.nodes_list[node_index]
+         depth, height = self.nodes_dict[node]
+         cross_item = (node_index, depth, height)
+         cross_list.append(cross_item)
       return cross_list
 
    def __repr__(self):
       return "- GTree\n" + self.getTraversalString()
 
    def __len__(self):
-      return self.getNodesCount()
+      return len(self.nodes_list)
    
    def __getitem__(self, index):
-      node_stack = []
-      count = -1
-      tmp = None
+      return self.nodes_list[index]
 
-      node_stack.append(self.getRoot())
-      while len(node_stack) > 0:
-         count += 1
-         tmp = node_stack.pop()
-         if count == index:
-            return tmp
-
-         rev_childs = tmp.getChilds()[:]
-         rev_childs.reverse()
-
-         for child in rev_childs:
-            node_stack.append(child)
+   def __iter__(self):
+      return iter(self.nodes_list)

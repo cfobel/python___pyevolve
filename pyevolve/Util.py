@@ -189,24 +189,21 @@ def importSpecial(name):
    return imp_mod 
 
 def getCrossoverPoint(t1, t2, max_depth):
-   perm = []
-   for x in t1:
-      for y in t2:
-         perm.append([x,y])
-
    pairs = []
 
-   for p in perm:
-      T1p, T2p = p
-      i1, d1, h1 = T1p
-      i2, d2, h2 = T2p
-      if (i1>0) and (i2>0):
-         if (h1>0) and (h2>0):
-            if (d2+h1<=max_depth) and (d1+h2<=max_depth):
-               pairs.append([T1p, T2p])
+   for T1p in t1:
+      for T2p in t2:
+         #T1p, T2p = p
+         i1, d1, h1 = T1p
+         i2, d2, h2 = T2p
+         if (i1>0) and (i2>0):
+            if (h1>0) and (h2>0):
+               if (d2+h1 <= max_depth) and (d1+h2 <= max_depth):
+                  pairs.append((T1p, T2p))
 
    if len(pairs) <=0: return None
    return rand_choice(pairs)
+
 
 class Graph:
    """ The Graph class
