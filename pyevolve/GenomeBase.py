@@ -87,7 +87,7 @@ class GenomeBase:
       ret = "- GenomeBase\n"
       ret+= "\tScore:\t\t\t %.6f\n" % (self.score,)
       ret+= "\tFitness:\t\t %.6f\n\n" % (self.fitness,)
-      #ret+= "\tInit Params:\t\t %s\n\n" % (self.internalParams,)
+      ret+= "\tParams:\t\t %s\n\n" % (self.internalParams,)
 
       for slot in self.allSlots:
          ret+= "\t" + slot.__repr__()
@@ -423,11 +423,8 @@ class GTreeBase:
 
       :rtype: the depth of the node, the depth of root node is 0
       """
-      count = 1
-      if node==self.getRoot():
-         return 0
-      count += self.getNodeDepth(node.getParent())
-      return count
+      if node==self.getRoot(): return 0
+      else:                    return 1 + self.getNodeDepth(node.getParent())
 
    def getNodeHeight(self, node):
       """ Returns the height of a node
@@ -539,7 +536,7 @@ class GTreeBase:
       :rtype: the list with possible crossover points 
       """
       cross_list = []
-      for node_index in xrange(len(self.nodes_list)):
+      for node_index in xrange(len(self)):
          node = self.nodes_list[node_index]
          depth, height = self.nodes_dict[node]
          cross_item = (node_index, depth, height)
