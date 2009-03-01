@@ -384,7 +384,7 @@ class GTreeBase:
 
    def __init__(self, root_node):
       self.root_node = root_node
-      self.nodes_dict = {}
+      self.tree_height = None
       self.nodes_list = None
 
    def processNodes(self):
@@ -393,14 +393,8 @@ class GTreeBase:
       internal nodes list and the internal nodes properties such as
       depth and height.
       """
-      self.nodes_dict.clear()
-      all_nodes = self.getAllNodes()
-
-      for node in all_nodes:
-         depth, height = self.getNodeDepth(node), self.getNodeHeight(node)
-         self.nodes_dict.update({node: (depth, height)})
-
-      self.nodes_list = all_nodes
+      self.nodes_list = self.getAllNodes()
+      self.tree_height = self.getNodeHeight(self.getRoot())
    
    def getRoot(self):
       """ Return the tree root node 
@@ -443,7 +437,7 @@ class GTreeBase:
       
       :rtype: the tree height
       """
-      return self.getNodeHeight(self.getRoot())
+      return self.tree_height
 
    def getNodesCount(self, start_node=None):
       """ Return the number of the nodes on the tree
@@ -507,7 +501,6 @@ class GTreeBase:
       """
       return rand_choice(self.nodes_list)
 
-
    def getAllNodes(self):
       """ Return a new list with all nodes
       
@@ -544,10 +537,14 @@ class GTreeBase:
       return cross_list
 
    def __repr__(self):
-      return "- GTree\n" + self.getTraversalString()
+      str_buff  = "- GTree\n"
+      str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
+      str_buff += "\n" + self.getTraversalString()
+      return str_buff
 
    def __len__(self):
       return len(self.nodes_list)
+      #return self.getNodesCount(self.getRoot())
    
    def __getitem__(self, index):
       return self.nodes_list[index]

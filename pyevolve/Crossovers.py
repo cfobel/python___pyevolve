@@ -7,7 +7,7 @@ In this module we have the genetic operators of crossover (or recombination) for
 
 """
 
-from random import randint as rand_randint
+from random import randint as rand_randint, choice as rand_choice
 import Util
 import Consts
 
@@ -379,58 +379,151 @@ def G2DBinaryStringXSingleHPoint(genome, **args):
 ##          Tree           ##
 #############################
 
-def GTreeCrossoverSinglePoint(genome, **args):
-   """ The crossover of Tree, Strict Single Point
 
-   """
+def GTreeCrossoverSinglePoint(genome, **args):
+   """ The crossover of Tree, Single Point """
    sister = None
    brother = None
-   gMom = args["mom"]
-   gDad = args["dad"]
+   gMom = args["mom"].clone()
+   gDad = args["dad"].clone()
 
-   max_depth = gMom.getParam("max_depth", None)
+   gMom.resetStats()
+   gDad.resetStats()
 
-   if max_depth is None:
-      Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
-      
-   if max_depth < 2:
-      Util.raiseException("The max_depth must be >= 2, if you want to use GTreeCrossoverSinglePoint crossover !", ValueError)
+   node_mom_stack = []
+   all_mom_nodes  = []
+   node_mom_tmp   = None
 
-   mom_xo_nodes = gMom.getCrossNodeList()
-   dad_xo_nodes = gDad.getCrossNodeList()
-   xo_point     = Util.getCrossoverPoint(mom_xo_nodes, dad_xo_nodes, max_depth)
+   node_dad_stack = []
+   all_dad_nodes  = []
+   node_dad_tmp   = None
 
-   if xo_point is None:
-      return (gMom.clone(), gDad.clone())
+   node_mom_stack.append(gMom.getRoot())
+   node_dad_stack.append(gDad.getRoot())
 
-   nodeMom, nodeDad = xo_point
+   while (len(node_mom_stack) > 0) and  (len(node_dad_stack) > 0):
+      node_mom_tmp = node_mom_stack.pop()
+      node_dad_tmp = node_dad_stack.pop()
 
-   mom_clone = gMom.clone()
-   mom_clone.resetStats()
-   
-   dad_clone = gDad.clone()
-   dad_clone.resetStats()
+      if node_mom_tmp != gMom.getRoot():
+         all_mom_nodes.append(node_mom_tmp)
+         all_dad_nodes.append(node_dad_tmp)
 
-   nodeMom = mom_clone[nodeMom[0]]
-   nodeDad = dad_clone[nodeDad[0]]
+      node_mom_stack.extend(node_mom_tmp.getChilds())
+      node_dad_stack.extend(node_dad_tmp.getChilds())
+
+   if len(all_mom_nodes)==0 or len(all_dad_nodes)==0:
+      return (gMom, gDad)
+
+   if len(all_dad_nodes) == 1: nodeDad = all_dad_nodes[0]
+   else: nodeDad = rand_choice(all_dad_nodes)
+
+   if len(all_mom_nodes) == 1: nodeMom = all_mom_nodes[0]
+   else: nodeMom = rand_choice(all_mom_nodes)
 
    nodeMom_parent = nodeMom.getParent()
    nodeDad_parent = nodeDad.getParent()
 
    # Sister
    if args["count"] >= 1:
-      sister = mom_clone
+      sister = gMom
       nodeDad.setParent(nodeMom_parent)
       nodeMom_parent.replaceChild(nodeMom, nodeDad)
       sister.processNodes()
 
    # Brother
    if args["count"] == 2:
-      brother = dad_clone
+      brother = gDad
       nodeMom.setParent(nodeDad_parent)
       nodeDad_parent.replaceChild(nodeDad, nodeMom)
       brother.processNodes()
 
    return (sister, brother)
 
+
+def GTreeCrossoverSinglePointStrict(genome, **args):
+   """ The crossover of Tree, Strict Single Point
+
+   .. warning:: This crossover method is more smart than simple
+                Single Point Crossover, it does some height and
+                depth analysis on nodes of the tree, the offspring
+                created with this crossover will never have a depth
+                greater than the *max_depth* genome parameter.
+                However, this height and depth analysis take some
+                performance from the GA, use it with caution.
+   """
+   sister = None
+   brother = None
+
+   gMom = args["mom"].clone()
+   gDad = args["dad"].clone()
+
+   gMom.resetStats()
+   gDad.resetStats()
+
+   max_depth = gMom.getParam("max_depth", None)
+
+   if max_depth is None:
+      Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
+      
+   if max_depth < 0:
+      Util.raiseException("The max_depth must be >= 1, if you want to use GTreeCrossoverSinglePointStrict crossover !", ValueError)
+
+   pairs = []
+
+   node_mom_stack = []
+   node_mom_tmp   = None
+
+   node_dad_stack = []
+   node_dad_tmp   = None
+
+   node_mom_stack.append(gMom.getRoot())
+
+   while len(node_mom_stack) > 0:
+
+      node_mom_tmp = node_mom_stack.pop()
+      node_mom_stack.extend(node_mom_tmp.getChilds())
+
+      mD = gMom.getNodeDepth(node_mom_tmp)
+      if mD <= 0: continue
+      mH = gMom.getNodeHeight(node_mom_tmp)
+      if mH <= 0: continue
+
+      node_dad_stack.append(gDad.getRoot())
+
+      while len(node_dad_stack) > 0:
+         node_dad_tmp = node_dad_stack.pop()
+         node_dad_stack.extend(node_dad_tmp.getChilds())
+
+         dD = gDad.getNodeDepth(node_dad_tmp)
+         if dD <= 0: continue
+         dH = gDad.getNodeHeight(node_dad_tmp)
+         if dH <= 0: continue
+
+         if (dD+mH <= max_depth) and (mD+dH <= max_depth):
+            pairs.append((node_mom_tmp, node_dad_tmp))
+
+   if len(pairs) == 0:
+      return (gMom, gDad)
+
+   nodeMom, nodeDad = rand_choice(pairs)
+
+   nodeMom_parent = nodeMom.getParent()
+   nodeDad_parent = nodeDad.getParent()
+
+   # Sister
+   if args["count"] >= 1:
+      sister = gMom
+      nodeDad.setParent(nodeMom_parent)
+      nodeMom_parent.replaceChild(nodeMom, nodeDad)
+      sister.processNodes()
+
+   # Brother
+   if args["count"] == 2:
+      brother = gDad
+      nodeMom.setParent(nodeDad_parent)
+      nodeDad_parent.replaceChild(nodeDad, nodeMom)
+      brother.processNodes()
+
+   return (sister, brother)
 
