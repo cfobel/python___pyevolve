@@ -478,24 +478,33 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    node_dad_tmp   = None
 
    node_mom_stack.append(gMom.getRoot())
+   node_mom_stack.append(0)
 
    while len(node_mom_stack) > 0:
 
+      mD = node_mom_stack.pop()
       node_mom_tmp = node_mom_stack.pop()
-      node_mom_stack.extend(node_mom_tmp.getChilds())
+      
+      for child in node_mom_tmp.getChilds():
+         node_mom_stack.append(child)
+         node_mom_stack.append(mD+1)
 
-      mD = gMom.getNodeDepth(node_mom_tmp)
       if mD <= 0: continue
       mH = gMom.getNodeHeight(node_mom_tmp)
       if mH <= 0: continue
 
       node_dad_stack.append(gDad.getRoot())
+      node_dad_stack.append(0)
 
       while len(node_dad_stack) > 0:
+         
+         dD = node_dad_stack.pop()
          node_dad_tmp = node_dad_stack.pop()
-         node_dad_stack.extend(node_dad_tmp.getChilds())
 
-         dD = gDad.getNodeDepth(node_dad_tmp)
+         for child in node_dad_tmp.getChilds():
+            node_dad_stack.append(child)
+            node_dad_stack.append(dD+1)
+
          if dD <= 0: continue
          dH = gDad.getNodeHeight(node_dad_tmp)
          if dH <= 0: continue
