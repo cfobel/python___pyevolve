@@ -1,27 +1,34 @@
 from pyevolve import GSimpleGA
 from pyevolve import GTree
-#from pyevolve import DBAdapters
+from pyevolve import Crossovers
+from pyevolve import Mutators
 import time
+import random
 
-# This function is the evaluation function, we want
-# to give high score to more zero'ed chromosomes
+
 def eval_func(chromosome):
    score = 0.0
 
+   height = chromosome.getHeight()
+
    for node in chromosome:
-      if node.getData()==0:
-         score += 0.1
+      score += (100 - node.getData())*0.1
+
+   if height <= chromosome.getParam("max_depth"):
+      score += (score*0.8)
 
    return score
 
 def main_run():
 
    genome = GTree.GTree()
-   genome.setParams(max_depth=3, max_sister=-2, method="full")
+   genome.setParams(max_depth=3, max_sister=2, method="grow")
    genome.evaluator += eval_func
+   genome.crossover.set(Crossovers.GTreeCrossoverSinglePointStrict)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(100)
+   ga.setGenerations(500)
+   #ga.setMutationRate(0.0)
    
    ga(freq_stats=10)
    best = ga.bestIndividual()
@@ -37,8 +44,8 @@ def main_run():
 #stats.print_stats(20)
 
 if __name__ == "__main__":
-  #import psyco
-  #psyco.full()
+  ##import psyco
+  ##psyco.full()
   t0 = time.clock()
   main_run()
   t1 = time.clock()
