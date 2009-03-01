@@ -146,7 +146,7 @@ def G2DListInitializatorAllele(genome, **args):
 ##      Tree      ##
 ####################
 
-def GTreeInitInteger(genome, **args):
+def GTreeInitializatorInteger(genome, **args):
    """ Integer initialization function of GTree
 
    This initializator accepts the *rangemin* and *rangemax* genome parameters.
@@ -179,7 +179,33 @@ def GTreeInitInteger(genome, **args):
    genome.setRoot(root)
    genome.processNodes()
 
+def GTreeInitializatorAllele(genome, **args):
+   """ Allele initialization function of GTree
 
+   To use this initializator, you must specify the *allele* genome parameter with the
+   :class:`GAllele.GAlleles` instance.
+
+   .. warning:: the :class:`GAllele.GAlleles` instance **must** have the homogeneous flag enabled
+
+   """
+   max_depth    = genome.getParam("max_depth", 5)
+   max_siblings = genome.getParam("max_siblings", 2)
+   method       = genome.getParam("method", "grow")
+
+   allele = genome.getParam("allele", None)
+   if allele is None:
+      Util.raiseException("to use the GTreeInitializatorAllele, you must specify the 'allele' parameter")
+
+   if allele.homogeneous == False:
+      Util.raiseException("to use the GTreeInitializatorAllele, the 'allele' must be homogeneous")
+
+   if method == "grow":
+      root = GTree.buildTreeGrow(0, allele[0].getRandomAllele, max_siblings, max_depth)
+   else:
+      root = GTree.buildTreeFull(0, allele[0].getRandomAllele, max_siblings, max_depth)
+
+   genome.setRoot(root)
+   genome.processNodes()
 
 
 

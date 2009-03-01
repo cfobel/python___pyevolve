@@ -523,19 +523,6 @@ class GTreeBase:
 
       return all_nodes 
 
-   def getCrossNodeList(self):
-      """ Return a list with possible crossover points
-
-      :rtype: the list with possible crossover points 
-      """
-      cross_list = []
-      for node_index in xrange(len(self)):
-         node = self.nodes_list[node_index]
-         depth, height = self.nodes_dict[node]
-         cross_item = (node_index, depth, height)
-         cross_list.append(cross_item)
-      return cross_list
-
    def __repr__(self):
       str_buff  = "- GTree\n"
       str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
@@ -544,7 +531,6 @@ class GTreeBase:
 
    def __len__(self):
       return len(self.nodes_list)
-      #return self.getNodesCount(self.getRoot())
    
    def __getitem__(self, index):
       return self.nodes_list[index]
