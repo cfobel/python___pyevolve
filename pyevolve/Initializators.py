@@ -155,15 +155,15 @@ def GTreeInitInteger(genome, **args):
    *max_depth*
       The max depth of the tree
 
-   *max_sister*
-      The number of maximum sisters of an node
+   *max_siblings*
+      The number of maximum siblings of an node
 
    *method*
       The method, accepts "grow" or "full"
 
    """
    max_depth = genome.getParam("max_depth", 5)
-   max_sister = genome.getParam("max_sister", 2)
+   max_siblings = genome.getParam("max_siblings", 2)
 
    range_min = genome.getParam("rangemin", 0)
    range_max = genome.getParam("rangemax", 100)
@@ -172,9 +172,9 @@ def GTreeInitInteger(genome, **args):
    method = genome.getParam("method", "grow")
 
    if method == "grow":
-      root = GTree.buildTreeGrow(0, lambda_generator, max_sister, max_depth)
+      root = GTree.buildTreeGrow(0, lambda_generator, max_siblings, max_depth)
    else:
-      root = GTree.buildTreeFull(0, lambda_generator, max_sister, max_depth)
+      root = GTree.buildTreeFull(0, lambda_generator, max_siblings, max_depth)
 
    genome.setRoot(root)
    genome.processNodes()

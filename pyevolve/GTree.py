@@ -136,19 +136,19 @@ class GTreeNode(GTreeNodeBase):
       self.setData(node.getData())
       node.setData(tmp_data)
 
-#############################
-#     Utility Functions     # 
-#############################
+#################################
+#    Tree Utility Functions     # 
+#################################
 
 
-def buildTreeGrow(depth, value_callback, max_sister, max_depth):
+def buildTreeGrow(depth, value_callback, max_siblings, max_depth):
    """ Random generates a Tree structure using the value_callback
    for data generation and the method "Grow"
 
    :param depth: the initial depth, zero
    :param value_callback: the function which generates the random
                           values for nodes
-   :param max_sister: the maximum number of sisters of a node
+   :param max_siblings: the maximum number of sisters of a node
    :param max_depth: the maximum depth of the tree   
 
    :rtype: the root node of created tree
@@ -159,21 +159,21 @@ def buildTreeGrow(depth, value_callback, max_sister, max_depth):
 
    if depth == max_depth: return n
 
-   for i in xrange(rand_randint(0, abs(max_sister))):
-      child = buildTreeGrow(depth+1, value_callback, max_sister, max_depth)
+   for i in xrange(rand_randint(0, abs(max_siblings))):
+      child = buildTreeGrow(depth+1, value_callback, max_siblings, max_depth)
       child.setParent(n)
       n.addChild(child)
    return n
 
 
-def buildTreeFull(depth, value_callback, max_sister, max_depth):
+def buildTreeFull(depth, value_callback, max_siblings, max_depth):
    """ Random generates a Tree structure using the value_callback
    for data generation and the method "Full"
 
    :param depth: the initial depth, zero
    :param value_callback: the function which generates the random
                           values for nodes
-   :param max_sister: the maximum number of sisters of a node
+   :param max_siblings: the maximum number of sisters of a node
    :param max_depth: the maximum depth of the tree   
 
    :rtype: the root node of created tree
@@ -184,11 +184,11 @@ def buildTreeFull(depth, value_callback, max_sister, max_depth):
 
    if depth == max_depth: return n
 
-   if max_sister < 0: range_val = abs(max_sister)
-   else:              range_val = rand_randint(1, abs(max_sister))
+   if max_siblings < 0: range_val = abs(max_siblings)
+   else:              range_val = rand_randint(1, abs(max_siblings))
 
    for i in xrange(range_val):
-      child = buildTreeFull(depth+1, value_callback, max_sister, max_depth)
+      child = buildTreeFull(depth+1, value_callback, max_siblings, max_depth)
       child.setParent(n)
       n.addChild(child)
    return n
