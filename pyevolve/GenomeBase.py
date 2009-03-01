@@ -526,6 +526,7 @@ class GTreeBase:
    def __repr__(self):
       str_buff  = "- GTree\n"
       str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
+      str_buff += "\tNodes:\t\t\t%d\n" % self.getNodesCount()
       str_buff += "\n" + self.getTraversalString()
       return str_buff
 
