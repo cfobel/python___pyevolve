@@ -477,6 +477,25 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    node_dad_stack = []
    node_dad_tmp   = None
 
+   dad_cache      = []
+
+   node_dad_stack.append(gDad.getRoot())
+   node_dad_stack.append(0)
+
+   while len(node_dad_stack) > 0:
+      
+      dD = node_dad_stack.pop()
+      node_dad_tmp = node_dad_stack.pop()
+
+      for child in node_dad_tmp.getChilds():
+         node_dad_stack.append(child)
+         node_dad_stack.append(dD+1)
+
+      dH = gDad.getNodeHeight(node_dad_tmp)
+
+      # (node, depth, height)
+      dad_cache.append((node_dad_tmp, dD, dH))
+
    node_mom_stack.append(gMom.getRoot())
    node_mom_stack.append(0)
 
@@ -489,31 +508,18 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
          node_mom_stack.append(child)
          node_mom_stack.append(mD+1)
 
-      if mD <= 0: continue
       mH = gMom.getNodeHeight(node_mom_tmp)
-      if mH <= 0: continue
 
-      node_dad_stack.append(gDad.getRoot())
-      node_dad_stack.append(0)
-
-      while len(node_dad_stack) > 0:
-         
-         dD = node_dad_stack.pop()
-         node_dad_tmp = node_dad_stack.pop()
-
-         for child in node_dad_tmp.getChilds():
-            node_dad_stack.append(child)
-            node_dad_stack.append(dD+1)
-
-         if dD <= 0: continue
-         dH = gDad.getNodeHeight(node_dad_tmp)
-         if dH <= 0: continue
+      for cache_item in dad_cache:
+         node_dad_tmp, dD, dH = cache_item
+      
+         # Don't swap two nodes with height zero,
+         # which means no childs
+         if (mH==0) and (dH==0):
+            continue
 
          if (dD+mH <= max_depth) and (mD+dH <= max_depth):
             pairs.append((node_mom_tmp, node_dad_tmp))
-
-   if len(pairs) == 0:
-      return (gMom, gDad)
 
    nodeMom, nodeDad = rand_choice(pairs)
 
@@ -524,14 +530,22 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    if args["count"] >= 1:
       sister = gMom
       nodeDad.setParent(nodeMom_parent)
-      nodeMom_parent.replaceChild(nodeMom, nodeDad)
+
+      if nodeMom_parent is None:
+         sister.setRoot(nodeDad)
+      else:
+         nodeMom_parent.replaceChild(nodeMom, nodeDad)
       sister.processNodes()
 
    # Brother
    if args["count"] == 2:
       brother = gDad
       nodeMom.setParent(nodeDad_parent)
-      nodeDad_parent.replaceChild(nodeDad, nodeMom)
+
+      if nodeDad_parent is None:
+         brother.setRoot(nodeMom)
+      else:
+         nodeDad_parent.replaceChild(nodeDad, nodeMom)
       brother.processNodes()
 
    return (sister, brother)

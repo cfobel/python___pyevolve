@@ -354,8 +354,8 @@ class GTreeNodeBase:
 
       :param parent: the parent node
       """
-      if not isinstance(parent, GTreeNodeBase):
-         Util.raiseException("The parent must be a node", TypeError)
+      #if not isinstance(parent, GTreeNodeBase):
+      #   Util.raiseException("The parent must be a node", TypeError)
       self.parent = parent
    
    def getParent(self):
@@ -486,14 +486,6 @@ class GTreeBase:
          callback(child_node)
          self.traversal(callback, child_node)
 
-   def getNodeCopy(self, node):
-      """ Returns a safe copy of the node and all of it childs
-      
-      :rtype: a new instance of the node and sub-nodes
-      """
-      new_node = copy.deepcopy(node)
-      return new_node
-
    def getRandomNode(self):
       """ Returns a random node from the Tree
 
@@ -517,9 +509,7 @@ class GTreeBase:
 
          rev_childs = tmp.getChilds()[:]
          rev_childs.reverse()
-
-         for child in rev_childs:
-            node_stack.append(child)
+         node_stack.extend(rev_childs)
 
       return all_nodes 
 
