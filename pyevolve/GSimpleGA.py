@@ -580,7 +580,8 @@ class GSimpleGA:
       logging.info(message)
       print message,
       self.internalPop.statistics()
-      self.internalPop.printStats()
+      stat_ret = self.internalPop.printStats()
+      return message + stat_ret
 
    def printTimeElapsed(self):
       """ Shows the time elapsed since the begin of evolution """

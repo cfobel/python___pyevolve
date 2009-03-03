@@ -363,7 +363,7 @@ class GPopulation:
       """ Print statistics of the current population """
       message = ""
       if self.sortType == Consts.sortType["scaled"]:
-         message =  "Max/Min/Avg Fitness(Raw) [%.2f(%.2f)/%.2f(%.2f)/%.2f(%.2f)]" % (self.stats["fitMax"], self.stats["rawMax"], self.stats["fitMin"], self.stats["rawMin"], self.stats["fitAve"], self.stats["rawAve"])
+         message = "Max/Min/Avg Fitness(Raw) [%.2f(%.2f)/%.2f(%.2f)/%.2f(%.2f)]" % (self.stats["fitMax"], self.stats["rawMax"], self.stats["fitMin"], self.stats["rawMin"], self.stats["fitAve"], self.stats["rawAve"])
       else:
          message = "Max/Min/Avg Raw [%.2f/%.2f/%.2f]" % (self.stats["rawMax"], self.stats["rawMin"], self.stats["rawAve"])
       logging.info(message)
