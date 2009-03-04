@@ -574,7 +574,13 @@ class GSimpleGA:
       return (self.currentGeneration == self.nGenerations)
    
    def printStats(self):
-      """ Print generation statistics """
+      """ Print generation statistics
+
+      :rtype: the printed statistics as string
+
+      .. versionchanged:: 0.6
+         The return of *printStats* method.
+      """
       percent = self.currentGeneration * 100 / float(self.nGenerations)
       message = "Gen. %d (%.2f%%):" % (self.currentGeneration, percent)
       logging.info(message)
@@ -585,7 +591,9 @@ class GSimpleGA:
 
    def printTimeElapsed(self):
       """ Shows the time elapsed since the begin of evolution """
-      print "Total time elapsed: %.3f seconds." % (time()-self.time_init)
+      total_time = time()-self.time_init
+      print "Total time elapsed: %.3f seconds." % total_time
+      return total_time
    
    def dumpStatsDB(self):
       """ Dumps the current statistics to database adapter """
