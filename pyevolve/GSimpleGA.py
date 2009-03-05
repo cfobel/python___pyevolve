@@ -239,6 +239,9 @@ class GSimpleGA:
       self.terminationCriteria = FunctionSlot("Termination Criteria")
       self.selector.set(Consts.CDefGASelector)
       self.allSlots            = [ self.selector, self.stepCallback, self.terminationCriteria ]
+
+      self.extinctionGenerations = 300
+      self.extinctionScores = []
       
       self.currentGeneration = 0
       
@@ -669,6 +672,24 @@ class GSimpleGA:
                if freq_stats:
                   print "\n\tEvolution stopped by Step Callback function !\n"
                break
+
+            if self.extinctionGenerations > 0:
+               ext_score = int(self.bestIndividual().score)
+
+               if len(self.extinctionScores) >= self.extinctionGenerations:
+                  self.extinctionScores.insert(0, ext_score)
+                  self.extinctionScores = self.extinctionScores[:-1]
+
+                  if len(set(self.extinctionScores)) == 1:
+                     print "Development Version: extinction warning."
+                     self.initialize()
+                     self.internalPop.evaluate()
+                     self.internalPop.sort()
+                     del self.extinctionScores[:]
+
+               else:
+                  self.extinctionScores.append(ext_score)
+
 
             if self.interactiveMode:
                if sys_platform[:3] == "win":
