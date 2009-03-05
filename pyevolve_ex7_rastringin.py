@@ -12,9 +12,12 @@ def rastringin(xlist):
 
 if __name__ == "__main__":
 
+   import psyco
+   psyco.full()
+
    # Genome instance
    genome = G1DList.G1DList(20)
-   genome.setParams(rangemin=-5.2, rangemax=5.30)
+   genome.setParams(rangemin=-5.2, rangemax=5.30, bestRawScore=0.00, roundDecimal=2)
    genome.initializator.set(Initializators.G1DListInitializatorReal)
    genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
@@ -26,8 +29,10 @@ if __name__ == "__main__":
    ga.setMinimax(Consts.minimaxType["minimize"])
    #ga.selector.set(Selectors.GRouletteWheel)
    ga.setGenerations(1000)
-   ga.setCrossoverRate(0.6)
-   ga.setMutationRate(0.05)
+   ga.setCrossoverRate(0.8)
+   ga.setPopulationSize(200)
+   ga.setMutationRate(0.06)
+   ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
    # Create DB Adapter and set as adapter
    #sqlite_adapter = DBAdapters.DBSQLite(identify="rastringin")
@@ -40,5 +45,5 @@ if __name__ == "__main__":
    # Best individual
    best = ga.bestIndividual()
    print "\nBest individual score: %.2f" % (best.getRawScore(),)
-   print best
+   #print best
 
