@@ -240,7 +240,7 @@ class GSimpleGA:
       self.selector.set(Consts.CDefGASelector)
       self.allSlots            = [ self.selector, self.stepCallback, self.terminationCriteria ]
 
-      self.extinctionGenerations = 300
+      self.extinctionGenerations = 0
       self.extinctionScores = []
       
       self.currentGeneration = 0
