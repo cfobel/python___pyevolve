@@ -1,4 +1,3 @@
-# $Id: pyevolve_ex3_schaffer.py 150 2009-01-18 19:29:13Z christian.perone $
 from pyevolve import G1DList, GSimpleGA, Selectors
 from pyevolve import Initializators, Mutators, Consts
 import math
@@ -10,29 +9,34 @@ def schafferF6(xlist):
    score = 0.5 + (t1*t1 - 0.5)/(t2*t2)
    return score
 
-# Genome instance
-genome = G1DList.G1DList(2)
-genome.setParams(rangemin=-100, rangemax=100, bestRawScore=0.00, roundDecimal=2)
-genome.initializator.set(Initializators.G1DListInitializatorReal)
-genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
+if __name__ == "__main__":
 
-# The evaluator function (objective function)
-genome.evaluator.set(schafferF6)
+   import psyco
+   psyco.full()      
 
-# Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
-ga.selector.set(Selectors.GRouletteWheel)
+   # Genome instance
+   genome = G1DList.G1DList(2)
+   genome.setParams(rangemin=-100, rangemax=100, bestRawScore=0.00, roundDecimal=2)
+   genome.initializator.set(Initializators.G1DListInitializatorReal)
+   genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
-ga.minimax = Consts.minimaxType["minimize"]
-ga.setGenerations(5000)
-ga.setMutationRate(0.05)
-ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
+   # The evaluator function (objective function)
+   genome.evaluator.set(schafferF6)
 
-# Do the evolution, with stats dump
-# frequency of 10 generations
-ga.evolve(freq_stats=100)
+   # Genetic Algorithm Instance
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.selector.set(Selectors.GRouletteWheel)
 
-# Best individual
-best = ga.bestIndividual()
-print "\nBest individual score: %.2f" % (best.score,)
-print best
+   ga.minimax = Consts.minimaxType["minimize"]
+   ga.setGenerations(5000)
+   ga.setMutationRate(0.05)
+   ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
+
+   # Do the evolution, with stats dump
+   # frequency of 10 generations
+   ga.evolve(freq_stats=100)
+
+   # Best individual
+   best = ga.bestIndividual()
+   print "\nBest individual score: %.2f" % (best.score,)
+   #print best
