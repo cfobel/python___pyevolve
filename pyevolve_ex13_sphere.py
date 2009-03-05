@@ -10,31 +10,38 @@ def sphere(xlist):
       total += (xlist[i]**2)
    return total
 
-# Genome instance
-genome = G1DList.G1DList(50)
-genome.setParams(rangemin=-5.12, rangemax=5.13)
-genome.initializator.set(Initializators.G1DListInitializatorReal)
-genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
-# The evaluator function (objective function)
-genome.evaluator.set(sphere)
+if __name__ == "__main__":
+   
+   import psyco
+   psyco.full()
 
-# Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
-ga.minimax = Consts.minimaxType["minimize"]
-ga.setGenerations(500)
-ga.setMutationRate(0.02)
+   # Genome instance
+   genome = G1DList.G1DList(50)
+   genome.setParams(rangemin=-5.12, rangemax=5.13, bestRawScore=0.00, roundDecimal=2)
+   genome.initializator.set(Initializators.G1DListInitializatorReal)
+   genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
-# Create DB Adapter and set as adapter
-# sqlite_adapter = DBAdapters.DBSQLite(identify="sphere")
-# ga.setDBAdapter(sqlite_adapter)
+   # The evaluator function (objective function)
+   genome.evaluator.set(sphere)
 
-# Do the evolution, with stats dump
-# frequency of 10 generations
-ga.evolve(freq_stats=20)
+   # Genetic Algorithm Instance
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.setMinimax(Consts.minimaxType["minimize"])
+   ga.setGenerations(1500)
+   ga.setMutationRate(0.02)
+   ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
-# Best individual
-best = ga.bestIndividual()
-print "\nBest individual score: %.2f" % (best.score,)
-print best
+   # Create DB Adapter and set as adapter
+   # sqlite_adapter = DBAdapters.DBSQLite(identify="sphere")
+   # ga.setDBAdapter(sqlite_adapter)
+
+   # Do the evolution, with stats dump
+   # frequency of 10 generations
+   ga.evolve(freq_stats=40)
+
+   # Best individual
+   best = ga.bestIndividual()
+   print "\nBest individual score: %.2f" % (best.score,)
+   #print best
 
