@@ -3,7 +3,7 @@ from pyevolve import Initializators, Mutators, Consts, DBAdapters
 import math
 
 # This is the Rastringin Function, a deception function
-def ackleyF1(xlist):
+def ackley(xlist):
    sum1 = 0
    score = 0
    n = len(xlist)
@@ -19,31 +19,37 @@ def ackleyF1(xlist):
 
    return score
 
-# Genome instance
-genome = G1DList.G1DList(5)
-genome.setParams(rangemin=-8, rangemax=8)
-genome.initializator.set(Initializators.G1DListInitializatorReal)
-genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
+if __name__ == "__main__":
 
-# The evaluator function (objective function)
-genome.evaluator.set(ackleyF1)
+   import psyco
+   psyco.full()
 
-# Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
-ga.minimax = Consts.minimaxType["minimize"]
-ga.setGenerations(500)
-ga.setMutationRate(0.03)
+   # Genome instance
+   genome = G1DList.G1DList(5)
+   genome.setParams(rangemin=-8, rangemax=8,  bestRawScore=0.00, roundDecimal=2)
+   genome.initializator.set(Initializators.G1DListInitializatorReal)
+   genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
-# Create DB Adapter and set as adapter
-# sqlite_adapter = DBAdapters.DBSQLite(identify="ackley")
-# ga.setDBAdapter(sqlite_adapter)
+   # The evaluator function (objective function)
+   genome.evaluator.set(ackley)
 
-# Do the evolution, with stats dump
-# frequency of 10 generations
-ga.evolve(freq_stats=50)
+   # Genetic Algorithm Instance
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.setMinimax(Consts.minimaxType["minimize"])
+   ga.setGenerations(1000)
+   ga.setMutationRate(0.04)
+   ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
-# Best individual
-best = ga.bestIndividual()
-print "\nBest individual score: %.2f" % (best.getRawScore(),)
-print best
+   # Create DB Adapter and set as adapter
+   # sqlite_adapter = DBAdapters.DBSQLite(identify="ackley")
+   # ga.setDBAdapter(sqlite_adapter)
+
+   # Do the evolution, with stats dump
+   # frequency of 10 generations
+   ga.evolve(freq_stats=50)
+
+   # Best individual
+   best = ga.bestIndividual()
+   print "\nBest individual score: %.2f" % (best.getRawScore(),)
+   #print best
 
