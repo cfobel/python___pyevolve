@@ -12,8 +12,8 @@ def rastringin(xlist):
 
 if __name__ == "__main__":
 
-   import psyco
-   psyco.full()
+   #import psyco
+   #psyco.full()
 
    # Genome instance
    genome = G1DList.G1DList(20)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
    # Do the evolution, with stats dump
    # frequency of 10 generations
-   ga.evolve(freq_stats=50)
+   ga.evolve(freq_stats=10)
 
    # Best individual
    best = ga.bestIndividual()

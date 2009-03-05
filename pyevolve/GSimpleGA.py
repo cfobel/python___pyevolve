@@ -59,19 +59,21 @@ Class
 
 """
 
-from GPopulation import GPopulation
+from GPopulation  import GPopulation
 from FunctionSlot import FunctionSlot
-from Migration import MigrationScheme
-from GenomeBase import GenomeBase
-from DBAdapters import DBBaseAdapter
+from Migration    import MigrationScheme
+from GenomeBase   import GenomeBase
+from DBAdapters   import DBBaseAdapter
 
 import Consts
 import Util
+
 import random
 import logging
-from time import time
+
+from time  import time
 from types import BooleanType
-from sys import platform as sys_platform
+from sys   import platform as sys_platform
 
 import code
 import pyevolve
@@ -521,7 +523,7 @@ class GSimpleGA:
          genomeMom = self.select(popID=self.currentGeneration)
          genomeDad = self.select(popID=self.currentGeneration)
          
-         if  not genomeMom.crossover.isEmpty() and self.pCrossover >= 1.0:
+         if not genomeMom.crossover.isEmpty() and self.pCrossover >= 1.0:
             for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=2):
                (sister, brother) = it
          else:
@@ -683,8 +685,13 @@ class GSimpleGA:
                   if len(set(self.extinctionScores)) == 1:
                      print "Development Version: extinction warning."
                      self.initialize()
+                     #self.internalPop.create(minimax=self.minimax)
+                     #for gen in self.internalPop.internalPop[-60:]:
+                     #   gen.initialize()
+                     #self.internalPop.clearFlags()
                      self.internalPop.evaluate()
                      self.internalPop.sort()
+                     self.internalPop.statistics()
                      del self.extinctionScores[:]
 
                else:

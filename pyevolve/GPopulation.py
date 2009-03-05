@@ -303,7 +303,6 @@ class GPopulation:
 
    def create(self, **args):
       """ Clone the example genome to fill the population """
-      self.clear()
       self.minimax = args["minimax"]
       self.internalPop = [self.oneSelfGenome.clone() for i in xrange(self.popSize)]
       self.clearFlags()
@@ -393,7 +392,7 @@ class GPopulation:
       
    def clone(self):
       """ Return a brand-new cloned population """
-      newpop = GPopulation(self.oneSelfGenome.clone())
+      newpop = GPopulation(self.oneSelfGenome)
       self.copy(newpop)
       return newpop
       

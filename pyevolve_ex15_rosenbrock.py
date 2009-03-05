@@ -13,7 +13,7 @@ if __name__ == "__main__":
    psyco.full()
 
    # Genome instance
-   genome = G1DList.G1DList(20)
+   genome = G1DList.G1DList(50)
    genome.setParams(rangemin=-5, rangemax=10, bestRawScore=0.0)
    genome.mutator.set(Mutators.G1DListMutatorIntegerRange)
 
@@ -36,12 +36,12 @@ if __name__ == "__main__":
 
    # Do the evolution, with stats dump
    # frequency of 10 generations
-   ga.evolve(freq_stats=50)
+   ga.evolve(freq_stats=40)
 
    # Best individual
    best = ga.bestIndividual()
    print "\nBest individual score: %.2f" % (best.score,)
-   #print best
+   print best
 
 
 
