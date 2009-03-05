@@ -9,9 +9,11 @@ def rosenbrock(xlist):
    return sum_var
 
 if __name__ == "__main__":
+   import psyco
+   psyco.full()
 
    # Genome instance
-   genome = G1DList.G1DList(10)
+   genome = G1DList.G1DList(20)
    genome.setParams(rangemin=-5, rangemax=10, bestRawScore=0.0)
    genome.mutator.set(Mutators.G1DListMutatorIntegerRange)
 
@@ -22,10 +24,10 @@ if __name__ == "__main__":
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setMinimax(Consts.minimaxType["minimize"])
    #ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(5000)
-   ga.setCrossoverRate(0.6)
-   ga.setPopulationSize(400)
-   ga.setMutationRate(0.08)
+   ga.setGenerations(50000)
+   ga.setCrossoverRate(0.8)
+   ga.setPopulationSize(200)
+   ga.setMutationRate(0.03)
    ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
    # Create DB Adapter and set as adapter
@@ -39,7 +41,7 @@ if __name__ == "__main__":
    # Best individual
    best = ga.bestIndividual()
    print "\nBest individual score: %.2f" % (best.score,)
-   print best
+   #print best
 
 
 
