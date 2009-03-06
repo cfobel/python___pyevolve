@@ -167,6 +167,7 @@ def GTreeInitializatorInteger(genome, **args):
 
    range_min = genome.getParam("rangemin", 0)
    range_max = genome.getParam("rangemax", 100)
+
    lambda_generator = lambda: rand_randint(range_min, range_max)
 
    method = genome.getParam("method", "grow")
