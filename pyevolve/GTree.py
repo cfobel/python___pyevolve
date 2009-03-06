@@ -23,9 +23,9 @@ Default Parameters
 
 *Crossover*
 
-   :func:`Crossovers.GTreeCrossoverSinglePoint`
+   :func:`Crossovers.GTreeCrossoverSinglePointStrict`
 
-   The Single Point crossover for GTree
+   The Strict Single Point crossover for GTree
 
 .. versionadded:: 0.6
    The *GTree* module.

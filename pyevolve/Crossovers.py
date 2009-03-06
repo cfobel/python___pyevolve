@@ -442,6 +442,9 @@ def GTreeCrossoverSinglePoint(genome, **args):
 
 def GTreeCrossoverSinglePointStrict(genome, **args):
    """ The crossover of Tree, Strict Single Point
+
+   ..note:: This crossover method creates offspring with restriction of the
+            *max_depth* parameter.
    
    Accepts the *max_attempt* parameter and *max_depth* (required).
    

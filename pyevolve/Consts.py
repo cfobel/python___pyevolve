@@ -442,7 +442,7 @@ CDefG2DBinaryStringUniformProb = 0.5
 # - GTree defaults
 CDefGTreeInit      = Initializators.GTreeInitializatorInteger
 CDefGGTreeMutator  = Mutators.GTreeMutatorIntegerRange
-CDefGTreeCrossover = Crossovers.GTreeCrossoverSinglePoint
+CDefGTreeCrossover = Crossovers.GTreeCrossoverSinglePointStrict
 
 # - G1DList defaults
 CDefG1DListMutIntMU = 2
