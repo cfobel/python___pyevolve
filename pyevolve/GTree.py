@@ -11,15 +11,21 @@ Default Parameters
 
 *Initializator*
 
-  :func:`Initializators.GTreeInitInteger`
+  :func:`Initializators.GTreeInitializatorInteger
 
    The Integer Initializator for GTree
 
 *Mutator*
-   TODO
+   
+   :func:`Mutators.GTreeMutatorIntegerRange`
+
+   The Integer Range mutator for GTree
 
 *Crossover*
-   TODO
+
+   :func:`Crossovers.GTreeCrossoverSinglePoint`
+
+   The Single Point crossover for GTree
 
 .. versionadded:: 0.6
    The *GTree* module.
