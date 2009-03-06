@@ -14,7 +14,7 @@ from random import randint as rand_randint, choice as rand_choice
 from FunctionSlot import FunctionSlot
 import Util
 
-
+from heapq import heappush, heappop
 
 class GenomeBase:
    """ GenomeBase Class - The base of all chromosome representation """
@@ -425,12 +425,14 @@ class GTreeBase:
 
       :rtype: the height of the node
       """
-      heights = []
+      height = 0
       if len(node) <= 0:
          return 0
       for child in node.getChilds():
-         heights.append(self.getNodeHeight(child)+1)
-      return max(heights)
+         h_inner = self.getNodeHeight(child)+1
+         if h_inner > height:
+            height = h_inner
+      return height
 
    def getHeight(self):
       """ Return the tree height
