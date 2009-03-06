@@ -179,6 +179,7 @@ def GTreeInitializatorInteger(genome, **args):
 
    genome.setRoot(root)
    genome.processNodes()
+   assert genome.getHeight() <= max_depth
 
 def GTreeInitializatorAllele(genome, **args):
    """ Allele initialization function of GTree
@@ -207,6 +208,8 @@ def GTreeInitializatorAllele(genome, **args):
 
    genome.setRoot(root)
    genome.processNodes()
+   assert genome.getHeight() <= max_depth
+
 
 
 

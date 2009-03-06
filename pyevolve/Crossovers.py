@@ -440,28 +440,22 @@ def GTreeCrossoverSinglePoint(genome, **args):
 
    return (sister, brother)
 
-
 def GTreeCrossoverSinglePointStrict(genome, **args):
-   """ The crossover of Tree, Strict Single Point
-
-   .. warning:: This crossover method is more smart than simple
-                Single Point Crossover, it does some height and
-                depth analysis on nodes of the tree, the offspring
-                created with this crossover will never have a depth
-                greater than the *max_depth* genome parameter.
-                However, this height and depth analysis take some
-                performance from the GA, use it with caution.
-   """
+   """ The crossover of Tree, Strict Single Point """
    sister = None
    brother = None
 
    gMom = args["mom"].clone()
    gDad = args["dad"].clone()
 
+   #gMom.processNodes()
+   #gDad.processNodes()
+
    gMom.resetStats()
    gDad.resetStats()
 
    max_depth = gMom.getParam("max_depth", None)
+   max_attemp = 20
 
    if max_depth is None:
       Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
@@ -469,59 +463,30 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    if max_depth < 0:
       Util.raiseException("The max_depth must be >= 1, if you want to use GTreeCrossoverSinglePointStrict crossover !", ValueError)
 
-   pairs = []
+   momRandom = None
+   dadRandom = None
 
-   node_mom_stack = []
-   node_mom_tmp   = None
+   for i in xrange(max_attemp):
+      momRandom = gMom.getRandomNode()
+      dadRandom = gDad.getRandomNode()
 
-   node_dad_stack = []
-   node_dad_tmp   = None
+      mH = gMom.getNodeHeight(momRandom)
+      dH = gDad.getNodeHeight(dadRandom)
 
-   dad_cache      = []
+      mD = gMom.getNodeDepth(momRandom)
+      dD = gDad.getNodeDepth(dadRandom)
 
-   node_dad_stack.append(gDad.getRoot())
-   node_dad_stack.append(0)
+      if (mH==0) and (dH==0):
+         continue
 
-   while len(node_dad_stack) > 0:
-      
-      dD = node_dad_stack.pop()
-      node_dad_tmp = node_dad_stack.pop()
+      if (dD+mH <= max_depth) and (mD+dH <= max_depth):
+         break
 
-      for child in node_dad_tmp.getChilds():
-         node_dad_stack.append(child)
-         node_dad_stack.append(dD+1)
-
-      dH = gDad.getNodeHeight(node_dad_tmp)
-
-      # (node, depth, height)
-      dad_cache.append((node_dad_tmp, dD, dH))
-
-   node_mom_stack.append(gMom.getRoot())
-   node_mom_stack.append(0)
-
-   while len(node_mom_stack) > 0:
-
-      mD = node_mom_stack.pop()
-      node_mom_tmp = node_mom_stack.pop()
-      
-      for child in node_mom_tmp.getChilds():
-         node_mom_stack.append(child)
-         node_mom_stack.append(mD+1)
-
-      mH = gMom.getNodeHeight(node_mom_tmp)
-
-      for cache_item in dad_cache:
-         node_dad_tmp, dD, dH = cache_item
-      
-         # Don't swap two nodes with height zero,
-         # which means no childs
-         if (mH==0) and (dH==0):
-            continue
-
-         if (dD+mH <= max_depth) and (mD+dH <= max_depth):
-            pairs.append((node_mom_tmp, node_dad_tmp))
-
-   nodeMom, nodeDad = rand_choice(pairs)
+   if i==(max_attemp-1):
+      assert gMom.getHeight() <= max_depth
+      return (gMom, gDad)
+   else:
+      nodeMom, nodeDad = momRandom, dadRandom
 
    nodeMom_parent = nodeMom.getParent()
    nodeDad_parent = nodeDad.getParent()
@@ -536,6 +501,7 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
       else:
          nodeMom_parent.replaceChild(nodeMom, nodeDad)
       sister.processNodes()
+      assert sister.getHeight() <= max_depth
 
    # Brother
    if args["count"] == 2:
@@ -547,6 +513,7 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
       else:
          nodeDad_parent.replaceChild(nodeDad, nodeMom)
       brother.processNodes()
+      assert brother.getHeight() <= max_depth
 
    return (sister, brother)
 
