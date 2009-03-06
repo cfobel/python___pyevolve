@@ -560,3 +560,191 @@ class DBVPythonGraph(DBBaseAdapter):
       self.curveDev.plot(pos=(generation, stats["rawDev"]))
       self.curveAvg.plot(pos=(generation, stats["rawAve"]))
       
+class DBMySQLAdapter(DBBaseAdapter):
+   """ DBMySQLAdapter Class - Adapter to dump data in MySql database server
+   
+   Example:
+      >>> dbadapter = DBMySQLAdapter("pyevolve_username", "password", identify="run1")
+
+   or
+
+      >>> dbadapter = DBMySQLAdapter(user="username", passwd="password",
+      ...                            host="mysqlserver.com.br", port=3306, db="pyevolve_db")
+
+   When you run some GA for the first time, you need to create the database, for this, you
+   must use the *resetDB* parameter as True.
+
+   This parameter will erase all the database tables and will create the new ones.
+   The *resetDB* parameter is different from the *resetIdentify* parameter, the *resetIdentify*
+   only erases the rows with the same "identify" name, and *resetDB* will drop and recreate
+   the tables.
+
+   :param user: mysql username (must have permission to create, drop, insert, etc.. on tables
+   :param passwd: the user password on MySQL server
+   :param host: the hostname, default is "localhost"
+   :param port: the port, default is 3306
+   :param db: the database name, default is "pyevolve"
+   :param identify: the identify if the run
+   :param resetDB: if True, the database structure will be recreated
+   :param resetIdentify: if True, the identify with the same name will be overwrite with new data
+   :param frequency: the generational dump frequency
+   :param commit_freq: the commit frequency
+   """
+
+   def __init__(self, user, passwd, host=Consts.CDefMySQLDBHost, port=Consts.CDefMySQLDBPort,
+                db=Consts.CDefMySQLDBName, identify=None, resetDB=False, resetIdentify=True,
+                frequency=Consts.CDefMySQLStatsGenFreq, commit_freq=Consts.CDefMySQLStatsCommitFreq):
+      """ The creator of the DBSQLite Class """
+
+      DBBaseAdapter.__init__(self, frequency, identify)
+
+      self.mysqldbmod = None
+      self.connection = None
+      self.resetDB = resetDB
+      self.resetIdentify = resetIdentify
+      self.db = db
+      self.host = host
+      self.port = port
+      self.user = user
+      self.passwd = passwd
+      self.typeDict = { types.FloatType : "DOUBLE(14,6)" }
+      self.cursorPool = None
+      self.commitFreq = commit_freq
+
+   def __repr__(self):
+      """ The string representation of adapter """
+      ret = "DBMySQLAdapter DB Adapter [identify='%', host='%s', username='%s', db='%s']" % (self.getIdentify(),
+            self.host, self.user, self.db)
+      return ret
+
+   def open(self, ga_engine):
+      """ Open the database connection
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
+      if self.mysqldbmod is None:
+         logging.debug("Loading MySQLdb module...")
+         self.mysqldbmod = Util.importSpecial("MySQLdb")
+
+      logging.debug("Opening database, host=%s", self.host)
+      self.connection = self.mysqldbmod.connect(host=self.host, user=self.user,
+                                                passwd=self.passwd, db=self.db,
+                                                port=self.port)
+      temp_stats = Statistics.Statistics()
+      self.createStructure(temp_stats)
+
+      if self.resetDB:
+         self.resetStructure(Statistics.Statistics())
+
+      if self.resetIdentify:
+         self.resetTableIdentify()
+
+   def commitAndClose(self):
+      """ Commit changes on database and closes connection """
+      self.commit()
+      self.close()
+
+   def close(self):
+      """ Close the database connection """
+      logging.debug("Closing database.")
+      if self.cursorPool:
+         self.cursorPool.close()
+         self.cursorPool = None
+      self.connection.close()
+
+   def commit(self):
+      """ Commit changes to database """
+      logging.debug("Commiting changes to database.")
+      self.connection.commit()
+
+   def getCursor(self):
+      """ Return a cursor from the pool
+
+      :rtype: the cursor
+
+      """
+      if not self.cursorPool:
+         logging.debug("Creating new cursor for database...")
+         self.cursorPool = self.connection.cursor()
+         return self.cursorPool
+      else:
+         return self.cursorPool
+
+   def createStructure(self, stats):
+      """ Create table using the Statistics class structure
+
+      :param stats: the statistics object
+
+      """
+      c = self.getCursor()
+      pstmt = "create table if not exists %s(identify VARCHAR(80), generation INTEGER, " % (Consts.CDefMySQLDBTable)
+      for k, v in stats.items():
+         pstmt += "%s %s, " % (k, self.typeDict[type(v)])
+      pstmt = pstmt[:-2] + ")"
+      logging.debug("Creating table %s: %s.", Consts.CDefSQLiteDBTable, pstmt)
+      c.execute(pstmt)
+
+      pstmt = """create table if not exists %s(identify VARCHAR(80), generation INTEGER,
+              individual INTEGER, fitness DOUBLE(14,6), raw DOUBLE(14,6))""" % (Consts.CDefMySQLDBTablePop)
+      logging.debug("Creating table %s: %s.", Consts.CDefMySQLDBTablePop, pstmt)
+      c.execute(pstmt)
+      self.commit()
+
+   def resetTableIdentify(self):
+      """ Delete all records on the table with the same Identify """
+      c = self.getCursor()
+      stmt  = "delete from %s where identify = '%s'" % (Consts.CDefMySQLDBTable, self.getIdentify())
+      stmt2 = "delete from %s where identify = '%s'" % (Consts.CDefMySQLDBTablePop, self.getIdentify())
+
+      logging.debug("Erasing data from the tables with the identify = %s", self.getIdentify())
+      c.execute(stmt)
+      c.execute(stmt2)
+
+      self.commit()
+
+
+   def resetStructure(self, stats):
+      """ Deletes de current structure and calls createStructure
+
+      :param stats: the statistics object
+
+      """
+      logging.debug("Reseting structure, droping table and creating new empty table.")
+      c = self.getCursor()
+      c.execute("drop table if exists %s" % (Consts.CDefMySQLDBTable,))
+      c.execute("drop table if exists %s" % (Consts.CDefMySQLDBTablePop,))
+      self.commit()
+      self.createStructure(stats)
+      
+   def insert(self, ga_engine):
+      """ Inserts the statistics data to database
+
+      :param ga_engine: the GA Engine
+
+      .. versionchanged:: 0.6
+         The method now receives the *ga_engine* parameter.
+      """
+      stats      = ga_engine.getStatistics()
+      population = ga_engine.getPopulation()
+      generation = ga_engine.getCurrentGeneration()
+
+      c = self.getCursor()
+      pstmt = "insert into " + Consts.CDefMySQLDBTable + " values (%s, %s, "
+      for i in xrange(len(stats)):
+         pstmt += "%s, "
+      pstmt = pstmt[:-2] + ")" 
+      c.execute(pstmt, (self.getIdentify(), generation) + stats.asTuple())
+
+      pstmt = "insert into " + Consts.CDefMySQLDBTablePop + " values(%s, %s, %s, %s, %s)"
+
+      tups = []
+      for i in xrange(len(population)):
+         ind = population[i]
+         tups.append((self.getIdentify(), generation, i, ind.fitness, ind.score))
+
+      c.executemany(pstmt, tups)
+      if (generation % self.commitFreq == 0):
+         self.commit()

@@ -272,6 +272,39 @@ SQLite3 DB Adapter Constants (:class:`DBAdapters.DBSQLite`)
 
    Default commit frequency.
 
+
+MySQL DB Adapter Constants (:class:`DBAdapters.DBMySQLAdapter`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. attribute:: CDefMySQLDBName
+   
+   Default database name.
+
+.. attribute:: CDefMySQLDBTable
+
+   Default statistical table name.
+
+.. attribute:: CDefMySQLDBTablePop
+
+   Default population statistical table name.
+
+.. attribute:: CDefMySQLStatsGenFreq
+
+   Default generational frequency for dump statistics.
+
+.. attribute:: CDefMySQLStatsCommitFreq
+
+   Default commit frequency.
+
+.. attribute:: CDefMySQLDBHost
+
+   Default MySQL connection host.
+
+.. attribute:: CDefMySQLDBPort
+
+   Default MySQL connection TCP port.
+
+
 URL Post DB Adapter Constants (:class:`DBAdapters.DBURLPost`)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -358,7 +391,8 @@ CDefImportList = {"visual.graph": "you must install VPython !",
                   "csv" : "csv module not found !",
                   "urllib" : "urllib module not found !",
                   "sqlite3": "sqlite3 module not found, are you using Jython or IronPython ?",
-                  "xmlrpclib" : "xmlrpclib module not found !"}
+                  "xmlrpclib" : "xmlrpclib module not found !",
+                  "MySQLdb" : "MySQLdb module not found, you must install mysql-python !"}
 
 ####################
 # Defaults section #
@@ -440,6 +474,17 @@ CDefSQLiteDBTable = "statistics"
 CDefSQLiteDBTablePop = "population"
 CDefSQLiteStatsGenFreq = 1
 CDefSQLiteStatsCommitFreq = 300
+
+# - DB Adapters MySQL defaults
+CDefMySQLDBName = "pyevolve"
+CDefMySQLDBTable = "statistics"
+CDefMySQLDBTablePop = "population"
+CDefMySQLDBHost = "localhost"
+CDefMySQLDBPort = 3306
+CDefMySQLStatsGenFreq = 1
+CDefMySQLStatsCommitFreq = 300
+
+
 
 # - DB Adapters URL Post defaults
 CDefURLPostStatsGenFreq = 100

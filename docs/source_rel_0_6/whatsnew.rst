@@ -92,3 +92,8 @@ What's new on the release |release|:
 
    Added the new :class:`DBAdapters.DBVPythonGraph` class, this DB
    Adapter uses the VPython to create real-time statistics graphs.
+
+**MySQL DB Adapter - dump statistics to MySQL**
+ 
+   Added the new :class:`DBAdapters.DBMySQLAdapter` class, this DB Adapter
+   will dump statistics to a local or remote MySQL database.
