@@ -441,7 +441,11 @@ def GTreeCrossoverSinglePoint(genome, **args):
    return (sister, brother)
 
 def GTreeCrossoverSinglePointStrict(genome, **args):
-   """ The crossover of Tree, Strict Single Point """
+   """ The crossover of Tree, Strict Single Point
+   
+   Accepts the *max_attempt* parameter and *max_depth* (required).
+   
+   """
    sister = None
    brother = None
 
@@ -455,7 +459,7 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    gDad.resetStats()
 
    max_depth = gMom.getParam("max_depth", None)
-   max_attemp = 20
+   max_attempt = gMom.getParam("max_attempt", 10)
 
    if max_depth is None:
       Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
@@ -466,23 +470,23 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    momRandom = None
    dadRandom = None
 
-   for i in xrange(max_attemp):
+   for i in xrange(max_attempt):
       momRandom = gMom.getRandomNode()
       dadRandom = gDad.getRandomNode()
 
+      # Optimize here
       mH = gMom.getNodeHeight(momRandom)
       dH = gDad.getNodeHeight(dadRandom)
 
       mD = gMom.getNodeDepth(momRandom)
       dD = gDad.getNodeDepth(dadRandom)
 
-      if (mH==0) and (dH==0):
-         continue
+      if (mH==0) and (dH==0): continue
 
       if (dD+mH <= max_depth) and (mD+dH <= max_depth):
          break
 
-   if i==(max_attemp-1):
+   if i==(max_attempt-1):
       assert gMom.getHeight() <= max_depth
       return (gMom, gDad)
    else:
