@@ -235,6 +235,7 @@ class GSimpleGA:
       
       self.time_init       = None
       self.interactiveMode = interactiveMode
+      self.interactiveGen  = 0
 
       self.selector            = FunctionSlot("Selector")
       self.stepCallback        = FunctionSlot("Generation Step Callback")
@@ -262,6 +263,30 @@ class GSimpleGA:
          return self.evolve(kwargs.get("freq_stats"))
       else:
          return self.evolve()
+
+   def setInteractiveGeneration(self, generation):
+      """ Sets the generation in which the GA must enter in the
+      Interactive Mode
+      
+      :param generation: the generation number, use "0" to disable
+
+      .. versionadded::0.6
+         The *setInteractiveGeneration* method.
+      """
+      if generation < 0:
+         Util.raiseException("Generation must be >= 0", ValueError)
+      self.interactiveGen = generation
+
+   def getInteractiveGeneration(self):
+      """ returns the generation in which the GA must enter in the
+      Interactive Mode
+      
+      :rtype: the generation number or 0 if not set
+
+      .. versionadded::0.6
+         The *getInteractiveGeneration* method.
+      """
+      return self.interactiveGen
 
    def setElitismReplacement(self, numreplace):
       """ Set the number of best individuals to copy to the next generation on the elitism
@@ -702,8 +727,10 @@ class GSimpleGA:
                if sys_platform[:3] == "win":
                   if msvcrt.kbhit():
                      if ord(msvcrt.getch()) == Consts.CDefESCKey:
+                        print "Loading modules for Interactive Mode...",
                         logging.debug("Windows Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
                         from pyevolve import Interaction
+                        print " done !"
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-Z to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
                                            "population" : self.getPopulation(),
@@ -714,9 +741,24 @@ class GSimpleGA:
                elif sys_platform[:5] == "linux":
                   if Util.kbhit():
                      if ord(Util.getch()) == Consts.CDefESCKey:
+                        print "Loading modules for Interactive Mode...",
                         logging.debug("Linux Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
                         from pyevolve import Interaction
+                        print " done !"
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-D to quit interactive mode." % (pyevolve.__version__,)
+                        session_locals = { "ga_engine"  : self,
+                                           "population" : self.getPopulation(),
+                                           "pyevolve"   : pyevolve,
+                                           "it"         : Interaction}
+                        print
+                        code.interact(interact_banner, local=session_locals)
+
+               if (self.getInteractiveGeneration() > 0) and (self.getInteractiveGeneration() == self.getCurrentGeneration()):
+                        print "Loading modules for Interactive Mode...",
+                        logging.debug("Manual Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
+                        from pyevolve import Interaction
+                        print " done !"
+                        interact_banner = "## Pyevolve v.%s - Interactive Mode ##" % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
                                            "population" : self.getPopulation(),
                                            "pyevolve"   : pyevolve,

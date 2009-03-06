@@ -252,10 +252,3 @@ class G2DList(GenomeBase):
       return newcopy
 
 
-
-if __name__ == "__main__":
-   a = G2DList(3,3)
-   a.setItem(2,2, "s")
-   a[1][1] = 2
-
-   print a

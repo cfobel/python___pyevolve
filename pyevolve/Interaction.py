@@ -10,6 +10,9 @@ and exposes to you in the name space called "it".
 To use this mode, the parameter *interactiveMode* must be enabled in the
 :class:`GSimpleGA.GSimpleGA`.
 
+You can use the manual method to enter in the Interactive Mode at specific
+generation using the :meth:`GSimpleGA.GSimpleGA.setInteractiveGeneration` method.
+
 """
 import logging
 

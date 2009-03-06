@@ -182,6 +182,9 @@ Now, *what you can do* with this prompt !?
 * Plot graphics of the current population
 * Data analysis, etc... python is your limit.
 
+.. note:: Mac users should use the :meth:`GSimpleGA.GSimpleGA.setInteractiveGeneration`, for
+          more information, see :mod:`Interaction` module documentation.
+
 Inspecting the population
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

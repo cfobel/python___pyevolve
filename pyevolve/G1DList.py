@@ -192,8 +192,3 @@ class G1DList(GenomeBase, G1DBase):
       self.copy(newcopy)
       return newcopy
 
-
-
-if __name__ == "__main__":
-   a = G1DList(10)
-   print a
