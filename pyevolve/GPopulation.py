@@ -109,37 +109,6 @@ class GPopulation:
       self.statted = False
       self.stats   = Statistics()
 
-   def setParams(self, **args):
-      """ Set the internal params
-
-      Example:
-         >>> population.setParams(parameter="value")
-
-      :param args: this params will saved in every chromosome for genetic op. use
-
-      .. versionadded: 0.6
-         The method `setParams'
-
-      """
-      self.internalParams.update(args)
-
-   def getParam(self, key, nvl=None):
-      """ Gets an internal parameter
-
-      Example:
-         >>> population.getParam("parameter")
-         "value"
-
-      :param key: the key of param
-      :param nvl: if the key doesn't exist, the nvl will be returned
-
-      .. versionadded: 0.6
-         The method `getParam'
-
-      """
-      return self.internalParams.get(key, nvl)
-      
-
    def setMultiProcessing(self, flag=True):
       """ Sets the flag to enable/disable the use of python multiprocessing module.
       Use this option when you have more than one core on your CPU and when your

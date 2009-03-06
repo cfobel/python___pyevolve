@@ -11,7 +11,7 @@ Default Parameters
 
 *Initializator*
 
-  :func:`Initializators.GTreeInitializatorInteger
+  :func:`Initializators.GTreeInitializatorInteger`
 
    The Integer Initializator for GTree
 
