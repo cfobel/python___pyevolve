@@ -394,7 +394,6 @@ class GTreeBase:
       depth and height.
       """
       self.nodes_list   = self.getAllNodes()
-
       self.nodes_leaf   = filter(lambda n: n.isLeaf(), self.nodes_list)
       self.nodes_branch = filter(lambda n: n.isLeaf()==False, self.nodes_list)
 
@@ -475,6 +474,7 @@ class GTreeBase:
          str_buff += self.getTraversalString(child_node, spaces)
       return str_buff
 
+
    def traversal(self, callback, start_node=None):
       """ Traversal the tree, this method will call the
       user-defined callback function for each node on the tree
@@ -499,7 +499,10 @@ class GTreeBase:
       :rtype: random node
       """
       lists = (self.nodes_list, self.nodes_leaf, self.nodes_branch)
-      return rand_choice(lists[node_type])
+      cho = lists[node_type]
+      if len(cho) <= 0:
+         return None
+      return rand_choice(cho)
 
    def getAllNodes(self):
       """ Return a new list with all nodes

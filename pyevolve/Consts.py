@@ -444,6 +444,11 @@ CDefGTreeInit      = Initializators.GTreeInitializatorInteger
 CDefGGTreeMutator  = Mutators.GTreeMutatorIntegerRange
 CDefGTreeCrossover = Crossovers.GTreeCrossoverSinglePointStrict
 
+# - GTree defaults
+CDefGTreeGPInit      = Initializators.GTreeGPInitializator
+CDefGGTreeGPMutator  = Mutators.GTreeGPMutatorOperation
+CDefGTreeGPCrossover = Crossovers.GTreeGPCrossoverSinglePoint
+
 # - G1DList defaults
 CDefG1DListMutIntMU = 2
 CDefG1DListMutIntSIGMA = 10
@@ -506,4 +511,10 @@ CDefGenMigrationReplacement = 3
 
 CDefNetworkIndividual = 1
 CDefNetworkInfo = 2
+
+nodeType = {"TERMINAL" : 0, "NONTERMINAL": 1}
+
+TERMINALS    = ['1.', '2.', '3.', '4.', 'y']
+FUNCTIONS    = ['+', '-', '*', '/']
+FUNCTIONS_OP = {'+' : 2, '-' : 2, '*':2, '/':2}
 

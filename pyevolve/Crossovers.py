@@ -538,3 +538,93 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
 
    return (sister, brother)
 
+#############################################################################3
+#############################################################################3
+#############################################################################3
+#############################################################################3
+#############################################################################3
+
+def GTreeGPCrossoverSinglePoint(genome, **args):
+   sister = None
+   brother = None
+
+   gMom = args["mom"].clone()
+   gDad = args["dad"].clone()
+
+   gMom.resetStats()
+   gDad.resetStats()
+
+   max_depth   = gMom.getParam("max_depth", None)
+   max_attempt = gMom.getParam("max_attempt", 10)
+
+   if max_depth is None:
+      Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
+      
+   if max_depth < 0:
+      Util.raiseException("The max_depth must be >= 1, if you want to use GTreeCrossoverSinglePointStrict crossover !", ValueError)
+
+   momRandom = None
+   dadRandom = None
+   
+   for i in xrange(max_attempt):
+
+      dadRandom = gDad.getRandomNode()
+
+      if   dadRandom.getType() == Consts.nodeType["TERMINAL"]:
+         momRandom = gMom.getRandomNode(1)
+      elif dadRandom.getType() == Consts.nodeType["NONTERMINAL"]:
+         momRandom = gMom.getRandomNode(2)
+
+      if momRandom is None: continue
+
+      assert momRandom is not None
+      assert dadRandom is not None
+
+      # Optimize here
+      mH = gMom.getNodeHeight(momRandom)
+      dH = gDad.getNodeHeight(dadRandom)
+
+      mD = gMom.getNodeDepth(momRandom)
+      dD = gDad.getNodeDepth(dadRandom)
+
+      # The depth of the crossover is greater than the max_depth
+      if (dD+mH <= max_depth) and (mD+dH <= max_depth):
+         break
+
+   if i==(max_attempt-1):
+      assert gMom.getHeight() <= max_depth
+      return (gMom, gDad)
+   else:
+      nodeMom, nodeDad = momRandom, dadRandom
+
+   nodeMom_parent = nodeMom.getParent()
+   nodeDad_parent = nodeDad.getParent()
+
+   # Sister
+   if args["count"] >= 1:
+      sister = gMom
+      nodeDad.setParent(nodeMom_parent)
+
+      if nodeMom_parent is None:
+         sister.setRoot(nodeDad)
+      else:
+         nodeMom_parent.replaceChild(nodeMom, nodeDad)
+      sister.processNodes()
+      assert sister.getHeight() <= max_depth
+
+   # Brother
+   if args["count"] == 2:
+      brother = gDad
+      nodeMom.setParent(nodeDad_parent)
+
+      if nodeDad_parent is None:
+         brother.setRoot(nodeMom)
+      else:
+         nodeDad_parent.replaceChild(nodeDad, nodeMom)
+      brother.processNodes()
+      assert brother.getHeight() <= max_depth
+
+   return (sister, brother)
+
+
+

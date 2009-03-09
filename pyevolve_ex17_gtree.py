@@ -22,17 +22,16 @@ def eval_func(chromosome):
 def main_run():
 
    genome = GTree.GTree()
-   genome.setParams(max_depth=5, max_sister=2, method="grow")
+   genome.setParams(max_depth=3, max_siblings=2, method="grow")
    genome.evaluator += eval_func
    genome.crossover.set(Crossovers.GTreeCrossoverSinglePointStrict)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(500)
+   ga.setGenerations(100)
    ga.setMutationRate(0.05)
    
    ga(freq_stats=10)
-   best = ga.bestIndividual()
-   print best
+   print ga.bestIndividual()
 
 #import hotshot, hotshot.stats
 #prof = hotshot.Profile("ev.prof")
@@ -44,8 +43,8 @@ def main_run():
 #stats.print_stats(20)
 
 if __name__ == "__main__":
-  import psyco
-  psyco.full()
+  #import psyco
+  #psyco.full()
   t0 = time.clock()
   main_run()
   t1 = time.clock()

@@ -173,9 +173,9 @@ def GTreeInitializatorInteger(genome, **args):
    method = genome.getParam("method", "grow")
 
    if method == "grow":
-      root = GTree.buildTreeGrow(0, lambda_generator, max_siblings, max_depth)
+      root = GTree.buildGTreeGrow(0, lambda_generator, max_siblings, max_depth)
    else:
-      root = GTree.buildTreeFull(0, lambda_generator, max_siblings, max_depth)
+      root = GTree.buildGTreeFull(0, lambda_generator, max_siblings, max_depth)
 
    genome.setRoot(root)
    genome.processNodes()
@@ -202,17 +202,26 @@ def GTreeInitializatorAllele(genome, **args):
       Util.raiseException("to use the GTreeInitializatorAllele, the 'allele' must be homogeneous")
 
    if method == "grow":
-      root = GTree.buildTreeGrow(0, allele[0].getRandomAllele, max_siblings, max_depth)
+      root = GTree.buildGTreeGrow(0, allele[0].getRandomAllele, max_siblings, max_depth)
    else:
-      root = GTree.buildTreeFull(0, allele[0].getRandomAllele, max_siblings, max_depth)
+      root = GTree.buildGTreeFull(0, allele[0].getRandomAllele, max_siblings, max_depth)
 
    genome.setRoot(root)
    genome.processNodes()
    assert genome.getHeight() <= max_depth
 
 
+####################################################################################
 
+def GTreeGPInitializator(genome, **args):
+   max_depth = genome.getParam("max_depth", 5)
+   method    = genome.getParam("method", "grow")
 
+   if method == "grow":
+      root = GTree.buildGTreeGPGrow(0, max_depth)
+   else:
+      root = GTree.buildGTreeGPFull(0, max_depth)
 
-
-
+   genome.setRoot(root)
+   genome.processNodes()
+   assert genome.getHeight() <= max_depth

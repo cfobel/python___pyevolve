@@ -9,6 +9,7 @@ In this module we have the genetic operators of mutation for each chromosome rep
 
 import Util
 from random import randint as rand_randint, gauss as rand_gauss, uniform as rand_uniform
+from random import choice as rand_choice
 import Consts
 
 #############################
@@ -623,5 +624,32 @@ def GTreeMutatorIntegerRange(genome, **args):
    return int(mutations)
 
 
+####################################################################################
 
+def GTreeGPMutatorOperation(genome, **args):
+   if args["pmut"] <= 0.0: return 0
+   elements = len(genome)
+   mutations = args["pmut"] * elements
 
+   if mutations < 1.0:
+      mutations = 0
+      for i in xrange(len(genome)):
+         if Util.randomFlipCoin(args["pmut"]):
+            mutations += 1
+            rand_node = genome.getRandomNode()
+            if rand_node.getType() == Consts.nodeType["TERMINAL"]:
+               term_operator = rand_choice(Consts.TERMINALS)
+            else:
+               term_operator = rand_choice(Consts.FUNCTIONS)
+            rand_node.setData(term_operator)
+
+   else: 
+      for it in xrange(int(round(mutations))):
+         rand_node = genome.getRandomNode()
+         if rand_node.getType() == Consts.nodeType["TERMINAL"]:
+            term_operator = rand_choice(Consts.TERMINALS)
+         else:
+            term_operator = rand_choice(Consts.FUNCTIONS)
+         rand_node.setData(term_operator)
+
+   return int(mutations)
