@@ -381,7 +381,7 @@ def G2DBinaryStringXSingleHPoint(genome, **args):
 
 
 def GTreeCrossoverSinglePoint(genome, **args):
-   """ The crossover of Tree, Single Point """
+   """ The crossover for GTree, Single Point """
    sister = None
    brother = None
    gMom = args["mom"].clone()
