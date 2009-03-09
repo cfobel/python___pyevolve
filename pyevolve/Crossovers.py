@@ -446,7 +446,9 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    ..note:: This crossover method creates offspring with restriction of the
             *max_depth* parameter.
    
-   Accepts the *max_attempt* parameter and *max_depth* (required).
+   Accepts the *max_attempt* parameter, *max_depth* (required), and
+   the distr_leaft (>= 0.0 and <= 1.0), which represents the probability
+   of leaf selection when findin random nodes for crossover.
    
    """
    sister = None
@@ -455,14 +457,12 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
    gMom = args["mom"].clone()
    gDad = args["dad"].clone()
 
-   #gMom.processNodes()
-   #gDad.processNodes()
-
    gMom.resetStats()
    gDad.resetStats()
 
-   max_depth = gMom.getParam("max_depth", None)
+   max_depth   = gMom.getParam("max_depth", None)
    max_attempt = gMom.getParam("max_attempt", 10)
+   distr_leaf =  gMom.getParam("distr_leaf", None)
 
    if max_depth is None:
       Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
@@ -472,10 +472,25 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
 
    momRandom = None
    dadRandom = None
-
+   
    for i in xrange(max_attempt):
-      momRandom = gMom.getRandomNode()
-      dadRandom = gDad.getRandomNode()
+
+      if distr_leaf is None:
+         dadRandom = gDad.getRandomNode()
+         momRandom = gMom.getRandomNode()
+      else:
+         if Util.randomFlipCoin(distr_leaf):
+            momRandom = gMom.getRandomNode(1)
+         else: 
+            momRandom = gMom.getRandomNode(2)
+
+         if Util.randomFlipCoin(distr_leaf):
+            dadRandom = gDad.getRandomNode(1)
+         else:
+            dadRandom = gDad.getRandomNode(2)
+
+      assert momRandom is not None
+      assert dadRandom is not None
 
       # Optimize here
       mH = gMom.getNodeHeight(momRandom)
@@ -484,8 +499,7 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
       mD = gMom.getNodeDepth(momRandom)
       dD = gDad.getNodeDepth(dadRandom)
 
-      if (mH==0) and (dH==0): continue
-
+      # The depth of the crossover is greater than the max_depth
       if (dD+mH <= max_depth) and (mD+dH <= max_depth):
          break
 

@@ -393,7 +393,11 @@ class GTreeBase:
       internal nodes list and the internal nodes properties such as
       depth and height.
       """
-      self.nodes_list = self.getAllNodes()
+      self.nodes_list   = self.getAllNodes()
+
+      self.nodes_leaf   = filter(lambda n: n.isLeaf(), self.nodes_list)
+      self.nodes_branch = filter(lambda n: n.isLeaf()==False, self.nodes_list)
+
       self.tree_height = self.getNodeHeight(self.getRoot())
    
    def getRoot(self):
@@ -488,12 +492,14 @@ class GTreeBase:
          callback(child_node)
          self.traversal(callback, child_node)
 
-   def getRandomNode(self):
+   def getRandomNode(self, node_type=0):
       """ Returns a random node from the Tree
 
+      :param node_type: 0 = Any, 1 = Leaf, 2 = Branch
       :rtype: random node
       """
-      return rand_choice(self.nodes_list)
+      lists = (self.nodes_list, self.nodes_leaf, self.nodes_branch)
+      return rand_choice(lists[node_type])
 
    def getAllNodes(self):
       """ Return a new list with all nodes
@@ -520,6 +526,7 @@ class GTreeBase:
       str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
       str_buff += "\tNodes:\t\t\t%d\n" % self.getNodesCount()
       str_buff += "\n" + self.getTraversalString()
+
       return str_buff
 
    def __len__(self):
