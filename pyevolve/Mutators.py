@@ -623,13 +623,28 @@ def GTreeMutatorIntegerRange(genome, **args):
 
    return int(mutations)
 
-
-####################################################################################
+###################
+##     Tree GP   ##
+###################
 
 def GTreeGPMutatorOperation(genome, **args):
+   """ The mutator of GTreeGP, Operation Mutator
+   
+   .. versionadded:: 0.6
+      The *GTreeGPMutatorOperation* function
+   """
+
    if args["pmut"] <= 0.0: return 0
    elements = len(genome)
    mutations = args["pmut"] * elements
+   ga_engine = args["ga_engine"]
+
+
+   terminals = ga_engine.getParam("gp_terminals")
+   assert terminals is not None
+
+   functions_op = ga_engine.getParam("gp_functions_op")
+   assert functions_op is not None
 
    if mutations < 1.0:
       mutations = 0
@@ -638,18 +653,36 @@ def GTreeGPMutatorOperation(genome, **args):
             mutations += 1
             rand_node = genome.getRandomNode()
             if rand_node.getType() == Consts.nodeType["TERMINAL"]:
-               term_operator = rand_choice(Consts.TERMINALS)
+               term_operator = rand_choice(terminals)
             else:
-               term_operator = rand_choice(Consts.FUNCTIONS)
+               op_len = functions_op[rand_node.getData()]
+               fun_candidates = []
+               for o, l in functions_op.items():
+                  if l==op_len:
+                     fun_candidates.append(o)
+
+               if len(fun_candidates) <= 0:
+                  continue
+
+               term_operator = rand_choice(fun_candidates)
             rand_node.setData(term_operator)
 
    else: 
       for it in xrange(int(round(mutations))):
          rand_node = genome.getRandomNode()
          if rand_node.getType() == Consts.nodeType["TERMINAL"]:
-            term_operator = rand_choice(Consts.TERMINALS)
+            term_operator = rand_choice(terminals)
          else:
-            term_operator = rand_choice(Consts.FUNCTIONS)
+            op_len = functions_op[rand_node.getData()]
+            fun_candidates = []
+            for o, l in functions_op.items():
+               if l==op_len:
+                  fun_candidates.append(o)
+
+            if len(fun_candidates) <= 0:
+               continue
+            
+            term_operator = rand_choice(fun_candidates)
          rand_node.setData(term_operator)
 
    return int(mutations)

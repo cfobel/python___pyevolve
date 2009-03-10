@@ -276,12 +276,12 @@ class GPopulation:
       self.internalPop = [self.oneSelfGenome.clone() for i in xrange(self.popSize)]
       self.clearFlags()
 
-   def initialize(self):
+   def initialize(self, **args):
       """ Initialize all individuals of population,
       this calls the initialize() of individuals """
       logging.debug("Initializing the population")
       for gen in self.internalPop:
-         gen.initialize()
+         gen.initialize(**args)
       self.clearFlags()
 
    def evaluate(self, **args):

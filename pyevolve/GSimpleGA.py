@@ -243,9 +243,8 @@ class GSimpleGA:
       self.selector.set(Consts.CDefGASelector)
       self.allSlots            = [ self.selector, self.stepCallback, self.terminationCriteria ]
 
-      self.extinctionGenerations = 0
-      self.extinctionScores = []
-      
+      self.internalParams = {}
+
       self.currentGeneration = 0
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
@@ -263,6 +262,35 @@ class GSimpleGA:
          return self.evolve(kwargs.get("freq_stats"))
       else:
          return self.evolve()
+
+   def setParams(self, **args):
+      """ Set the internal params
+
+      Example:
+         >>> ga.setParams(gp_terminals=['x', 'y'])
+
+
+      :param args: params to save
+
+      ..versionaddd:: 0.6
+         Added the *setParams* method.
+      """
+      self.internalParams.update(args)
+   
+   def getParam(self, key, nvl=None):
+      """ Gets an internal parameter
+
+      Example:
+         >>> ga.getParam("gp_terminals")
+         ['x', 'y']
+
+      :param key: the key of param
+      :param nvl: if the key doesn't exist, the nvl will be returned
+
+      ..versionaddd:: 0.6
+         Added the *getParam* method.
+      """
+      return self.internalParams.get(key, nvl)
 
    def setInteractiveGeneration(self, generation):
       """ Sets the generation in which the GA must enter in the
@@ -509,10 +537,24 @@ class GSimpleGA:
       """
       return self.internalPop.bestRaw()
 
+   def __gp_catch_functions(self, prefix):
+      import __main__ as mod_main
+
+      functions_op = {}
+      functions    = []
+
+      main_dict = mod_main.__dict__
+      for obj, addr in main_dict.items():
+         if obj[0:len(prefix)] == prefix:
+            op_len = len(addr.func_code.co_varnames)
+            functions_op[obj] = op_len
+            functions.append(obj)
+      self.setParams(gp_functions_op=functions_op, gp_functions=functions)
+
    def initialize(self):
       """ Initializes the GA Engine. Create and initialize population """
       self.internalPop.create(minimax=self.minimax)
-      self.internalPop.initialize()
+      self.internalPop.initialize(ga_engine=self)
       logging.debug("The GA Engine was initialized !")      
 
    def getPopulation(self):
@@ -559,8 +601,8 @@ class GSimpleGA:
                sister = genomeMom.clone()
                brother = genomeDad.clone()
 
-         sister.mutate(pmut=self.pMutation)
-         brother.mutate(pmut=self.pMutation)
+         sister.mutate(pmut=self.pMutation, ga_engine=self)
+         brother.mutate(pmut=self.pMutation, ga_engine=self)
 
          newPop.internalPop.append(sister)
          newPop.internalPop.append(brother)
@@ -576,7 +618,7 @@ class GSimpleGA:
             sister = random.choice([genomeMom, genomeDad])
 
             sisterClone = sister.clone()
-            sisterClone.mutate(pmut=self.pMutation)
+            sisterClone.mutate(pmut=self.pMutation, ga_engine=self)
 
          newPop.internalPop.append(sisterClone)
 
@@ -658,6 +700,11 @@ class GSimpleGA:
       if self.dbAdapter: self.dbAdapter.open(self)
       if self.migrationAdapter: self.migrationAdapter.start()
 
+      # GP Testing
+      gp_func_prefix = self.getParam("gp_func_prefix")
+      if gp_func_prefix is not None:
+         self.__gp_catch_functions(gp_func_prefix)
+
       self.initialize()
       self.internalPop.evaluate()
       self.internalPop.sort()
@@ -699,29 +746,6 @@ class GSimpleGA:
                if freq_stats:
                   print "\n\tEvolution stopped by Step Callback function !\n"
                break
-
-            if self.extinctionGenerations > 0:
-               ext_score = int(self.bestIndividual().score)
-
-               if len(self.extinctionScores) >= self.extinctionGenerations:
-                  self.extinctionScores.insert(0, ext_score)
-                  self.extinctionScores = self.extinctionScores[:-1]
-
-                  if len(set(self.extinctionScores)) == 1:
-                     print "Development Version: extinction warning."
-                     self.initialize()
-                     #self.internalPop.create(minimax=self.minimax)
-                     #for gen in self.internalPop.internalPop[-60:]:
-                     #   gen.initialize()
-                     #self.internalPop.clearFlags()
-                     self.internalPop.evaluate()
-                     self.internalPop.sort()
-                     self.internalPop.statistics()
-                     del self.extinctionScores[:]
-
-               else:
-                  self.extinctionScores.append(ext_score)
-
 
             if self.interactiveMode:
                if sys_platform[:3] == "win":

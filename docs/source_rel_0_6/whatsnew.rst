@@ -97,3 +97,9 @@ What's new on the release |release|:
  
    Added the new :class:`DBAdapters.DBMySQLAdapter` class, this DB Adapter
    will dump statistics to a local or remote MySQL database.
+
+**Genetic Programming - Pyevolve now supports GP**
+
+   Added new support for the Genetic Programming, you can check the
+   examples with symbolic regression. The GTreeGP choromsome representation
+   is used for the GP main tree.

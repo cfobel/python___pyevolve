@@ -161,6 +161,8 @@ def GTreeInitializatorInteger(genome, **args):
    *method*
       The method, accepts "grow" or "full"
 
+   .. versionadded:: 0.6
+      The *GTreeInitializatorInteger* function.
    """
    max_depth = genome.getParam("max_depth", 5)
    max_siblings = genome.getParam("max_siblings", 2)
@@ -189,6 +191,8 @@ def GTreeInitializatorAllele(genome, **args):
 
    .. warning:: the :class:`GAllele.GAlleles` instance **must** have the homogeneous flag enabled
 
+   .. versionadded:: 0.6
+      The *GTreeInitializatorAllele* function.
    """
    max_depth    = genome.getParam("max_depth", 5)
    max_siblings = genome.getParam("max_siblings", 2)
@@ -210,17 +214,31 @@ def GTreeInitializatorAllele(genome, **args):
    genome.processNodes()
    assert genome.getHeight() <= max_depth
 
-
-####################################################################################
+####################
+##      Tree GP   ##
+####################
 
 def GTreeGPInitializator(genome, **args):
+   """This initializator accepts the follow parameters:
+      
+   *max_depth*
+      The max depth of the tree
+
+   *method*
+      The method, accepts "grow" or "full"
+
+   .. versionadded:: 0.6
+      The *GTreeGPInitializator* function.
+   """
+
    max_depth = genome.getParam("max_depth", 5)
    method    = genome.getParam("method", "grow")
+   ga_engine = args["ga_engine"]
 
    if method == "grow":
-      root = GTree.buildGTreeGPGrow(0, max_depth)
+      root = GTree.buildGTreeGPGrow(ga_engine, 0, max_depth)
    else:
-      root = GTree.buildGTreeGPFull(0, max_depth)
+      root = GTree.buildGTreeGPFull(ga_engine, 0, max_depth)
 
    genome.setRoot(root)
    genome.processNodes()

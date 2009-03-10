@@ -56,6 +56,10 @@ General constants
    
    The import list and messages
 
+.. attribute:: nodeType
+
+   The genetic programming node types, can be "TERMINAL":0 or "NONTERMINAL":1
+
 Selection methods constants (:mod:`Selectors`)
 ----------------------------------------------------------------------------
 
@@ -489,8 +493,6 @@ CDefMySQLDBPort = 3306
 CDefMySQLStatsGenFreq = 1
 CDefMySQLStatsCommitFreq = 300
 
-
-
 # - DB Adapters URL Post defaults
 CDefURLPostStatsGenFreq = 100
 
@@ -503,6 +505,8 @@ CDefXMLRPCStatsGenFreq = 20
 
 # Util Consts
 CDefBroadcastAddress = "255.255.255.255"
+nodeType = {"TERMINAL" : 0, "NONTERMINAL": 1}
+
 
 # Migration Consts
 CDefGenMigrationRate = 20
@@ -512,15 +516,4 @@ CDefGenMigrationReplacement = 3
 CDefNetworkIndividual = 1
 CDefNetworkInfo = 2
 
-nodeType = {"TERMINAL" : 0, "NONTERMINAL": 1}
-
-TERMINALS    = ['1.', '2.', '3.', '4.', 'y']
-FUNCTIONS    = ['+', '-', '*', '/', 'sqrt']
-
-# Required, max
-FUNCTIONS_OP = {'+'   :2,
-                '-'   :2,
-                '*'   :2,
-                '/'   :2,
-                'sqrt':1}
 

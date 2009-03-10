@@ -467,10 +467,10 @@ class GTreeBase:
       str_buff = ""
       if start_node is None:
          start_node = self.getRoot()
-         str_buff += "%s - Depth: %d - Height: %d\n" % (start_node, self.getNodeDepth(start_node), self.getNodeHeight(start_node))
+         str_buff += "%s\n" % start_node
       spaces = spc + 2
       for child_node in start_node.getChilds():
-         str_buff += "%s%s - Depth: %d - Height: %d\n" % (" " * spaces, child_node, self.getNodeDepth(child_node), self.getNodeHeight(child_node))
+         str_buff += "%s%s\n" % (" " * spaces, child_node)
          str_buff += self.getTraversalString(child_node, spaces)
       return str_buff
 
