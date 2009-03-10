@@ -515,6 +515,12 @@ CDefNetworkInfo = 2
 nodeType = {"TERMINAL" : 0, "NONTERMINAL": 1}
 
 TERMINALS    = ['1.', '2.', '3.', '4.', 'y']
-FUNCTIONS    = ['+', '-', '*', '/']
-FUNCTIONS_OP = {'+' : 2, '-' : 2, '*':2, '/':2}
+FUNCTIONS    = ['+', '-', '*', '/', 'sqrt']
+
+# Required, max
+FUNCTIONS_OP = {'+'   :2,
+                '-'   :2,
+                '*'   :2,
+                '/'   :2,
+                'sqrt':1}
 
