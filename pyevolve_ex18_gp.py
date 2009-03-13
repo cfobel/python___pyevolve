@@ -1,50 +1,43 @@
 from pyevolve import GSimpleGA
 from pyevolve import GTree
-from time import clock
-from random import randint
+from pyevolve import Consts
+from pyevolve import Selectors
+from math import sqrt
 
-def gp_random(a,b):
-   return randint(a,b)
-
-def gp_sub(a,b):
-   return a-b
-
-def gp_add(a,b):
-   return a+b
-
+def gp_add(a, b): return a+b
+def gp_sqrt(a):   return sqrt(a)
+def gp_square(a): return a*a
+   
 def eval_func(chromosome):
-   xpr   = chromosome.getPreOrderExpression()
-   score = 0.0
-
-   ret    = eval(xpr)
-   score += abs(ret)
-
+   score  = 0.0
+   expr    = chromosome.getPreOrderExpression()
+   for a in xrange(1,8):
+      for b in xrange(1,8):
+         # PYthagooras
+         target = sqrt((a*a)+(b*b))
+         ret    = eval(expr)
+         score += (target - ret)**2
    return score
 
 def main_run():
-   import psyco
-   psyco.full()
-
    genome = GTree.GTreeGP()
-   genome.setParams(max_depth=3, method="full")
+   genome.setParams(max_depth=6, method="grow")
    genome.evaluator += eval_func
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setParams(gp_terminals  = ['1.', '2.', '3.', '4.'],
+   ga.setParams(gp_terminals  = ['a', 'b'],
                 gp_func_prefix= "gp")
 
-   ga.setGenerations(100)
+   ga.setMinimax(Consts.minimaxType["minimize"])
+   ga.selector.set(Selectors.GRouletteWheel)
+   ga.setGenerations(5000)
    ga.setCrossoverRate(1.0)
-   ga.setMutationRate(0.1)
+   ga.setMutationRate(0.6)
+   ga.setPopulationSize(200)
    
-   ga(freq_stats=10)
+   ga(freq_stats=5)
    best = ga.bestIndividual()
    print best
 
-
 if __name__ == "__main__":
-  t0 = clock()
-  main_run()
-  t1 = clock()
-  print "%.3f" % (t1-t0)
-
+   main_run()

@@ -546,7 +546,7 @@ class GSimpleGA:
       main_dict = mod_main.__dict__
       for obj, addr in main_dict.items():
          if obj[0:len(prefix)] == prefix:
-            op_len = len(addr.func_code.co_varnames)
+            op_len = addr.func_code.co_argcount
             functions_op[obj] = op_len
             functions.append(obj)
       self.setParams(gp_functions_op=functions_op, gp_functions=functions)

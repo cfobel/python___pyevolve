@@ -555,7 +555,7 @@ def GTreeGPCrossoverSinglePoint(genome, **args):
    gDad.resetStats()
 
    max_depth   = gMom.getParam("max_depth", None)
-   max_attempt = gMom.getParam("max_attempt", 10)
+   max_attempt = gMom.getParam("max_attempt", 15)
 
    if max_depth is None:
       Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
@@ -580,12 +580,13 @@ def GTreeGPCrossoverSinglePoint(genome, **args):
       assert momRandom is not None
       assert dadRandom is not None
 
+      mD = gMom.getNodeDepth(momRandom)
+      dD = gDad.getNodeDepth(dadRandom)
+      if mD==0 and dD==0: continue
+      
       # Optimize here
       mH = gMom.getNodeHeight(momRandom)
       dH = gDad.getNodeHeight(dadRandom)
-
-      mD = gMom.getNodeDepth(momRandom)
-      dD = gDad.getNodeDepth(dadRandom)
 
       # The depth of the crossover is greater than the max_depth
       if (dD+mH <= max_depth) and (mD+dH <= max_depth):

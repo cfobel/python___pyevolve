@@ -6,6 +6,7 @@ import time
 import random
 
 
+
 def eval_func(chromosome):
    score = 0.0
 
@@ -27,7 +28,7 @@ def main_run():
    genome.crossover.set(Crossovers.GTreeCrossoverSinglePointStrict)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(100)
+   ga.setGenerations(1000)
    ga.setMutationRate(0.05)
    
    ga(freq_stats=10)
@@ -43,10 +44,10 @@ def main_run():
 #stats.print_stats(20)
 
 if __name__ == "__main__":
-  #import psyco
-  #psyco.full()
-  t0 = time.clock()
-  main_run()
-  t1 = time.clock()
-  print "%.3f" % (t1-t0)
-
+   #import psyco
+   #psyco.full()
+   t0 = time.clock()
+   main_run()
+   t1 = time.clock()
+   print "%.3f" % (t1-t0)
+  

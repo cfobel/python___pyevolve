@@ -652,6 +652,7 @@ def GTreeGPMutatorOperation(genome, **args):
          if Util.randomFlipCoin(args["pmut"]):
             mutations += 1
             rand_node = genome.getRandomNode()
+            assert rand_node is not None
             if rand_node.getType() == Consts.nodeType["TERMINAL"]:
                term_operator = rand_choice(terminals)
             else:
@@ -670,6 +671,7 @@ def GTreeGPMutatorOperation(genome, **args):
    else: 
       for it in xrange(int(round(mutations))):
          rand_node = genome.getRandomNode()
+         assert rand_node is not None
          if rand_node.getType() == Consts.nodeType["TERMINAL"]:
             term_operator = rand_choice(terminals)
          else:
