@@ -13,7 +13,6 @@ def eval_func(chromosome):
    expr    = chromosome.getPreOrderExpression()
    for a in xrange(1,8):
       for b in xrange(1,8):
-         # PYthagooras
          target = sqrt((a*a)+(b*b))
          ret    = eval(expr)
          score += (target - ret)**2
