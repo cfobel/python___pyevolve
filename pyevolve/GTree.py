@@ -337,6 +337,10 @@ class GTreeGP(GenomeBase, GTreeBase):
       
       return str_buff
 
+   def getCompiledCode(self):
+      expr = self.getPreOrderExpression()
+      return compile(expr, "<string>", "eval")
+
    def clone(self):
       """ Return a new instance of the genome"""
       return copy.deepcopy(self)

@@ -11,6 +11,7 @@ import Util
 from random import randint as rand_randint, gauss as rand_gauss, uniform as rand_uniform
 from random import choice as rand_choice
 import Consts
+import GTree
 
 #############################
 ##     1D Binary String    ##
@@ -688,3 +689,52 @@ def GTreeGPMutatorOperation(genome, **args):
          rand_node.setData(term_operator)
 
    return int(mutations)
+
+
+def GTreeGPMutatorSubtree(genome, **args):
+   """ The mutator of GTreeGP, Subtree Mutator
+   
+   .. versionadded:: 0.6
+      The *GTreeGPMutatorSubtree* function
+   """
+
+   if args["pmut"] <= 0.0: return 0
+   mutations = 0
+   ga_engine = args["ga_engine"]
+
+   max_depth = genome.getParam("max_depth", None)
+
+   if max_depth is None:
+      Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
+      
+   if max_depth < 0:
+      Util.raiseException("The max_depth must be >= 1, if you want to use GTreeGPMutatorSubtree crossover !", ValueError)
+
+   branch_list = genome.nodes_branch
+   elements = len(branch_list)
+   
+   for i in xrange(elements):
+
+      node = branch_list[i]
+      assert node is not None
+
+      depth = genome.getNodeDepth(node)
+
+      if Util.randomFlipCoin(args["pmut"]):
+         mutations += 1
+
+         root_subtree = GTree.buildGTreeGPGrow(ga_engine, 0, max_depth-depth)
+         node_parent = node.getParent()
+
+         if node_parent is None:
+            genome.setRoot(root_subtree)
+            genome.processNodes()
+            return mutations
+         else:
+            root_subtree.setParent(node_parent)
+            node_parent.replaceChild(node, root_subtree)
+         genome.processNodes()
+   
+   return int(mutations)
+
+
