@@ -5,8 +5,6 @@ from pyevolve import Mutators
 import time
 import random
 
-
-
 def eval_func(chromosome):
    score = 0.0
 
@@ -23,16 +21,20 @@ def eval_func(chromosome):
 def main_run():
 
    genome = GTree.GTree()
+   root = GTree.GTreeNode(2)
+   genome.setRoot(root)
+   genome.processNodes()
+
    genome.setParams(max_depth=3, max_siblings=2, method="grow")
    genome.evaluator += eval_func
    genome.crossover.set(Crossovers.GTreeCrossoverSinglePointStrict)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(1000)
+   ga.setGenerations(100)
    ga.setMutationRate(0.05)
    
    ga(freq_stats=10)
-   print ga.bestIndividual()
+   #print ga.bestIndividual()
 
 #import hotshot, hotshot.stats
 #prof = hotshot.Profile("ev.prof")

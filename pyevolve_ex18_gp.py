@@ -5,10 +5,8 @@ from pyevolve import Selectors
 from pyevolve import Mutators
 from math import sqrt
 
-def gp_sub(a, b): return a-b
 def gp_add(a, b): return a+b
 def gp_square(a): return a*a
-
 def gp_sqrt(a):
    ret = 0   
    try:
@@ -31,10 +29,12 @@ def eval_func(chromosome):
 
 def main_run():
    genome = GTree.GTreeGP()
-   genome.setParams(max_depth=10, method="grow")
+   root   = GTree.GTreeNodeGP('a', Consts.nodeType["TERMINAL"])
+   genome.setRoot(root)
+
+   genome.setParams(max_depth=5, method="grow")
    genome.evaluator += eval_func
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
-
 
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setParams(gp_terminals  = ['a', 'b'],
@@ -42,14 +42,30 @@ def main_run():
 
    ga.setMinimax(Consts.minimaxType["minimize"])
    #ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(5000)
+   ga.setGenerations(15)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.2)
-   #ga.setPopulationSize(200)
+   ga.setPopulationSize(80)
    
-   ga(freq_stats=20)
-   best = ga.bestIndividual()
-   print best
+   ga(freq_stats=10)
+
+   import pydot   
+
+   for i in xrange(1):
+      ind = ga.getPopulation().bestRaw(i)
+      print ind
+      graph = ind.writeDotGraph()
+
+   graph.write_jpeg('tree.png', prog='dot')
 
 if __name__ == "__main__":
    main_run()
+#   import hotshot, hotshot.stats
+#   prof = hotshot.Profile("ev.prof")
+#   prof.runcall(main_run)
+#   prof.close()
+#   stats = hotshot.stats.load("ev.prof")
+#   stats.strip_dirs()
+#   stats.sort_stats('time', 'calls')
+#   stats.print_stats(20)
+

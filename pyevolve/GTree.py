@@ -314,6 +314,44 @@ class GTreeGP(GenomeBase, GTreeBase):
       ret += "\tExpression: %s\n" % self.getPreOrderExpression()
       return ret
 
+   def writeDotGraph(self):
+      import pydot
+      graph = pydot.Dot(strict=True)
+      graph.set_type("graph")
+
+      node_stack = []
+      nodes_dict = {}
+      tmp = None
+
+      for i in xrange(len(self.nodes_list)):
+         newnode = pydot.Node(str(i), style="filled")
+         newnode.set_label(self.nodes_list[i].getData())
+         nodes_dict.update({self.nodes_list[i]: newnode})
+         if self.nodes_list[i].getType() == Consts.nodeType["TERMINAL"]:
+            newnode.set_color("lightblue2")
+         else:
+            newnode.set_color("goldenrod2")
+
+         graph.add_node(newnode)
+
+      node_stack.append(self.getRoot())
+      while len(node_stack) > 0:
+         tmp = node_stack.pop()
+
+         parent = tmp.getParent()
+         if parent is not None:
+            parent_node = nodes_dict[parent]
+            child_node  = nodes_dict[tmp]
+           
+            newedge = pydot.Edge(parent_node, child_node)
+            graph.add_edge(newedge)
+   
+         rev_childs = tmp.getChilds()[:]
+         rev_childs.reverse()
+         node_stack.extend(rev_childs)
+
+      return graph
+
    def getSExpression(self, start_node=None):
       """ Returns a tree-formated string (s-expression) of the tree.
       
