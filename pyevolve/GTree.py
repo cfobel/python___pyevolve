@@ -94,9 +94,16 @@ class GTree(GenomeBase, GTreeBase):
       ret += GTreeBase.__repr__(self)
       return ret
 
+   def copy(self, g):
+      GenomeBase.copy(self, g)
+      GTreeBase.copy(self, g)
+
    def clone(self):
       """ Return a new instance of the genome"""
-      return copy.deepcopy(self)
+      newcopy = GTree()
+      self.copy(newcopy)
+      newcopy.processNodes(True)
+      return newcopy
 
 class GTreeNode(GTreeNodeBase):
    """ The GTreeNode class - The node representation
@@ -146,6 +153,15 @@ class GTreeNode(GTreeNodeBase):
       tmp_data = self.node_data
       self.setData(node.getData())
       node.setData(tmp_data)
+
+   def copy(self, g):
+      GTreeNodeBase.copy(self, g)
+      g.node_data = self.node_data
+
+   def clone(self):
+      newcopy = GTreeNode(None)
+      self.copy(newcopy)
+      return newcopy
 
 #################################
 #    Tree Utility Functions     # 
@@ -270,6 +286,15 @@ class GTreeNodeGP(GTreeNodeBase):
       node.setData(tmp_data)
       node.setType(tmp_type)
 
+   def copy(self, g):
+      GTreeNodeBase.copy(self, g)
+      g.node_data = self.node_data
+      g.node_type = self.node_type
+
+   def clone(self):
+      newcopy = GTreeNodeGP(None)
+      self.copy(newcopy)
+      return newcopy
 
 class GTreeGP(GenomeBase, GTreeBase):
    """ The GTreeGP Class - The Genetic Programming Tree representation """
@@ -341,9 +366,17 @@ class GTreeGP(GenomeBase, GTreeBase):
       expr = self.getPreOrderExpression()
       return compile(expr, "<string>", "eval")
 
+   def copy(self, g):
+      GenomeBase.copy(self, g)
+      GTreeBase.copy(self, g)
+
    def clone(self):
       """ Return a new instance of the genome"""
-      return copy.deepcopy(self)
+      newcopy = GTreeGP()
+      self.copy(newcopy)
+      newcopy.processNodes(True)
+      return newcopy
+
 
 #################################
 #    Tree GP Utility Functions  # 

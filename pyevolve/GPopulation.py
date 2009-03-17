@@ -38,6 +38,28 @@ from Statistics import Statistics
 from math import sqrt as math_sqrt
 import logging
 
+def key_raw_score(individual):
+   """ A key function to return raw score
+
+   :param individual: the individual instance
+   :rtype: the individual raw score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.score
+
+def key_fitness_score(individual):
+   """ A key function to return fitness score, used by max()/min()
+
+   :param individual: the individual instance
+   :rtype: the individual fitness score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.fitness
+
 try:
    from multiprocessing import cpu_count, Queue, Process
    CPU_COUNT = cpu_count()
@@ -192,8 +214,8 @@ class GPopulation:
          raw_sum += self[ind].score
          fit_sum += self[ind].fitness
 
-      self.stats["rawMax"] = max(self, key=Util.key_raw_score).score
-      self.stats["rawMin"] = min(self, key=Util.key_raw_score).score
+      self.stats["rawMax"] = max(self, key=key_raw_score).score
+      self.stats["rawMin"] = min(self, key=key_raw_score).score
       self.stats["rawAve"] = raw_sum / float(len_pop)
       self.stats["rawTot"] = raw_sum
       self.stats["fitTot"] = fit_sum
@@ -321,8 +343,8 @@ class GPopulation:
       for ind in xrange(len(self)):
          fit_sum += self[ind].fitness
 
-      self.stats["fitMax"] = max(self, key=Util.key_fitness_score).fitness
-      self.stats["fitMin"] = min(self, key=Util.key_fitness_score).fitness
+      self.stats["fitMax"] = max(self, key=key_fitness_score).fitness
+      self.stats["fitMin"] = min(self, key=key_fitness_score).fitness
       self.stats["fitAve"] = fit_sum / float(len(self))
 
       self.sorted = False

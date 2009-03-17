@@ -333,9 +333,12 @@ class GTreeNodeBase:
       
       :param child: the node to be added   
       """
-      if not isinstance(child, GTreeNodeBase):
-         Util.raiseException("The child must be a node", TypeError)
-      self.childs.append(child)
+      if type(child) == list:
+         self.childs.extend(child)
+      else:
+         if not isinstance(child, GTreeNodeBase):
+            Util.raiseException("The child must be a node", TypeError)
+         self.childs.append(child)
 
    def replaceChild(self, older, newer):
       """ Replaces a child of the node
@@ -343,9 +346,6 @@ class GTreeNodeBase:
       :param older: the child to be replaces
       :param newer: the new child which replaces the older
       """
-      if (not isinstance(older, GTreeNodeBase)) or (not isinstance(newer, GTreeNodeBase)):
-         Util.raiseException("The child must be a node", TypeError)
-
       index = self.childs.index(older)
       self.childs[index] = newer
 
@@ -367,11 +367,35 @@ class GTreeNodeBase:
 
    def __repr__(self):
       parent = "None" if self.getParent() is None else "Present"
-      str_repr = "GTreeNodeBase [Childs=%d, Parent=%s]" % (len(self), parent)
+      str_repr = "GTreeNodeBase @%s [Childs=%d, Parent=%s]" % (id(self), len(self), parent)
       return str_repr
 
    def __len__(self):
       return len(self.childs)
+
+   def copy(self, g):
+      """ Copy the current contents GTreeNodeBase to 'g'
+
+      :param g: the destination node      
+
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
+      """
+      g.parent = self.parent
+      g.childs = self.childs[:]
+      
+   def clone(self):
+      """ Clone this GenomeBase
+
+      :rtype: the clone genome   
+
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
+      """
+      newcopy = GTreeNodeBase(None)
+      self.copy(newcopy)
+      return newcopy
+   
 
 class GTreeBase:
    """ GTreeBase Class - The base class for the tree genomes
@@ -387,7 +411,7 @@ class GTreeBase:
       self.tree_height = None
       self.nodes_list = None
 
-   def processNodes(self):
+   def processNodes(self, cloning=False):
       """ Creates a *cache* on the tree, this method must be called
       every time you change the shape of the tree. It updates the
       internal nodes list and the internal nodes properties such as
@@ -397,7 +421,8 @@ class GTreeBase:
       self.nodes_leaf   = filter(lambda n: n.isLeaf(), self.nodes_list)
       self.nodes_branch = filter(lambda n: n.isLeaf()==False, self.nodes_list)
 
-      self.tree_height = self.getNodeHeight(self.getRoot())
+      if not cloning:
+         self.tree_height = self.getNodeHeight(self.getRoot())
    
    def getRoot(self):
       """ Return the tree root node 
@@ -525,7 +550,7 @@ class GTreeBase:
       return all_nodes 
 
    def __repr__(self):
-      str_buff  = "- GTree\n"
+      str_buff  = "- GTree @%s\n" % id(self)
       str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
       str_buff += "\tNodes:\t\t\t%d\n" % self.getNodesCount()
       str_buff += "\n" + self.getTraversalString()
@@ -540,3 +565,43 @@ class GTreeBase:
 
    def __iter__(self):
       return iter(self.nodes_list)
+
+   def copy(self, g, node=None, node_parent=None):
+      """ Copy the current contents GTreeBase to 'g'
+
+      :param g: the destination GTreeBase tree
+
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
+      """
+      if node is None:
+         g.tree_height = self.tree_height
+         node = self.root_node
+
+      newnode = node.clone()
+
+      if node_parent is None:
+         g.setRoot(newnode)
+      else:
+         newnode.setParent(node_parent)
+         node_parent.replaceChild(node, newnode)
+      
+      for ci in xrange(len(newnode)):
+         GTreeBase.copy(self, g, newnode.getChild(ci), newnode)
+
+      return newnode
+      
+   def clone(self):
+      """ Clone this GenomeBase
+
+      :rtype: the clone genome   
+
+      .. note:: If you are planning to create a new chromosome representation, you
+                **must** implement this method on your class.
+      """
+      newcopy = GTreeBase(None)
+      self.copy(newcopy)
+      newcopy.processNodes()
+      return newcopy
+
+
