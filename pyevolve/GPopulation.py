@@ -205,10 +205,7 @@ class GPopulation:
          tmpvar += s
 
       tmpvar/= float((len(self) - 1))
-      try:
-         self.stats["rawDev"] = math_sqrt(tmpvar)
-      except:
-         self.stats["rawDev"] = 0.0
+      self.stats["rawDev"] = math_sqrt(tmpvar)
       self.stats["rawVar"] = tmpvar
 
       self.statted = True
