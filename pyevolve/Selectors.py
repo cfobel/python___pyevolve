@@ -9,7 +9,29 @@ This module have the *selection methods*, like roulette wheel, tournament, ranki
 
 import random
 import Consts
-from Util import key_raw_score, key_fitness_score
+
+def key_raw_score(individual):
+   """ A key function to return raw score
+
+   :param individual: the individual instance
+   :rtype: the individual raw score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.score
+
+def key_fitness_score(individual):
+   """ A key function to return fitness score, used by max()/min()
+
+   :param individual: the individual instance
+   :rtype: the individual fitness score
+
+   .. note:: this function is used by the max()/min() python functions
+
+   """
+   return individual.fitness
+
 
 def GRankSelector(population, **args):
    """ The Rank Selector """

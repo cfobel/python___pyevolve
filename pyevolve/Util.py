@@ -112,28 +112,6 @@ def raiseException(message, expt=None):
       raise expt, message
 
 
-def key_raw_score(individual):
-   """ A key function to return raw score
-
-   :param individual: the individual instance
-   :rtype: the individual raw score
-
-   .. note:: this function is used by the max()/min() python functions
-
-   """
-   return individual.score
-
-def key_fitness_score(individual):
-   """ A key function to return fitness score, used by max()/min()
-
-   :param individual: the individual instance
-   :rtype: the individual fitness score
-
-   .. note:: this function is used by the max()/min() python functions
-
-   """
-   return individual.fitness
-
 def cmp_individual_raw(a, b):
    """ Compares two individual raw scores
 
