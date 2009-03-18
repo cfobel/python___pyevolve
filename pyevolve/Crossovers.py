@@ -577,9 +577,6 @@ def GTreeGPCrossoverSinglePoint(genome, **args):
 
       if momRandom is None: continue
 
-      assert momRandom is not None
-      assert dadRandom is not None
-
       mD = gMom.getNodeDepth(momRandom)
       dD = gDad.getNodeDepth(dadRandom)
       if mD==0 and dD==0: continue

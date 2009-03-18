@@ -699,10 +699,9 @@ def GTreeGPMutatorSubtree(genome, **args):
    """
 
    if args["pmut"] <= 0.0: return 0
-   mutations = 0
    ga_engine = args["ga_engine"]
-
    max_depth = genome.getParam("max_depth", None)
+   mutations = 0
 
    if max_depth is None:
       Util.raiseException("You must specify the max_depth genome parameter !", ValueError)
@@ -718,9 +717,8 @@ def GTreeGPMutatorSubtree(genome, **args):
       node = branch_list[i]
       assert node is not None
 
-      depth = genome.getNodeDepth(node)
-
       if Util.randomFlipCoin(args["pmut"]):
+         depth = genome.getNodeDepth(node)
          mutations += 1
 
          root_subtree = GTree.buildGTreeGPGrow(ga_engine, 0, max_depth-depth)
