@@ -396,7 +396,8 @@ CDefImportList = {"visual.graph": "you must install VPython !",
                   "urllib" : "urllib module not found !",
                   "sqlite3": "sqlite3 module not found, are you using Jython or IronPython ?",
                   "xmlrpclib" : "xmlrpclib module not found !",
-                  "MySQLdb" : "MySQLdb module not found, you must install mysql-python !"}
+                  "MySQLdb" : "MySQLdb module not found, you must install mysql-python !",
+                  "pydot" : "Pydot module not found, you must install Pydot to plot graphs !"}
 
 ####################
 # Defaults section #

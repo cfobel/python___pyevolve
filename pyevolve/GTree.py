@@ -37,6 +37,7 @@ import copy
 from random import randint as rand_randint, choice as rand_choice
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
+import Util
 
 #################################
 #             GTree             # 
@@ -95,11 +96,18 @@ class GTree(GenomeBase, GTreeBase):
       return ret
 
    def copy(self, g):
+      """ Copy the contents to the destination g
+      
+      :param g: the GTree genome destination
+      """
       GenomeBase.copy(self, g)
       GTreeBase.copy(self, g)
 
    def clone(self):
-      """ Return a new instance of the genome"""
+      """ Return a new instance of the genome
+      
+      :rtype: new GTree instance
+      """
       newcopy = GTree()
       self.copy(newcopy)
       newcopy.processNodes(True)
@@ -155,10 +163,18 @@ class GTreeNode(GTreeNodeBase):
       node.setData(tmp_data)
 
    def copy(self, g):
+      """ Copy the contents to the destination g
+      
+      :param g: the GTreeNode genome destination
+      """
       GTreeNodeBase.copy(self, g)
       g.node_data = self.node_data
 
    def clone(self):
+      """ Return a new instance of the genome
+      
+      :rtype: new GTree instance
+      """
       newcopy = GTreeNode(None)
       self.copy(newcopy)
       return newcopy
@@ -224,7 +240,13 @@ def buildGTreeFull(depth, value_callback, max_siblings, max_depth):
 #################################
 
 class GTreeNodeGP(GTreeNodeBase):
-   """ The GTreeNodeGP Class - The Genetic Programming Node representation """
+   """ The GTreeNodeGP Class - The Genetic Programming Node representation
+   
+   :param data: the node data
+   :param type: the node type
+   :param parent: the node parent
+   
+   """
    def __init__(self, data, node_type=0, parent=None):
       GTreeNodeBase.__init__(self, parent)
       self.node_type = node_type
@@ -287,18 +309,28 @@ class GTreeNodeGP(GTreeNodeBase):
       node.setType(tmp_type)
 
    def copy(self, g):
+      """ Copy the contents to the destination g
+      
+      :param g: the GTreeNodeGP genome destination
+      """
       GTreeNodeBase.copy(self, g)
       g.node_data = self.node_data
       g.node_type = self.node_type
 
    def clone(self):
+      """ Return a new copy of the node
+
+      :rtype: the new GTreeNodeGP instance
+      """
       newcopy = GTreeNodeGP(None)
       self.copy(newcopy)
       return newcopy
 
 class GTreeGP(GenomeBase, GTreeBase):
-   """ The GTreeGP Class - The Genetic Programming Tree representation """
-
+   """ The GTreeGP Class - The Genetic Programming Tree representation
+   
+   :param root_node: the Root node of the GP Tree
+   """
    def __init__(self, root_node=None):
       GenomeBase.__init__(self)
       GTreeBase.__init__(self, root_node)
@@ -314,17 +346,22 @@ class GTreeGP(GenomeBase, GTreeBase):
       ret += "\tExpression: %s\n" % self.getPreOrderExpression()
       return ret
 
-   def writeDotGraph(self):
-      import pydot
-      graph = pydot.Dot(strict=True)
+   def writeDotGraph(self, graph, startNode=0):
+      """ Write a graph to the pydot Graph instance
+      
+      :param graph: the pydot Graph instance
+      :param startNode: used to plot more than one individual 
+      """
+      pydot = Util.importSpecial("pydot")
       graph.set_type("graph")
-
+      count = startNode
       node_stack = []
       nodes_dict = {}
       tmp = None
 
       for i in xrange(len(self.nodes_list)):
-         newnode = pydot.Node(str(i), style="filled")
+         newnode = pydot.Node(str(count), style="filled")
+         count += 1
          newnode.set_label(self.nodes_list[i].getData())
          nodes_dict.update({self.nodes_list[i]: newnode})
          if self.nodes_list[i].getType() == Consts.nodeType["TERMINAL"]:
@@ -350,7 +387,7 @@ class GTreeGP(GenomeBase, GTreeBase):
          rev_childs.reverse()
          node_stack.extend(rev_childs)
 
-      return graph
+      return count
 
    def getSExpression(self, start_node=None):
       """ Returns a tree-formated string (s-expression) of the tree.
@@ -401,15 +438,26 @@ class GTreeGP(GenomeBase, GTreeBase):
       return str_buff
 
    def getCompiledCode(self):
+      """ Get the compiled code for the Tree expression
+      
+      :rtype: compiled python code
+      """
       expr = self.getPreOrderExpression()
       return compile(expr, "<string>", "eval")
 
    def copy(self, g):
+      """ Copy the contents to the destination g
+      
+      :param g: the GTreeGP genome destination
+      """
       GenomeBase.copy(self, g)
       GTreeBase.copy(self, g)
 
    def clone(self):
-      """ Return a new instance of the genome"""
+      """ Return a new instance of the genome
+      
+      :rtype: the new GTreeGP instance
+      """
       newcopy = GTreeGP()
       self.copy(newcopy)
       newcopy.processNodes(True)
