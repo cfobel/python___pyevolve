@@ -176,8 +176,15 @@ def GTreeInitializatorInteger(genome, **args):
 
    if method == "grow":
       root = GTree.buildGTreeGrow(0, lambda_generator, max_siblings, max_depth)
-   else:
+   elif method == "full":
       root = GTree.buildGTreeFull(0, lambda_generator, max_siblings, max_depth)
+   elif method == "ramped":
+      if Util.randomFlipCoin(0.5):
+         root = GTree.buildGTreeGrow(0, lambda_generator, max_siblings, max_depth)
+      else:
+         root = GTree.buildGTreeFull(0, lambda_generator, max_siblings, max_depth)
+   else:
+      Util.raiseException("Unknown tree initialization method [%s] !" % method)
 
    genome.setRoot(root)
    genome.processNodes()
@@ -207,8 +214,16 @@ def GTreeInitializatorAllele(genome, **args):
 
    if method == "grow":
       root = GTree.buildGTreeGrow(0, allele[0].getRandomAllele, max_siblings, max_depth)
-   else:
+   elif method == "full":
       root = GTree.buildGTreeFull(0, allele[0].getRandomAllele, max_siblings, max_depth)
+   elif method == "ramped":
+      if Util.randomFlipCoin(0.5):
+         root = GTree.buildGTreeGrow(0, allele[0].getRandomAllele, max_siblings, max_depth)
+      else:
+         root = GTree.buildGTreeFull(0, allele[0].getRandomAllele, max_siblings, max_depth)
+   else:
+      Util.raiseException("Unknown tree initialization method [%s] !" % method)
+
 
    genome.setRoot(root)
    genome.processNodes()
@@ -237,8 +252,15 @@ def GTreeGPInitializator(genome, **args):
 
    if method == "grow":
       root = GTree.buildGTreeGPGrow(ga_engine, 0, max_depth)
-   else:
+   elif method == "full":
       root = GTree.buildGTreeGPFull(ga_engine, 0, max_depth)
+   elif method == "ramped":
+      if Util.randomFlipCoin(0.5):
+         root = GTree.buildGTreeGPFull(ga_engine, 0, max_depth)
+      else:
+         root = GTree.buildGTreeGPGrow(ga_engine, 0, max_depth)
+   else:
+      Util.raiseException("Unknown tree initialization method [%s] !" % method)
 
    genome.setRoot(root)
    genome.processNodes()
