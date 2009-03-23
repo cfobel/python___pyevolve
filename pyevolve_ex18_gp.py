@@ -17,15 +17,17 @@ def gp_sqrt(a):
    return ret
    
 def eval_func(chromosome):
-   score    = 0.0
-   code_comp = chromosome.getCompiledCode()
+   square_accum  = 0.0
+   code_comp     = chromosome.getCompiledCode()
    
-   for a in xrange(1, 8):
-      for b in xrange(1, 8):
-         target = sqrt((a*a)+(b*b))+a+b
-         ret    = eval(code_comp)
-         score += (target - ret)**2
+   for a in xrange(-5, 5):
+      for b in xrange(-5, 5):
+         target        = sqrt((a*a)+(b*b))
+         ret           = eval(code_comp)
+         square_accum += (target - ret)**2
 
+   RMSE = sqrt(square_accum / 100.0)
+   score = (1.0 / (RMSE+1.0))
    return score
 
 def main_run():
@@ -33,22 +35,23 @@ def main_run():
    root   = GTree.GTreeNodeGP('a', Consts.nodeType["TERMINAL"])
    genome.setRoot(root)
 
-   genome.setParams(max_depth=8, method="grow")
+   genome.setParams(max_depth=4, method="ramped")
    genome.evaluator += eval_func
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
+   #genome.mutator.add(Mutators.GTreeGPMutatorOperation)
 
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setParams(gp_terminals  = ['a', 'b'],
                 gp_func_prefix= "gp")
 
-   ga.setMinimax(Consts.minimaxType["minimize"])
-   ga.selector.set(Selectors.GRouletteWheel)
+   ga.setMinimax(Consts.minimaxType["maximize"])
    ga.setGenerations(1000)
    ga.setCrossoverRate(1.0)
-   ga.setMutationRate(0.2)
+   ga.setMutationRate(0.08)
    ga.setPopulationSize(200)
    
-   ga(freq_stats=20)
+   ga(freq_stats=10)
+   #print ga.bestIndividual()
 
    graph = pydot.Dot()
    ga.bestIndividual().writeDotGraph(graph)
@@ -56,12 +59,3 @@ def main_run():
 
 if __name__ == "__main__":
    main_run()
-#   import hotshot, hotshot.stats
-#   prof = hotshot.Profile("ev.prof")
-#   prof.runcall(main_run)
-#   prof.close()
-#   stats = hotshot.stats.load("ev.prof")
-#   stats.strip_dirs()
-#   stats.sort_stats('time', 'calls')
-#   stats.print_stats(20)
-
