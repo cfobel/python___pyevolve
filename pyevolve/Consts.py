@@ -517,4 +517,3 @@ CDefGenMigrationReplacement = 3
 CDefNetworkIndividual = 1
 CDefNetworkInfo = 2
 
-

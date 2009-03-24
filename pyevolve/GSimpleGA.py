@@ -540,8 +540,7 @@ class GSimpleGA:
    def __gp_catch_functions(self, prefix):
       import __main__ as mod_main
 
-      functions_op = {}
-      functions    = []
+      function_set = {}
 
       main_dict = mod_main.__dict__
       for obj, addr in main_dict.items():
@@ -550,9 +549,8 @@ class GSimpleGA:
                op_len = addr.func_code.co_argcount
             except:
                continue
-            functions_op[obj] = op_len
-            functions.append(obj)
-      self.setParams(gp_functions_op=functions_op, gp_functions=functions)
+            function_set[obj] = op_len
+      self.setParams(gp_function_set=function_set)
 
    def initialize(self):
       """ Initializes the GA Engine. Create and initialize population """
@@ -704,9 +702,9 @@ class GSimpleGA:
       if self.migrationAdapter: self.migrationAdapter.start()
 
       # GP Testing
-      gp_func_prefix = self.getParam("gp_func_prefix")
-      if gp_func_prefix is not None:
-         self.__gp_catch_functions(gp_func_prefix)
+      gp_function_prefix = self.getParam("gp_function_prefix")
+      if gp_function_prefix is not None:
+         self.__gp_catch_functions(gp_function_prefix)
 
       self.initialize()
       self.internalPop.evaluate()

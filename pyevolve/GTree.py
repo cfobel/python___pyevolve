@@ -478,30 +478,27 @@ def buildGTreeGPGrow(ga_engine, depth, max_depth):
    :rtype: the root node
    """
 
-   terminals = ga_engine.getParam("gp_terminals")
-   assert terminals is not None
+   gp_terminals = ga_engine.getParam("gp_terminals")
+   assert gp_terminals is not None
 
-   functions = ga_engine.getParam("gp_functions")
-   assert functions is not None
-
-   functions_op = ga_engine.getParam("gp_functions_op")
-   assert functions_op is not None
+   gp_function_set = ga_engine.getParam("gp_function_set")
+   assert gp_function_set is not None
 
    if depth == max_depth:
-      random_terminal = rand_choice(terminals)
+      random_terminal = rand_choice(gp_terminals)
       n = GTreeNodeGP(random_terminal, Consts.nodeType["TERMINAL"])
       return n
    else:
-      fchoice = rand_choice([functions, terminals])
+      fchoice = rand_choice([gp_function_set.keys(), gp_terminals])
       random_node = rand_choice(fchoice)
 
-      if random_node in terminals:
+      if random_node in gp_terminals:
          n = GTreeNodeGP(random_node, Consts.nodeType["TERMINAL"])
       else:
          n = GTreeNodeGP(random_node, Consts.nodeType["NONTERMINAL"])
 
    if n.getType() == Consts.nodeType["NONTERMINAL"]:
-      for i in xrange(functions_op[n.getData()]):
+      for i in xrange(gp_function_set[n.getData()]):
          child = buildGTreeGPGrow(ga_engine, depth+1, max_depth)
          child.setParent(n)
          n.addChild(child)
@@ -517,30 +514,22 @@ def buildGTreeGPFull(ga_engine, depth, max_depth):
    :max_depth: the maximum depth of the tree
    :rtype: the root node
    """
-   terminals = ga_engine.getParam("gp_terminals")
-   assert terminals is not None
+   gp_terminals = ga_engine.getParam("gp_terminals")
+   assert gp_terminals is not None
 
-   functions = ga_engine.getParam("gp_functions")
-   assert functions is not None
-
-   functions_op = ga_engine.getParam("gp_functions_op")
-   assert functions_op is not None
-
+   gp_function_set = ga_engine.getParam("gp_function_set")
+   assert gp_function_set is not None
 
    if depth == max_depth:
-      random_terminal = rand_choice(terminals)
+      random_terminal = rand_choice(gp_terminals)
       n = GTreeNodeGP(random_terminal, Consts.nodeType["TERMINAL"])
       return n
    else:
-      random_oper = rand_choice(functions)
-
-      if random_oper in terminals:
-         n = GTreeNodeGP(random_oper, Consts.nodeType["TERMINAL"])
-      else:
-         n = GTreeNodeGP(random_oper, Consts.nodeType["NONTERMINAL"])
+      random_oper = rand_choice(gp_function_set.keys())
+      n = GTreeNodeGP(random_oper, Consts.nodeType["NONTERMINAL"])
 
    if n.getType() == Consts.nodeType["NONTERMINAL"]:
-      for i in xrange(functions_op[n.getData()]):
+      for i in xrange(gp_function_set[n.getData()]):
          child = buildGTreeGPFull(ga_engine, depth+1, max_depth)
          child.setParent(n)
          n.addChild(child)

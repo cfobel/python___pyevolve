@@ -641,11 +641,11 @@ def GTreeGPMutatorOperation(genome, **args):
    ga_engine = args["ga_engine"]
 
 
-   terminals = ga_engine.getParam("gp_terminals")
+   gp_terminals = ga_engine.getParam("gp_terminals")
    assert terminals is not None
 
-   functions_op = ga_engine.getParam("gp_functions_op")
-   assert functions_op is not None
+   gp_function_set = ga_engine.getParam("gp_function_set")
+   assert gp_function_set is not None
 
    if mutations < 1.0:
       mutations = 0
@@ -655,11 +655,11 @@ def GTreeGPMutatorOperation(genome, **args):
             rand_node = genome.getRandomNode()
             assert rand_node is not None
             if rand_node.getType() == Consts.nodeType["TERMINAL"]:
-               term_operator = rand_choice(terminals)
+               term_operator = rand_choice(gp_terminals)
             else:
-               op_len = functions_op[rand_node.getData()]
+               op_len = gp_function_set[rand_node.getData()]
                fun_candidates = []
-               for o, l in functions_op.items():
+               for o, l in gp_function_set.items():
                   if l==op_len:
                      fun_candidates.append(o)
 
@@ -668,17 +668,16 @@ def GTreeGPMutatorOperation(genome, **args):
 
                term_operator = rand_choice(fun_candidates)
             rand_node.setData(term_operator)
-
    else: 
       for it in xrange(int(round(mutations))):
          rand_node = genome.getRandomNode()
          assert rand_node is not None
          if rand_node.getType() == Consts.nodeType["TERMINAL"]:
-            term_operator = rand_choice(terminals)
+            term_operator = rand_choice(gp_terminals)
          else:
-            op_len = functions_op[rand_node.getData()]
+            op_len = gp_function_set[rand_node.getData()]
             fun_candidates = []
-            for o, l in functions_op.items():
+            for o, l in gp_function_set.items():
                if l==op_len:
                   fun_candidates.append(o)
 
