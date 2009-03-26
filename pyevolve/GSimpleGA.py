@@ -711,8 +711,7 @@ class GSimpleGA:
       logging.debug("Starting loop over evolutionary algorithm.")
 
       try:      
-         while not self.step():
-
+         while True:
             if self.migrationAdapter:
                logging.debug("Migration adapter: exchange")
                self.migrationAdapter.exchange()
@@ -728,7 +727,7 @@ class GSimpleGA:
                   stopFlagTerminationCriteria = it
 
             if freq_stats:
-               if (self.currentGeneration % freq_stats == 0) or (self.getCurrentGeneration() == 1):
+               if (self.currentGeneration % freq_stats == 0) or (self.getCurrentGeneration() == 0):
                   self.printStats()
 
             if self.dbAdapter:
@@ -789,6 +788,8 @@ class GSimpleGA:
                                            "it"         : Interaction}
                         print
                         code.interact(interact_banner, local=session_locals)
+
+            if self.step(): break
 
       except KeyboardInterrupt:
          logging.debug("CTRL-C detected, finishing evolution.")
