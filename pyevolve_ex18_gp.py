@@ -3,32 +3,43 @@ from pyevolve import GTree
 from pyevolve import Consts
 from pyevolve import Selectors
 from pyevolve import Mutators
-from math import sqrt
-#import pydot   
+from pyevolve import Util
+import math
+import pydot   
 
 def gp_add(a, b): return a+b
 def gp_square(a): return a*a
 def gp_sqrt(a):
    ret = 0   
    try:
-      ret = sqrt(a)
+      ret = math.sqrt(a)
    except:
       pass
    return ret
    
 def eval_func(chromosome):
-   square_accum  = 0.0
-   code_comp     = chromosome.getCompiledCode()
+   accum     = Util.RMSEAccumulator()
+   code_comp = chromosome.getCompiledCode()
    
    for a in xrange(0, 5):
       for b in xrange(0, 5):
-         target        = sqrt((a*a)+(b*b))
-         ret           = eval(code_comp)
-         square_accum += (target - ret)**2
+         evaluated     = eval(code_comp)
+         target        = math.sqrt((a*a)+(b*b))
+         accum += (target, evaluated)
 
-   RMSE = sqrt(square_accum / 25.0)
-   score = (1.0 / (RMSE+1.0))
-   return score
+   return accum.getRMSE()
+
+def callback_draw(ga):
+   pop = ga.getPopulation()
+   graph = pydot.Dot()
+   gen = ga.getCurrentGeneration()
+
+   n = 0
+   for ind in pop:
+      n = ind.writeDotGraph(graph, n)
+   graph.write_jpeg('pop%d.tif' % gen, prog='dot')
+   return False
+
 
 def main_run():
    genome = GTree.GTreeGP()
@@ -44,26 +55,22 @@ def main_run():
                 gp_function_prefix = "gp")
 
    ga.setMinimax(Consts.minimaxType["maximize"])
-   ga.setGenerations(5)
+   ga.setGenerations(1)
+   ga.stepCallback.set(callback_draw)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(4000)
+   ga.setPopulationSize(40)
    
-   ga()
-   print ga.bestIndividual()
-
-   #graph = pydot.Dot()
-   #ga.bestIndividual().writeDotGraph(graph)
-   #graph.write_jpeg('tree.png', prog='dot')
+   ga(freq_stats=1)
 
 if __name__ == "__main__":
-   #main_run()
-   import hotshot, hotshot.stats
-   prof = hotshot.Profile("ev.prof")
-   prof.runcall(main_run)
-   prof.close()
-   stats = hotshot.stats.load("ev.prof")
-   stats.strip_dirs()
-   stats.sort_stats('time', 'calls')
-   stats.print_stats(20)
+   main_run()
+   #import hotshot, hotshot.stats
+   #prof = hotshot.Profile("ev.prof")
+   #prof.runcall(main_run)
+   #prof.close()
+   #stats = hotshot.stats.load("ev.prof")
+   #stats.strip_dirs()
+   #stats.sort_stats('time', 'calls')
+   #stats.print_stats(20)
 
