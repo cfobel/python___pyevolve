@@ -617,11 +617,10 @@ class GSimpleGA:
                (sister, brother) = it
          else:
             sister = random.choice([genomeMom, genomeDad])
+            sister = sister.clone()
+            sister.mutate(pmut=self.pMutation, ga_engine=self)
 
-            sisterClone = sister.clone()
-            sisterClone.mutate(pmut=self.pMutation, ga_engine=self)
-
-         newPop.internalPop.append(sisterClone)
+         newPop.internalPop.append(sister)
 
       logging.debug("Evaluating the new created population.")
       newPop.evaluate()
@@ -729,7 +728,7 @@ class GSimpleGA:
                   stopFlagTerminationCriteria = it
 
             if freq_stats:
-               if (self.currentGeneration % freq_stats == 0) or (self.currentGeneration == 1):
+               if (self.currentGeneration % freq_stats == 0) or (self.getCurrentGeneration() == 1):
                   self.printStats()
 
             if self.dbAdapter:

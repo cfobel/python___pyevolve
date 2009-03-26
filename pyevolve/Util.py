@@ -10,6 +10,7 @@ use, like list item swap, random utilities and etc.
 
 from random import random as rand_random, choice as rand_choice
 from sys import platform as sys_platform
+from math import sqrt as math_sqrt
 import logging
 import Consts
 
@@ -166,22 +167,38 @@ def importSpecial(name):
       raiseException("Cannot import module %s: %s" % (name, Consts.CDefImportList[name]), expt=ImportError)
    return imp_mod 
 
-def getCrossoverPoint(t1, t2, max_depth):
-   pairs = []
+class RMSEAccumulator:
+   """ An accumulator for the Root mean square error  """
+   def __init__(self):
+      self.acc     = 0.0
+      self.acc_len = 0
 
-   for T1p in t1:
-      for T2p in t2:
-         #T1p, T2p = p
-         i1, d1, h1 = T1p
-         i2, d2, h2 = T2p
-         if (i1>0) and (i2>0):
-            if (h1>0) and (h2>0):
-               if (d2+h1 <= max_depth) and (d1+h2 <= max_depth):
-                  pairs.append((T1p, T2p))
+   def reset(self):
+      """ Reset the accumulator """
+      self.acc     = 0.0
+      self.acc_len = 0
 
-   if len(pairs) <=0: return None
-   return rand_choice(pairs)
+   def append(self, target, evaluated):
+      """ Add value to the accumulator
+      
+      :param target: the target value
+      :param evaluated: the evaluated value
+      """
+      self.acc += float((target - evaluated)**2)
+      self.acc_len+=1
+      
+   def __iadd__(self, value):
+      """ The same as append, but you must pass a tuple """
+      self.append(value[0], value[1])
+      return self
 
+   def getRMSE(self):
+      """ Return the root mean square error
+      
+      :rtype: float rmse
+      """
+      rmse = math_sqrt(self.acc / float(self.acc_len))
+      return (1.0 / (rmse+1.0))
 
 class Graph:
    """ The Graph class
