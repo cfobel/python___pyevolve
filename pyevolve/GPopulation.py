@@ -105,12 +105,30 @@ class GPopulation:
          >>> pop[10].fitness
          12.5
 
-   :param genome: the :term:`Sample genome`
+   :param genome: the :term:`Sample genome`, or a GPopulation object, when cloning.
 
    """
 
    def __init__(self, genome):
       """ The GPopulation Class creator """
+
+      if isinstance(genome, GPopulation):
+         self.oneSelfGenome  = genome.oneSelfGenome
+         self.internalPop    = []
+         self.internalPopRaw = []
+         self.popSize       = genome.popSize
+         self.sortType      = genome.sortType
+         self.sorted        = False
+         self.minimax       = genome.minimax
+         self.scaleMethod   = genome.scaleMethod
+         self.allSlots      = [self.scaleMethod]
+
+         self.internalParams = genome.internalParams
+         self.multiProcessing = genome.multiProcessing
+
+         self.statted = False
+         self.stats   = Statistics()
+         return
 
       logging.debug("New population instance, %s class genomes.", genome.__class__.__name__)
       self.oneSelfGenome  = genome
@@ -376,7 +394,8 @@ class GPopulation:
       pop.sortType = self.sortType
       pop.minimax = self.minimax
       pop.scaleMethod = self.scaleMethod
-      pop.internalParams = self.internalParams.copy()
+      #pop.internalParams = self.internalParams.copy()
+      pop.internalParams = self.internalParams
       pop.multiProcessing = self.multiProcessing
    
    def clear(self):

@@ -579,7 +579,7 @@ class GSimpleGA:
       genomeMom = None
       genomeDad = None
 
-      newPop = self.internalPop.clone()
+      newPop = GPopulation(self.internalPop)
       logging.debug("Population was cloned.")
       
       size_iterate = len(self.internalPop)

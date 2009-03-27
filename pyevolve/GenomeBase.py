@@ -59,9 +59,6 @@ class GenomeBase:
       self.mutator = FunctionSlot("Mutator")
       self.crossover = FunctionSlot("Crossover")
  
-      self.allSlots = [ self.evaluator, self.initializator,
-                      self.mutator, self.crossover ]
-      
       self.internalParams = {}
       self.score = 0.0
       self.fitness = 0.0
@@ -84,12 +81,15 @@ class GenomeBase:
 
    def __repr__(self):
       """String representation of Genome"""
+      allSlots =  self.allSlots = [ self.evaluator, self.initializator,
+                                    self.mutator, self.crossover ]
+
       ret = "- GenomeBase\n"
       ret+= "\tScore:\t\t\t %.6f\n" % (self.score,)
       ret+= "\tFitness:\t\t %.6f\n\n" % (self.fitness,)
       ret+= "\tParams:\t\t %s\n\n" % (self.internalParams,)
 
-      for slot in self.allSlots:
+      for slot in allSlots:
          ret+= "\t" + slot.__repr__()
       ret+="\n"
 
@@ -100,6 +100,9 @@ class GenomeBase:
 
       Example:
          >>> genome.setParams(rangemin=0, rangemax=100, gauss_mu=0, gauss_sigma=1)
+
+      .. note:: All the individuals of the population shares this parameters and uses
+                the same instance of this dict.
 
       :param args: this params will saved in every chromosome for genetic op. use
 
@@ -112,6 +115,9 @@ class GenomeBase:
       Example:
          >>> genome.getParam("rangemax")
          100
+
+      .. note:: All the individuals of the population shares this parameters and uses
+                the same instance of this dict.
 
       :param key: the key of param
       :param nvl: if the key doesn't exist, the nvl will be returned
@@ -162,6 +168,7 @@ class GenomeBase:
 
       .. note:: If you are planning to create a new chromosome representation, you
                 **must** implement this method on your class.
+
       """
       g.score = self.score
       g.fitness = self.fitness
@@ -169,8 +176,8 @@ class GenomeBase:
       g.initializator = self.initializator
       g.mutator = self.mutator
       g.crossover = self.crossover
-      g.allSlots = self.allSlots[:]
-      g.internalParams = self.internalParams.copy()
+      #g.internalParams = self.internalParams.copy()
+      g.internalParams = self.internalParams
       
    def clone(self):
       """ Clone this GenomeBase
