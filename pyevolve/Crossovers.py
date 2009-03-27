@@ -575,19 +575,19 @@ def GTreeGPCrossoverSinglePoint(genome, **args):
       elif dadRandom.getType() == Consts.nodeType["NONTERMINAL"]:
          momRandom = gMom.getRandomNode(2)
 
-      if momRandom is None: continue
-
       mD = gMom.getNodeDepth(momRandom)
       dD = gDad.getNodeDepth(dadRandom)
+
+      # Two nodes are root
       if mD==0 and dD==0: continue
       
-      # Optimize here
       mH = gMom.getNodeHeight(momRandom)
-      dH = gDad.getNodeHeight(dadRandom)
+      if dD+mH > max_depth: continue
 
-      # The depth of the crossover is greater than the max_depth
-      if (dD+mH <= max_depth) and (mD+dH <= max_depth):
-         break
+      dH = gDad.getNodeHeight(dadRandom)
+      if mD+dH > max_depth: continue
+
+      break
 
    if i==(max_attempt-1):
       assert gMom.getHeight() <= max_depth
