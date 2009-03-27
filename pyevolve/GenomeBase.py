@@ -542,9 +542,7 @@ class GTreeBase:
       while len(node_stack) > 0:
          tmp = node_stack.pop()
          all_nodes.append(tmp)
-
-         rev_childs = tmp.getChilds()[:]
-         rev_childs.reverse()
+         rev_childs = tmp.getChilds()
          node_stack.extend(rev_childs)
 
       return all_nodes 

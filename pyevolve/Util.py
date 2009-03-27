@@ -56,8 +56,8 @@ def randomFlipCoin(p):
    """
    if p == 1.0: return True
    if p == 0.0: return False
-   if rand_random() <= p: return True
-   else: return False
+
+   return True if rand_random() <= p else False
    
 def listSwapElement(lst, indexa, indexb):
    """ Swaps elements A and B in a list.
@@ -184,12 +184,13 @@ class RMSEAccumulator:
       :param target: the target value
       :param evaluated: the evaluated value
       """
-      self.acc += float((target - evaluated)**2)
+      self.acc += (target - evaluated)**2
       self.acc_len+=1
       
    def __iadd__(self, value):
       """ The same as append, but you must pass a tuple """
-      self.append(value[0], value[1])
+      self.acc += (value[0] - value[1])**2
+      self.acc_len+=1
       return self
 
    def getRMSE(self):
