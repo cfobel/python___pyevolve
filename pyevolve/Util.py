@@ -189,7 +189,10 @@ class RMSEAccumulator:
       
    def __iadd__(self, value):
       """ The same as append, but you must pass a tuple """
-      self.acc += (value[0] - value[1])**2
+      try:
+         self.acc += (value[0] - value[1])**2
+      except OverflowError:
+         return self
       self.acc_len+=1
       return self
 
