@@ -4,6 +4,10 @@
 <script type="text/javascript" src="_static/jquery.rotator.js"></script>
 
 <script type="text/javascript">
+function hideBlogHeadlines() {
+	document.getElementById('rotator').style.visibility='hidden';
+}
+
 $(document).ready(function() {
 	$.get("http://pyevolve.sourceforge.net/wordpress/?feed=rss2", function(d){  
 		$(d).find('item').each(function(){  
@@ -34,7 +38,7 @@ $(document).ready(function() {
 </a>
 <br>
 
-<h3><a href="http://pyevolve.sourceforge.net/wordpress">Recent Blog Posts</a></h3>
+<h3><a href="javascript:hideBlogHeadlines();">Recent Blog Posts</a></h3>
 
 <div id="rotator" style="height: 150px; overflow:hidden;">
 <div style="height: 80px"><p style="font-size: 90%" align="center">&mdash;</p></div>

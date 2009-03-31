@@ -21,6 +21,8 @@ See some plot screenshots on the :ref:`graphs_screens` section.
 
 Visit the project `blog site <http://pyevolve.sourceforge.net/wordpress>`_ and leave your comment.
 
+You can download this documentation in `LaTeX <http://pyevolve.sourceforge.net/latex_0_5.pdf>`_.
+
 Contents
 --------------------------------------------------
 
