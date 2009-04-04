@@ -14,8 +14,6 @@ from random import randint as rand_randint, choice as rand_choice
 from FunctionSlot import FunctionSlot
 import Util
 
-from heapq import heappush, heappop
-
 class GenomeBase:
    """ GenomeBase Class - The base of all chromosome representation """
 
