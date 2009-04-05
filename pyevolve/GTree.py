@@ -489,8 +489,12 @@ def buildGTreeGPGrow(ga_engine, depth, max_depth):
       n = GTreeNodeGP(random_terminal, Consts.nodeType["TERMINAL"])
       return n
    else:
-      fchoice = rand_choice([gp_function_set.keys(), gp_terminals])
-      random_node = rand_choice(fchoice)
+      # Do not generate degenerative trees 
+      if depth == 0:
+         random_node = rand_choice(gp_function_set.keys())
+      else:
+         fchoice = rand_choice([gp_function_set.keys(), gp_terminals])
+         random_node = rand_choice(fchoice)
 
       if random_node in gp_terminals:
          n = GTreeNodeGP(random_node, Consts.nodeType["TERMINAL"])
