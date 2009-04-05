@@ -4,32 +4,28 @@ from pyevolve import Consts
 from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Util
-from math import sqrt
+import math
 
 rmse_accum     = Util.RMSEAccumulator()
 
-PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269]
 PRIMES_LEN = len(PRIMES)
 
-def prot_sqrt(v):
-   ret = 0   
-   try:
-      ret = sqrt(v)
-   except:
-      pass
-   return ret
-
+def gp_sum(a):    return a*(a+1)/2
 def gp_add(a, b): return a+b
 def gp_sub(a, b): return a-b
 def gp_square(a): return a*a
-def gp_div(a, b): return 0 if b==0 else a/b
+def gp_div(a, b): return 1 if b==0 else a/b
 def gp_mul(a, b): return a*b
-def gp_sqrt(a):   return prot_sqrt(a)
-def gp_max(a,b): return a if a>b else b
-   
+def gp_sqrt(a):   return math.sqrt(abs(a))
+def gp_mod(a,b):  return 1 if b==0 else a%b
+def gp_cos(a):    return math.cos(a)
+def gp_sin(a):    return math.sin(a)
+
 def eval_func(chromosome):
    global rmse_accum
    rmse_accum.reset()
+   score = 0.0
 
    code_comp     = chromosome.getCompiledCode()
 
@@ -50,28 +46,26 @@ def main_run():
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setParams(gp_terminals       = ['a'],
+   ga.setParams(gp_terminals       = ['a', 'math.e', 'math.pi'],
                 gp_function_prefix = "gp")
+   #ga.selector.set(Selectors.GRouletteWheel)
 
    ga.setMinimax(Consts.minimaxType["maximize"])
-   ga.setGenerations(5000)
+   ga.setGenerations(20000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(4000)
+   ga.setPopulationSize(6000)
    
-   ga(freq_stats=2)
+   ga(freq_stats=5)
    print ga.bestIndividual()
 
 def funx(a):
-   return gp_sqrt(gp_add(gp_div(gp_add(gp_add(gp_div(gp_add(a, gp_mul(a, a)), gp_sqrt(a)), gp_div(gp_square(gp_mul(a, a)), gp_square(a))), gp_div(gp_square(gp_mul(gp_sqrt(a), gp_square(a))), gp_add(gp_mul(a, a), gp_div(gp_square(a), gp_square(a))))), gp_sqrt(gp_sqrt(a))), gp_square(gp_sqrt(gp_mul(gp_div(gp_mul(gp_div(a, a), gp_div(a, a)), gp_add(gp_mul(a, a), gp_sqrt(a))), gp_mul(gp_mul(gp_mul(a, a), gp_div(a, a)), gp_square(gp_add(a, a))))))))
+   return gp_add(gp_div(gp_sum(a), gp_sqrt(a)), gp_sqrt(gp_square(a)))
 
 def main_test():
-   ret = funx(1098)
-   print int(round(ret))
-   ret = funx(1099)
-   print int(round(ret))
-   ret = funx(1100)
-   print int(round(ret))
+   for i in xrange(PRIMES_LEN):
+      ret = int(round(funx(i+1)))
+      print "[%03d] [%03d] / Error = %d" % (PRIMES[i], ret, PRIMES[i]-ret)
 
 if __name__ == "__main__":
    main_run()

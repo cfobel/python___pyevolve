@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-15 -*-
 from pyevolve import GSimpleGA
 from pyevolve import GTree
 from pyevolve import Consts
@@ -5,12 +6,14 @@ from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Util
 import math
-#import pydot   
+import pydot   
+import random
 
-rmse_accum     = Util.RMSEAccumulator()
+rmse_accum = Util.RMSEAccumulator()
 
 def gp_add(a, b): return a+b
-def gp_square(a): return a*a
+#def gp_square(a): return a*a
+def gp_mul(a, b): return a*b
 def gp_sqrt(a):
    ret = 0   
    try:
@@ -40,7 +43,7 @@ def callback_draw(ga):
    n = 0
    for ind in pop:
       n = ind.writeDotGraph(graph, n)
-   graph.write_jpeg('pop%d.tif' % gen, prog='dot')
+   graph.write_jpeg('pop%d.jpg' % gen, prog='dot')
    return False
 
 
@@ -56,16 +59,24 @@ def main_run():
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setParams(gp_terminals       = ['a', 'b'],
                 gp_function_prefix = "gp")
+   ga.selector.set(Selectors.GRouletteWheel)
 
    ga.setMinimax(Consts.minimaxType["maximize"])
-   ga.setGenerations(20)
+   ga.setGenerations(1000)
    #ga.stepCallback.set(callback_draw)
-   ga.setCrossoverRate(1.0)
+   ga.setCrossoverRate(0.9)
    ga.setMutationRate(0.08)
    ga.setPopulationSize(500)
    
-   ga(freq_stats=5)
+   ga(freq_stats=10)
    print ga.bestIndividual()
 
 if __name__ == "__main__":
    main_run()
+
+
+# Tempo e espaço são formas puras e necessárias para o conhecimento, estão em nosso intelecto
+# Geometria representa um exemplo claro do conhecimento sintético a priori
+# Teorema de Pitágoras é um exemplo do conhecimento sintético a priori
+# Programação genética pode descobrir o teorema de pitágoras
+# Pode-se utilizar a GP para descobrir outros teoremas
