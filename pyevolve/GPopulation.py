@@ -320,12 +320,27 @@ class GPopulation:
       self.internalPop = [self.oneSelfGenome.clone() for i in xrange(self.popSize)]
       self.clearFlags()
 
+   def __findIndividual(self, individual, end):
+      for i in xrange(end):
+         if individual.compare(self.internalPop[i]) == 0:
+            return True
+
    def initialize(self, **args):
       """ Initialize all individuals of population,
       this calls the initialize() of individuals """
       logging.debug("Initializing the population")
-      for gen in self.internalPop:
-         gen.initialize(**args)
+      if hasattr(self.oneSelfGenome, "compare"):
+
+         for i in xrange(len(self.internalPop)):
+            curr = self.internalPop[i]
+            curr.initialize(**args)
+
+            while self.__findIndividual(curr, i):
+               curr.initialize(**args)
+         
+      else:
+         for gen in self.internalPop:
+            gen.initialize(**args)
       self.clearFlags()
 
    def evaluate(self, **args):

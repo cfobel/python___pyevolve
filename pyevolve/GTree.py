@@ -258,6 +258,19 @@ class GTreeNodeGP(GTreeNodeBase):
       str_repr += " - [%s][%s]" % (self.node_data, node_type_str)
       return str_repr     
 
+   def compare(self, other):
+      """ Compare this node with other 
+      
+      :param other: the other GTreeNodeGP
+      """
+      if not isinstance(other, GTreeNodeGP):
+         Util.raiseException("The other node used to compare is not a GTreeNodeGP class", TypeError)
+
+      if other.node_type == self.node_type:
+         if other.node_data == self.node_data:
+            return 0
+      return -1
+
    def setData(self, data):
       """Sets the node internal data
       
@@ -462,6 +475,42 @@ class GTreeGP(GenomeBase, GTreeBase):
       self.copy(newcopy)
       newcopy.processNodes(True)
       return newcopy
+
+   def compare(self, other):
+      """ This method will compare the currently tree with another one
+
+      :param other: the other GTreeGP to compare
+      """
+      if not isinstance(other, GTreeGP):
+         Util.raiseException("The other tree used to compare is not a GTreeGP class", TypeError)
+
+      stack_self = []
+      stack_other = []
+
+      tmp_self  = None
+      tmp_other = None
+
+      stack_self.append(self.getRoot())
+      stack_other.append(other.getRoot())
+
+      while len(stack_self) > 0:
+
+         if (len(stack_self) <= 0) or (len(stack_other) <= 0):
+            return -1
+         
+         tmp_self  = stack_self.pop()
+         tmp_other = stack_other.pop()
+
+         if tmp_self.compare(tmp_other) <> 0:
+            return -1
+
+         rev_childs = tmp_self.getChilds()
+         stack_self.extend(rev_childs)
+
+         rev_childs = tmp_other.getChilds()
+         stack_other.extend(rev_childs)
+   
+      return 0
 
 
 #################################
