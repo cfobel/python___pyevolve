@@ -332,6 +332,8 @@ class GPopulation:
       if hasattr(self.oneSelfGenome, "compare"):
 
          for i in xrange(len(self.internalPop)):
+            if i % 200 == 0:
+               print "Pop [%d]" % i
             curr = self.internalPop[i]
             curr.initialize(**args)
 
