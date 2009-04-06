@@ -204,8 +204,8 @@ class RMSEAccumulator:
       try:
          rmse = math_sqrt(self.acc / float(self.acc_len))
       except:
-         return 0
-      return (1.0 / (rmse+1.0))
+         return -1
+      return rmse
 
 class Graph:
    """ The Graph class
