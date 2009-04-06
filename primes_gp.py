@@ -44,12 +44,12 @@ def main_run():
    root   = GTree.GTreeNodeGP('a', Consts.nodeType["TERMINAL"])
    genome.setRoot(root)
 
-   genome.setParams(max_depth=8, method="ramped")
+   genome.setParams(max_depth=8, method="ramped", full_diversity=True)
    genome.evaluator += eval_func
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setParams(gp_terminals       = ['a', 'math.e', 'math.pi'],
+   ga.setParams(gp_terminals       = ['a', 'ephemeral:random.random()'],
                 gp_function_prefix = "gp")
    #ga.selector.set(Selectors.GRouletteWheel)
 
@@ -57,7 +57,7 @@ def main_run():
    ga.setGenerations(20000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(500)
+   ga.setPopulationSize(2000)
    
    ga(freq_stats=5)
    print ga.bestIndividual()
