@@ -201,7 +201,10 @@ class RMSEAccumulator:
       
       :rtype: float rmse
       """
-      rmse = math_sqrt(self.acc / float(self.acc_len))
+      try:
+         rmse = math_sqrt(self.acc / float(self.acc_len))
+      except:
+         return 0
       return (1.0 / (rmse+1.0))
 
 class Graph:
