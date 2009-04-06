@@ -330,7 +330,7 @@ class GPopulation:
       this calls the initialize() of individuals """
       logging.debug("Initializing the population")
    
-      if self.oneSelfGenome.getParam("fullDiversity") and hasattr(self.oneSelfGenome, "compare"):
+      if self.oneSelfGenome.getParam("full_diversity") and hasattr(self.oneSelfGenome, "compare"):
          for i in xrange(len(self.internalPop)):
             curr = self.internalPop[i]
             curr.initialize(**args)
