@@ -37,7 +37,10 @@ def eval_func(chromosome):
          return 0
       rmse_accum += (PRIMES[x], ret)
 
-   return rmse_accum.getRMSE()
+   rmse = rmse_accum.getRMSE()
+   #if rmse < 0: return 0      
+   #return (1.0 / (rmse+1.0))
+   return rmse
 
 def main_run():
    genome = GTree.GTreeGP()
@@ -53,11 +56,11 @@ def main_run():
                 gp_function_prefix = "gp")
    #ga.selector.set(Selectors.GRouletteWheel)
 
-   ga.setMinimax(Consts.minimaxType["maximize"])
+   ga.setMinimax(Consts.minimaxType["minimize"])
    ga.setGenerations(20000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(2000)
+   ga.setPopulationSize(5000)
    
    ga(freq_stats=5)
    print ga.bestIndividual()
