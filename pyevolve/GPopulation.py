@@ -329,17 +329,13 @@ class GPopulation:
       """ Initialize all individuals of population,
       this calls the initialize() of individuals """
       logging.debug("Initializing the population")
-      if hasattr(self.oneSelfGenome, "compare"):
-
+   
+      if self.oneSelfGenome.getParam("fullDiversity") and hasattr(self.oneSelfGenome, "compare"):
          for i in xrange(len(self.internalPop)):
-            if i % 200 == 0:
-               print "Pop [%d]" % i
             curr = self.internalPop[i]
             curr.initialize(**args)
-
             while self.__findIndividual(curr, i):
                curr.initialize(**args)
-         
       else:
          for gen in self.internalPop:
             gen.initialize(**args)

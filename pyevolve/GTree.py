@@ -34,7 +34,7 @@ Classes
 -------------------------------------------------------------
 """
 import copy
-from random import randint as rand_randint, choice as rand_choice
+import random
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
 import Util
@@ -202,7 +202,7 @@ def buildGTreeGrow(depth, value_callback, max_siblings, max_depth):
 
    if depth == max_depth: return n
 
-   for i in xrange(rand_randint(0, abs(max_siblings))):
+   for i in xrange(random.randint(0, abs(max_siblings))):
       child = buildGTreeGrow(depth+1, value_callback, max_siblings, max_depth)
       child.setParent(n)
       n.addChild(child)
@@ -227,7 +227,7 @@ def buildGTreeFull(depth, value_callback, max_siblings, max_depth):
    if depth == max_depth: return n
 
    if max_siblings < 0: range_val = abs(max_siblings)
-   else:                range_val = rand_randint(1, abs(max_siblings))
+   else:                range_val = random.randint(1, abs(max_siblings))
  
    for i in xrange(range_val):
       child = buildTreeFull(depth+1, value_callback, max_siblings, max_depth)
@@ -517,6 +517,18 @@ class GTreeGP(GenomeBase, GTreeBase):
 #    Tree GP Utility Functions  # 
 #################################
 
+def checkTerminal(terminal):
+   """ Do some check on the terminal, to evaluate ephemeral constants
+
+   :param terminal: the terminal string
+   """
+   if terminal.startswith("ephemeral:"):
+      splited = terminal.split(":")
+      ephemeral_constant = eval(splited[1])
+      return str(ephemeral_constant)
+   else:
+      return terminal
+
 def buildGTreeGPGrow(ga_engine, depth, max_depth):
    """ Creates a new random GTreeGP root node with subtrees using
    the "Grow" method.
@@ -534,19 +546,19 @@ def buildGTreeGPGrow(ga_engine, depth, max_depth):
    assert gp_function_set is not None
 
    if depth == max_depth:
-      random_terminal = rand_choice(gp_terminals)
+      random_terminal = checkTerminal(random.choice(gp_terminals))
       n = GTreeNodeGP(random_terminal, Consts.nodeType["TERMINAL"])
       return n
    else:
       # Do not generate degenerative trees 
       if depth == 0:
-         random_node = rand_choice(gp_function_set.keys())
+         random_node = random.choice(gp_function_set.keys())
       else:
-         fchoice = rand_choice([gp_function_set.keys(), gp_terminals])
-         random_node = rand_choice(fchoice)
+         fchoice = random.choice([gp_function_set.keys(), gp_terminals])
+         random_node = random.choice(fchoice)
 
       if random_node in gp_terminals:
-         n = GTreeNodeGP(random_node, Consts.nodeType["TERMINAL"])
+         n = GTreeNodeGP(checkTerminal(random_node), Consts.nodeType["TERMINAL"])
       else:
          n = GTreeNodeGP(random_node, Consts.nodeType["NONTERMINAL"])
 
@@ -574,11 +586,11 @@ def buildGTreeGPFull(ga_engine, depth, max_depth):
    assert gp_function_set is not None
 
    if depth == max_depth:
-      random_terminal = rand_choice(gp_terminals)
+      random_terminal = checkTerminal(random.choice(gp_terminals))
       n = GTreeNodeGP(random_terminal, Consts.nodeType["TERMINAL"])
       return n
    else:
-      random_oper = rand_choice(gp_function_set.keys())
+      random_oper = random.choice(gp_function_set.keys())
       n = GTreeNodeGP(random_oper, Consts.nodeType["NONTERMINAL"])
 
    if n.getType() == Consts.nodeType["NONTERMINAL"]:
