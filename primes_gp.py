@@ -31,7 +31,10 @@ def eval_func(chromosome):
 
    for x in xrange(PRIMES_LEN):
       a = x+1
-      ret = int(round(eval(code_comp)))
+      try:
+         ret = int(round(eval(code_comp)))
+      except:
+         return 0
       rmse_accum += (PRIMES[x], ret)
 
    return rmse_accum.getRMSE()
@@ -54,7 +57,7 @@ def main_run():
    ga.setGenerations(20000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(6000)
+   ga.setPopulationSize(500)
    
    ga(freq_stats=5)
    print ga.bestIndividual()
