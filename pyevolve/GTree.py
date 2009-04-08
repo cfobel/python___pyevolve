@@ -33,7 +33,6 @@ Default Parameters
 Classes
 -------------------------------------------------------------
 """
-import copy
 import random
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
