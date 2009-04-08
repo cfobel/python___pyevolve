@@ -379,17 +379,31 @@ class GTreeGP(GenomeBase, GTreeBase):
       node_stack = []
       nodes_dict = {}
       tmp = None
+      import __main__ as main_module
 
       for i in xrange(len(self.nodes_list)):
          newnode = pydot.Node(str(count), style="filled")
          count += 1
-         newnode.set_label(self.nodes_list[i].getData())
-         nodes_dict.update({self.nodes_list[i]: newnode})
+
          if self.nodes_list[i].getType() == Consts.nodeType["TERMINAL"]:
             newnode.set_color("lightblue2")
          else:
             newnode.set_color("goldenrod2")
 
+         if self.nodes_list[i].getType() == Consts.nodeType["NONTERMINAL"]:
+            func = getattr(main_module, self.nodes_list[i].getData())
+            if hasattr(func, "representation"):
+               newnode.set_label(func.representation)
+            else:
+               newnode.set_label(self.nodes_list[i].getData())
+
+            if hasattr(func, "color"): newnode.set_color(func.color)
+
+         else:
+            newnode.set_label(self.nodes_list[i].getData())
+      
+         nodes_dict.update({self.nodes_list[i]: newnode})
+         
          graph.add_node(newnode)
 
       node_stack.append(self.getRoot())
@@ -519,6 +533,14 @@ class GTreeGP(GenomeBase, GTreeBase):
 #################################
 #    Tree GP Utility Functions  # 
 #################################
+
+def gpdec(**kwds):
+   def decorate(f):
+      for k in kwds:
+            setattr(f, k, kwds[k])
+      return f
+   return decorate
+
 
 def writeGTreeGPPopulation(ga_engine, filename, start=0, end=0):
    """ Writes to a graphical file using pydot, the population of trees
