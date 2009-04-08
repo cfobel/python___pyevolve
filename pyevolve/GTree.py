@@ -392,18 +392,20 @@ class GTreeGP(GenomeBase, GTreeBase):
 
          if self.nodes_list[i].getType() == Consts.nodeType["NONTERMINAL"]:
             func = getattr(main_module, self.nodes_list[i].getData())
+
+            if hasattr(func, "shape"):
+               newnode.set_shape(func.shape)
+
             if hasattr(func, "representation"):
                newnode.set_label(func.representation)
             else:
                newnode.set_label(self.nodes_list[i].getData())
-
             if hasattr(func, "color"): newnode.set_color(func.color)
 
          else:
             newnode.set_label(self.nodes_list[i].getData())
       
          nodes_dict.update({self.nodes_list[i]: newnode})
-         
          graph.add_node(newnode)
 
       node_stack.append(self.getRoot())
@@ -529,50 +531,53 @@ class GTreeGP(GenomeBase, GTreeBase):
    
       return 0
 
+   @staticmethod
+   def writePopulation(ga_engine, filename, start=0, end=0):
+      """ Writes to a graphical file using pydot, the population of trees
+
+      Example:
+         >>> GTreeGP.writeGTreeGPPopulation(ga_engine, "pop.jpg", 0, 10)
+
+      This example will draw the first ten individuals of the population into
+      the file called "pop.jpg".
+
+      :param ga_engine: the GA Engine
+      :param filename: the filename, ie. population.jpg
+      :param start: the start index of individuals
+      :param end: the end index of individuals
+      """
+
+      if not HAVE_PYDOT:
+         Util.raiseException("You must install Pydot to use this feature !")
+
+      pop = ga_engine.getPopulation()
+      graph = pydot.Dot()
+
+      if not isinstance(pop[0], GTreeGP):
+         Util.raiseException("The population must have individuals of the GTreeGP chromosome !")
+
+      n = 0
+      end_index = len(pop) if end==0 else end
+      for i in xrange(start, end_index):
+         ind = pop[i]
+         n = ind.writeDotGraph(graph, n)
+
+      graph.write_jpeg(filename, prog='dot')
 
 #################################
 #    Tree GP Utility Functions  # 
 #################################
 
 def gpdec(**kwds):
+   """ This is a decorator to use with genetic programming non-terminals
+   
+   It currently accepts the attributes: shape, color and representation.
+   """
    def decorate(f):
       for k in kwds:
             setattr(f, k, kwds[k])
       return f
    return decorate
-
-
-def writeGTreeGPPopulation(ga_engine, filename, start=0, end=0):
-   """ Writes to a graphical file using pydot, the population of trees
-
-   Example:
-      >>> GTree.writeGTreeGPPopulation(ga_engine, "pop.jpg", 0, 10)
-
-   This example will draw the first ten individuals of the population into
-   the file called "pop.jpg".
-
-   :param ga_engine: the GA Engine
-   :param filename: the filename, ie. population.jpg
-   :param start: the start index of individuals
-   :param end: the end index of individuals
-   """
-
-   if not HAVE_PYDOT:
-      Util.raiseException("You must install Pydot to use this feature !")
-
-   pop = ga_engine.getPopulation()
-   graph = pydot.Dot()
-
-   if not isinstance(pop[0], GTreeGP):
-      Util.raiseException("The population must have individuals of the GTreeGP chromosome !")
-
-   n = 0
-   end_index = len(pop) if end==0 else end
-   for i in xrange(start, end_index):
-      ind = pop[i]
-      n = ind.writeDotGraph(graph, n)
-
-   graph.write_jpeg(filename, prog='dot')
 
 def checkTerminal(terminal):
    """ Do some check on the terminal, to evaluate ephemeral constants
