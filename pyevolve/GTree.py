@@ -39,6 +39,12 @@ from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
 import Util
 
+try:
+   import pydot
+   HAVE_PYDOT = True
+except ImportError:
+   HAVE_PYDOT = False
+   
 #################################
 #             GTree             # 
 #################################
@@ -365,7 +371,10 @@ class GTreeGP(GenomeBase, GTreeBase):
       :param graph: the pydot Graph instance
       :param startNode: used to plot more than one individual 
       """
-      pydot = Util.importSpecial("pydot")
+      if not HAVE_PYDOT:
+         print "You must install Pydot to use this feature !"
+         return
+
       graph.set_type("graph")
       count = startNode
       node_stack = []
@@ -484,7 +493,7 @@ class GTreeGP(GenomeBase, GTreeBase):
       if not isinstance(other, GTreeGP):
          Util.raiseException("The other tree used to compare is not a GTreeGP class", TypeError)
 
-      stack_self = []
+      stack_self  = []
       stack_other = []
 
       tmp_self  = None
@@ -498,17 +507,12 @@ class GTreeGP(GenomeBase, GTreeBase):
          if (len(stack_self) <= 0) or (len(stack_other) <= 0):
             return -1
          
-         tmp_self  = stack_self.pop()
-         tmp_other = stack_other.pop()
-
+         tmp_self, tmp_other = stack_self.pop(), stack_other.pop()
          if tmp_self.compare(tmp_other) <> 0:
             return -1
 
-         rev_childs = tmp_self.getChilds()
-         stack_self.extend(rev_childs)
-
-         rev_childs = tmp_other.getChilds()
-         stack_other.extend(rev_childs)
+         stack_self.extend(tmp_self.getChilds())
+         stack_other.extend(tmp_other.getChilds())
    
       return 0
 
@@ -516,6 +520,38 @@ class GTreeGP(GenomeBase, GTreeBase):
 #################################
 #    Tree GP Utility Functions  # 
 #################################
+
+def writeGTreeGPPopulation(ga_engine, filename, start=0, end=0):
+   """ Writes to a graphical file using pydot, the population of trees
+
+   Example:
+      >>> GTree.writeGTreeGPPopulation(ga_engine, "pop.jpg", 0, 10)
+
+   This example will draw the first ten individuals of the population into
+   the file called "pop.jpg".
+
+   :param ga_engine: the GA Engine
+   :param filename: the filename, ie. population.jpg
+   :param start: the start index of individuals
+   :param end: the end index of individuals
+   """
+
+   if not HAVE_PYDOT:
+      Util.raiseException("You must install Pydot to use this feature !")
+
+   pop = ga_engine.getPopulation()
+   graph = pydot.Dot()
+
+   if not isinstance(pop[0], GTreeGP):
+      Util.raiseException("The population must have individuals of the GTreeGP chromosome !")
+
+   n = 0
+   end_index = len(pop) if end==0 else end
+   for i in xrange(start, end_index):
+      ind = pop[i]
+      n = ind.writeDotGraph(graph, n)
+
+   graph.write_jpeg(filename, prog='dot')
 
 def checkTerminal(terminal):
    """ Do some check on the terminal, to evaluate ephemeral constants
