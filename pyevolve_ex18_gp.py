@@ -6,21 +6,21 @@ from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Util
 import math
-import pydot   
 import random
 
 rmse_accum = Util.RMSEAccumulator()
 
+@GTree.gpdec(representation="+", color="red")
 def gp_add(a, b): return a+b
-#def gp_square(a): return a*a
+
+@GTree.gpdec(representation="-")
+def gp_sub(a, b): return a-b
+
+@GTree.gpdec(representation="*")
 def gp_mul(a, b): return a*b
-def gp_sqrt(a):
-   ret = 0   
-   try:
-      ret = math.sqrt(a)
-   except:
-      pass
-   return ret
+
+@GTree.gpdec(representation="sqrt")
+def gp_sqrt(a):   return math.sqrt(abs(a))
    
 def eval_func(chromosome):
    global rmse_accum
@@ -32,18 +32,10 @@ def eval_func(chromosome):
          evaluated     = eval(code_comp)
          target        = math.sqrt((a*a)+(b*b))
          rmse_accum += (target, evaluated)
-
    return rmse_accum.getRMSE()
 
-def callback_draw(ga):
-   pop = ga.getPopulation()
-   graph = pydot.Dot()
-   gen = ga.getCurrentGeneration()
-
-   n = 0
-   for ind in pop:
-      n = ind.writeDotGraph(graph, n)
-   graph.write_jpeg('pop%d.jpg' % gen, prog='dot')
+def callback_draw(ga_engine):
+   GTree.writeGTreeGPPopulation(ga_engine, "full.jpg")
    return False
 
 
@@ -61,15 +53,15 @@ def main_run():
                 gp_function_prefix = "gp")
    ga.selector.set(Selectors.GRouletteWheel)
 
-   ga.setMinimax(Consts.minimaxType["maximize"])
-   ga.setGenerations(1000)
-   #ga.stepCallback.set(callback_draw)
-   ga.setCrossoverRate(0.9)
+   ga.setMinimax(Consts.minimaxType["minimize"])
+   ga.setGenerations(1)
+   ga.stepCallback.set(callback_draw)
+   ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(500)
+   ga.setPopulationSize(10)
    
    ga(freq_stats=10)
-   print ga.bestIndividual()
+   #print ga.bestIndividual()
 
 if __name__ == "__main__":
    main_run()
