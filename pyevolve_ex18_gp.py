@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-15 -*-
 from pyevolve import GSimpleGA
 from pyevolve import GTree
 from pyevolve import Consts
@@ -65,10 +64,3 @@ def main_run():
 
 if __name__ == "__main__":
    main_run()
-
-
-# Tempo e espaço são formas puras e necessárias para o conhecimento, estão em nosso intelecto
-# Geometria representa um exemplo claro do conhecimento sintético a priori
-# Teorema de Pitágoras é um exemplo do conhecimento sintético a priori
-# Programação genética pode descobrir o teorema de pitágoras
-# Pode-se utilizar a GP para descobrir outros teoremas
