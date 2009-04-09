@@ -1,4 +1,3 @@
-# $Id: setup.py 163 2009-01-21 15:13:40Z christian.perone $
 from setuptools import setup, find_packages
 from pyevolve import __version__, __author__
 
