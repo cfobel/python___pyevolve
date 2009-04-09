@@ -5,10 +5,11 @@ from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Util
 import math
+import pydot
 
 rmse_accum     = Util.RMSEAccumulator()
 
-PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269]
+PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
 PRIMES_LEN = len(PRIMES)
 
 def gp_sum(a):    return a*(a+1)/2
@@ -25,45 +26,43 @@ def gp_sin(a):    return math.sin(a)
 def eval_func(chromosome):
    global rmse_accum
    rmse_accum.reset()
-   score = 0.0
 
    code_comp     = chromosome.getCompiledCode()
 
    for x in xrange(PRIMES_LEN):
       a = x+1
-      try:
-         ret = int(round(eval(code_comp)))
-      except:
-         return 0
+      ret = int(round(eval(code_comp)))
       rmse_accum += (PRIMES[x], ret)
 
-   rmse = rmse_accum.getRMSE()
-   #if rmse < 0: return 0      
-   #return (1.0 / (rmse+1.0))
-   return rmse
+   return rmse_accum.getRMSE()
 
 def main_run():
+   print "Starting for %d primes !" % PRIMES_LEN
    genome = GTree.GTreeGP()
    root   = GTree.GTreeNodeGP('a', Consts.nodeType["TERMINAL"])
    genome.setRoot(root)
 
-   genome.setParams(max_depth=8, method="ramped", full_diversity=True)
+   genome.setParams(max_depth=10, method="ramped")
    genome.evaluator += eval_func
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
 
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setParams(gp_terminals       = ['a', 'ephemeral:random.random()'],
+   ga.setParams(gp_terminals       = ['a', 'ephemeral:random.random()', 'math.pi', 'math.e'],
                 gp_function_prefix = "gp")
-   #ga.selector.set(Selectors.GRouletteWheel)
 
    ga.setMinimax(Consts.minimaxType["minimize"])
-   ga.setGenerations(20000)
+   ga.setGenerations(5000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(5000)
+   ga.setPopulationSize(2000)
    
    ga(freq_stats=5)
-   print ga.bestIndividual()
+   best = ga.bestIndividual()
+
+   graph = pydot.Dot()
+   best.writeDotGraph(graph)
+   graph.write_jpeg('best.jpg', prog='dot')
+  
 
 def funx(a):
    return gp_add(gp_div(gp_sum(a), gp_sqrt(a)), gp_sqrt(gp_square(a)))
