@@ -13,6 +13,7 @@ from random import randint as rand_randint, choice as rand_choice
 
 from FunctionSlot import FunctionSlot
 import Util
+from collections import deque
 
 class GenomeBase:
    """ GenomeBase Class - The base of all chromosome representation """
@@ -540,15 +541,15 @@ class GTreeBase:
       :rtype: the list with all nodes
       """
       node_stack = []
+      all_nodes  = []
       tmp = None
-      all_nodes = []
 
       node_stack.append(self.getRoot())
       while len(node_stack) > 0:
          tmp = node_stack.pop()
          all_nodes.append(tmp)
-         rev_childs = tmp.getChilds()
-         node_stack.extend(rev_childs)
+         childs = tmp.getChilds()
+         node_stack.extend(childs)
 
       return all_nodes 
 

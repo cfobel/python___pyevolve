@@ -37,6 +37,7 @@ import random
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
 import Util
+import cStringIO
 
 try:
    import pydot
@@ -442,10 +443,10 @@ class GTreeGP(GenomeBase, GTreeBase):
 
       for child_node in start_node.getChilds():
          str_buff += "%s " % child_node.getData()
-         str_buff += self.getExpression(child_node)
+         str_buff += self.getSExpression(child_node)
 
       if not is_leaf:
-         str_buff += ") "
+         str_buff += " )"
       return str_buff
 
    def getPreOrderExpression(self, start_node=None):
@@ -454,18 +455,14 @@ class GTreeGP(GenomeBase, GTreeBase):
 
       :rtype: the expression string
       """
-      str_buff = ""
-
       if start_node is None:
          start_node = self.getRoot()
 
-      node_data = start_node.getData()
-      str_buff += node_data
+      str_buff = start_node.getData()
 
       if not start_node.isLeaf():
-         all_childs = start_node.getChilds()
-         first_child = all_childs[0]
-         str_buff += "(" + self.getPreOrderExpression(first_child)
+         all_childs  = start_node.getChilds()
+         str_buff += "(" + self.getPreOrderExpression(all_childs[0])
 
          for index in xrange(1, len(all_childs)):
             child = all_childs[index]
