@@ -5,7 +5,7 @@ from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Util
 import math
-import pydot
+#import pydot
 
 rmse_accum     = Util.RMSEAccumulator()
 
@@ -22,6 +22,7 @@ def gp_sqrt(a):   return math.sqrt(abs(a))
 def gp_mod(a,b):  return 1 if b==0 else a%b
 def gp_cos(a):    return math.cos(a)
 def gp_sin(a):    return math.sin(a)
+def gp_ifltz(a, b, c): return b if a < 0 else c
 
 def eval_func(chromosome):
    global rmse_accum
@@ -58,10 +59,11 @@ def main_run():
    
    ga(freq_stats=5)
    best = ga.bestIndividual()
+   print best
 
-   graph = pydot.Dot()
-   best.writeDotGraph(graph)
-   graph.write_jpeg('best.jpg', prog='dot')
+   #graph = pydot.Dot()
+   #best.writeDotGraph(graph)
+   #graph.write_jpeg('best.jpg', prog='dot')
   
 
 def funx(a):
