@@ -201,10 +201,9 @@ class RMSEAccumulator:
       
       :rtype: float rmse
       """
-      try:
-         rmse = math_sqrt(self.acc / float(self.acc_len))
-      except:
-         return -1
+      #try:
+      rmse = math_sqrt(self.acc / float(self.acc_len))
+      #except ZeroDivisionError:
       return rmse
 
 class Graph:
