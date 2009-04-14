@@ -642,7 +642,7 @@ def GTreeGPMutatorOperation(genome, **args):
 
 
    gp_terminals = ga_engine.getParam("gp_terminals")
-   assert terminals is not None
+   assert gp_terminals is not None
 
    gp_function_set = ga_engine.getParam("gp_function_set")
    assert gp_function_set is not None

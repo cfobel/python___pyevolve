@@ -189,10 +189,7 @@ class RMSEAccumulator:
       
    def __iadd__(self, value):
       """ The same as append, but you must pass a tuple """
-      try:
-         self.acc += (value[0] - value[1])**2
-      except OverflowError:
-         return self
+      self.acc += (value[0] - value[1])**2
       self.acc_len+=1
       return self
 
@@ -201,9 +198,7 @@ class RMSEAccumulator:
       
       :rtype: float rmse
       """
-      #try:
       rmse = math_sqrt(self.acc / float(self.acc_len))
-      #except ZeroDivisionError:
       return rmse
 
 class Graph:
