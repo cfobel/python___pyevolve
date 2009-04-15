@@ -550,6 +550,10 @@ class GSimpleGA:
             except:
                continue
             function_set[obj] = op_len
+
+      if len(function_set) <= 0:
+         Util.raiseException("No function set found using function prefix '%s' !" % prefix, ValueError)
+
       self.setParams(gp_function_set=function_set)
 
    def initialize(self):
