@@ -236,6 +236,7 @@ class GSimpleGA:
       self.time_init       = None
       self.interactiveMode = interactiveMode
       self.interactiveGen  = 0
+      self.GPMode = False
 
       self.selector            = FunctionSlot("Selector")
       self.stepCallback        = FunctionSlot("Generation Step Callback")
@@ -248,6 +249,20 @@ class GSimpleGA:
       self.currentGeneration = 0
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
+
+   def setGPMode(self, bool_value):
+      """ Sets the Genetic Programming mode of the GA Engine
+      
+      :param bool_value: True or False
+      """
+      self.GPMode = bool_value
+
+   def getGPMode(self):
+      """ Get the Genetic Programming mode of the GA Engine
+      
+      :rtype: True or False
+      """
+      return self.GPMode
 
    def __call__(self, *args, **kwargs):
       """ A method to implement a callable object
@@ -675,7 +690,6 @@ class GSimpleGA:
       """ Dumps the current statistics to database adapter """
       logging.debug("Dumping stats to the DB Adapter")
       self.internalPop.statistics()
-      #self.dbAdapter.insert(self.getStatistics(), self.internalPop, self.currentGeneration)
       self.dbAdapter.insert(self)
 
    def evolve(self, freq_stats=0):
@@ -705,9 +719,15 @@ class GSimpleGA:
       if self.migrationAdapter: self.migrationAdapter.start()
 
       # GP Testing
-      gp_function_prefix = self.getParam("gp_function_prefix")
-      if gp_function_prefix is not None:
-         self.__gp_catch_functions(gp_function_prefix)
+      for classes in Consts.CDefGPGenomes:
+         if  isinstance(self.internalPop.oneSelfGenome, classes):
+            self.setGPMode(True)
+            break
+
+      if self.getGPMode():
+         gp_function_prefix = self.getParam("gp_function_prefix")
+         if gp_function_prefix is not None:
+            self.__gp_catch_functions(gp_function_prefix)
 
       self.initialize()
       self.internalPop.evaluate()

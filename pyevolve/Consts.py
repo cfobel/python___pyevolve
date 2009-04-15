@@ -60,6 +60,11 @@ General constants
 
    The genetic programming node types, can be "TERMINAL":0 or "NONTERMINAL":1
 
+.. attribute:: CDefGPGenomes
+
+   The classes which are used in Genetic Programming, used to detected the
+   correct mode when starting the evolution
+
 Selection methods constants (:mod:`Selectors`)
 ----------------------------------------------------------------------------
 
@@ -367,6 +372,7 @@ import Initializators
 import Mutators
 import Crossovers
 import logging
+from GTree import GTreeGP
 
 # Required python version 2.5+
 CDefPythonRequire = (2, 5)
@@ -508,6 +514,7 @@ CDefXMLRPCStatsGenFreq = 20
 CDefBroadcastAddress = "255.255.255.255"
 nodeType = {"TERMINAL" : 0, "NONTERMINAL": 1}
 
+CDefGPGenomes = [GTreeGP]
 
 # Migration Consts
 CDefGenMigrationRate = 20
