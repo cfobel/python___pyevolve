@@ -659,3 +659,4 @@ def buildGTreeGPFull(ga_engine, depth, max_depth):
          n.addChild(child)
 
    return n
+

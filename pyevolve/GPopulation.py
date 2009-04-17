@@ -61,18 +61,23 @@ def key_fitness_score(individual):
    return individual.fitness
 
 try:
-   from multiprocessing import cpu_count, Queue, Process
+   from multiprocessing import cpu_count, Queue, Process, Pool
    CPU_COUNT = cpu_count()
    MULTI_PROCESSING = True if CPU_COUNT > 1 else False
    logging.debug("The multiprocessing state is: %s", MULTI_PROCESSING)
 except:
    MULTI_PROCESSING = False
 
+
 def async_eval(population, q):
    """ Internal used by the multiprocessing """
    for ind in population:
       ind.evaluate()
    q.put(population)
+
+def f(ind):
+   ind.evaluate()
+   return ind.score
 
 class GPopulation:
    """ GPopulation Class - The container for the population
@@ -350,15 +355,20 @@ class GPopulation:
 
       # We have multiprocessing
       if self.multiProcessing and MULTI_PROCESSING:
-         logging.debug("Evaluating the population using the multiprocessing method")
-         pop_len = len(self)
-         q = Queue()
-         p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()
-         p2 = Process(target=async_eval, args=(self.internalPop[:pop_len/2], q)).start()
-         half1, half2 = q.get(), q.get()
+         #logging.debug("Evaluating the population using the multiprocessing method")
+         #pop_len = len(self)
+         #q = Queue()
+         #p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()
+         #p2 = Process(target=async_eval, args=(self.internalPop[:pop_len/2], q)).start()
+         #half1, half2 = q.get(), q.get()
+         #self.internalPop = half1 + half2
 
-         self.internalPop = half1 + half2
-
+         #print ">> eval start"
+         p = Pool()
+         px = p.map(f, self.internalPop)
+         for ind, ret in zip(self.internalPop, px):
+            ind.score = ret
+         #print "<< eval end"
       else:
          for ind in self.internalPop:
             ind.evaluate(**args)
