@@ -235,7 +235,7 @@ class GSimpleGA:
       
       self.time_init       = None
       self.interactiveMode = interactiveMode
-      self.interactiveGen  = 0
+      self.interactiveGen  = -1
       self.GPMode = False
 
       self.selector            = FunctionSlot("Selector")
@@ -311,20 +311,20 @@ class GSimpleGA:
       """ Sets the generation in which the GA must enter in the
       Interactive Mode
       
-      :param generation: the generation number, use "0" to disable
+      :param generation: the generation number, use "-1" to disable
 
       .. versionadded::0.6
          The *setInteractiveGeneration* method.
       """
-      if generation < 0:
-         Util.raiseException("Generation must be >= 0", ValueError)
+      if generation < -1:
+         Util.raiseException("Generation must be >= -1", ValueError)
       self.interactiveGen = generation
 
    def getInteractiveGeneration(self):
       """ returns the generation in which the GA must enter in the
       Interactive Mode
       
-      :rtype: the generation number or 0 if not set
+      :rtype: the generation number or -1 if not set
 
       .. versionadded::0.6
          The *getInteractiveGeneration* method.
@@ -800,7 +800,7 @@ class GSimpleGA:
                         print
                         code.interact(interact_banner, local=session_locals)
 
-               if (self.getInteractiveGeneration() > 0) and (self.getInteractiveGeneration() == self.getCurrentGeneration()):
+               if (self.getInteractiveGeneration() >= 0) and (self.getInteractiveGeneration() == self.getCurrentGeneration()):
                         print "Loading modules for Interactive Mode...",
                         logging.debug("Manual Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
                         from pyevolve import Interaction
