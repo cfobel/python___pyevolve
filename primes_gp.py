@@ -22,9 +22,9 @@ def gp_sqrt(a):   return math.sqrt(abs(a))
 def gp_mod(a,b):  return 1 if b==0 else a%b
 def gp_cos(a):    return math.cos(a)
 def gp_sin(a):    return math.sin(a)
-def gp_ifltz(a, b, c): return b if a < 0 else c
-def gp_ifgtz(a, b, c): return b if a > 0 else c
-def gp_ifgt(a, b, c, d): return c if a > b else d
+#def gp_ifltz(a, b, c): return b if a < 0 else c
+#def gp_ifgtz(a, b, c): return b if a > 0 else c
+#def gp_ifgt(a, b, c, d): return c if a > b else d
 
 
 def eval_func(chromosome):
@@ -70,13 +70,13 @@ def main_run():
   
 
 def funx(a):
-   return gp_add(gp_div(gp_sum(a), gp_sqrt(a)), gp_sqrt(gp_square(a)))
+   return gp_add(a,gp_sqrt(gp_mul(gp_mul(gp_add(a,gp_cos(gp_mul(0.958,gp_square(a)))), gp_mul(a, 0.3157)), gp_add(a,gp_cos(gp_sub(a,gp_sin(gp_mul(0.5509, a))))))))
 
 def main_test():
    for i in xrange(PRIMES_LEN):
-      ret = int(round(funx(i+1)))
-      print "[%03d] [%03d] / Error = %d" % (PRIMES[i], ret, PRIMES[i]-ret)
+      ret = funx(i+1)
+      print "[%03d] [%03d] / Error = %.3f" % (PRIMES[i], ret, PRIMES[i]-ret)
 
 if __name__ == "__main__":
-   main_run()
-   #main_test()
+   #main_run()
+   main_test()
