@@ -457,6 +457,8 @@ class GTreeBase:
    def getNodeHeight(self, node):
       """ Returns the height of a node
 
+      .. note:: If the node has no childs, the height will be 0.
+
       :rtype: the height of the node
       """
       height = 0
