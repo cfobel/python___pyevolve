@@ -23,6 +23,9 @@ def gp_mod(a,b):  return 1 if b==0 else a%b
 def gp_cos(a):    return math.cos(a)
 def gp_sin(a):    return math.sin(a)
 def gp_ifltz(a, b, c): return b if a < 0 else c
+def gp_ifgtz(a, b, c): return b if a > 0 else c
+def gp_ifgt(a, b, c, d): return c if a > b else d
+
 
 def eval_func(chromosome):
    global rmse_accum
@@ -43,7 +46,7 @@ def main_run():
    root   = GTree.GTreeNodeGP('a', Consts.nodeType["TERMINAL"])
    genome.setRoot(root)
 
-   genome.setParams(max_depth=10, method="ramped")
+   genome.setParams(max_depth=6, method="ramped")
    genome.evaluator += eval_func
    genome.mutator.set(Mutators.GTreeGPMutatorSubtree)
 
@@ -52,10 +55,10 @@ def main_run():
                 gp_function_prefix = "gp")
 
    ga.setMinimax(Consts.minimaxType["minimize"])
-   ga.setGenerations(5000)
+   ga.setGenerations(50000)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
-   ga.setPopulationSize(2000)
+   ga.setPopulationSize(1000)
    
    ga(freq_stats=5)
    best = ga.bestIndividual()
