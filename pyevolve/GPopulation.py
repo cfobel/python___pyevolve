@@ -68,14 +68,8 @@ try:
 except:
    MULTI_PROCESSING = False
 
-
-def async_eval(population, q):
+def multiprocessing_eval(ind):
    """ Internal used by the multiprocessing """
-   for ind in population:
-      ind.evaluate()
-   q.put(population)
-
-def f(ind):
    ind.evaluate()
    return ind.score
 
@@ -352,23 +346,13 @@ class GPopulation:
       :param args: this params are passed to the evaluation function
 
       """
-
       # We have multiprocessing
       if self.multiProcessing and MULTI_PROCESSING:
-         #logging.debug("Evaluating the population using the multiprocessing method")
-         #pop_len = len(self)
-         #q = Queue()
-         #p1 = Process(target=async_eval, args=(self.internalPop[pop_len/2:], q)).start()
-         #p2 = Process(target=async_eval, args=(self.internalPop[:pop_len/2], q)).start()
-         #half1, half2 = q.get(), q.get()
-         #self.internalPop = half1 + half2
-
-         #print ">> eval start"
-         p = Pool()
-         px = p.map(f, self.internalPop)
-         for ind, ret in zip(self.internalPop, px):
-            ind.score = ret
-         #print "<< eval end"
+         logging.debug("Evaluating the population using the multiprocessing method")
+         proc_pool = Pool()
+         results = proc_pool.map(multiprocessing_eval, self.internalPop)
+         for individual, score in zip(self.internalPop, results):
+            individual.score = score
       else:
          for ind in self.internalPop:
             ind.evaluate(**args)
