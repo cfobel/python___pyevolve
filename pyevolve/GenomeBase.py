@@ -423,6 +423,7 @@ class GTreeBase:
       internal nodes list and the internal nodes properties such as
       depth and height.
       """
+      if self.root_node is None: return
       self.nodes_list   = self.getAllNodes()
       self.nodes_leaf   = filter(lambda n: n.isLeaf(), self.nodes_list)
       self.nodes_branch = filter(lambda n: n.isLeaf()==False, self.nodes_list)
@@ -583,6 +584,8 @@ class GTreeBase:
       if node is None:
          g.tree_height = self.tree_height
          node = self.root_node
+
+      if node is None: return None
 
       newnode = node.clone()
 
