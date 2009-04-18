@@ -61,7 +61,7 @@ def key_fitness_score(individual):
    return individual.fitness
 
 try:
-   from multiprocessing import cpu_count, Queue, Process, Pool
+   from multiprocessing import cpu_count, Pool
    CPU_COUNT = cpu_count()
    MULTI_PROCESSING = True if CPU_COUNT > 1 else False
    logging.debug("The multiprocessing state is: %s", MULTI_PROCESSING)
