@@ -168,7 +168,9 @@ def importSpecial(name):
    return imp_mod 
 
 class ErrorAccumulator:
-   """ An accumulator for the Root mean square error  """
+   """ An accumulator for the Root Mean Square Error (RMSE) and the
+   Mean Square Error (MSE)
+   """
    def __init__(self):
       self.acc     = 0.0
       self.acc_len = 0
@@ -196,13 +198,16 @@ class ErrorAccumulator:
    def getRMSE(self):
       """ Return the root mean square error
       
-      :rtype: float rmse
+      :rtype: float RMSE
       """
       rmse = math_sqrt(self.acc / float(self.acc_len))
       return rmse
 
    def getMSE(self):
-      """ Return the mean square error """
+      """ Return the mean square error
+
+      :rtype: float MSE
+      """
       mse = (self.acc / float(self.acc_len))
       return mse
 

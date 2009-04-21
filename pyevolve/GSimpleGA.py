@@ -247,6 +247,12 @@ class GSimpleGA:
       self.internalParams = {}
 
       self.currentGeneration = 0
+
+      # GP Testing
+      for classes in Consts.CDefGPGenomes:
+         if  isinstance(self.internalPop.oneSelfGenome, classes):
+            self.setGPMode(True)
+            break
       
       logging.debug("A GA Engine was created, nGenerations=%d", self.nGenerations)
 
@@ -362,6 +368,7 @@ class GSimpleGA:
    def __repr__(self):
       """ The string representation of the GA Engine """
       ret =  "- GSimpleGA\n"
+      ret += "\tGP Mode:\t\t %s\n" % self.getGPMode()
       ret += "\tPopulation Size:\t %d\n" % (self.internalPop.popSize,)
       ret += "\tGenerations:\t\t %d\n" % (self.nGenerations,)
       ret += "\tCurrent Generation:\t %d\n" % (self.currentGeneration,)
@@ -720,11 +727,6 @@ class GSimpleGA:
       if self.dbAdapter: self.dbAdapter.open(self)
       if self.migrationAdapter: self.migrationAdapter.start()
 
-      # GP Testing
-      for classes in Consts.CDefGPGenomes:
-         if  isinstance(self.internalPop.oneSelfGenome, classes):
-            self.setGPMode(True)
-            break
 
       if self.getGPMode():
          gp_function_prefix = self.getParam("gp_function_prefix")

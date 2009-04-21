@@ -457,7 +457,7 @@ CDefGTreeCrossover = Crossovers.GTreeCrossoverSinglePointStrict
 
 # - GTree defaults
 CDefGTreeGPInit      = Initializators.GTreeGPInitializator
-CDefGGTreeGPMutator  = Mutators.GTreeGPMutatorOperation
+CDefGGTreeGPMutator  = Mutators.GTreeGPMutatorSubtree
 CDefGTreeGPCrossover = Crossovers.GTreeGPCrossoverSinglePoint
 
 # - G1DList defaults
