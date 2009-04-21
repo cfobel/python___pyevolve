@@ -167,7 +167,7 @@ def importSpecial(name):
       raiseException("Cannot import module %s: %s" % (name, Consts.CDefImportList[name]), expt=ImportError)
    return imp_mod 
 
-class RMSEAccumulator:
+class ErrorAccumulator:
    """ An accumulator for the Root mean square error  """
    def __init__(self):
       self.acc     = 0.0
@@ -200,6 +200,12 @@ class RMSEAccumulator:
       """
       rmse = math_sqrt(self.acc / float(self.acc_len))
       return rmse
+
+   def getMSE(self):
+      """ Return the mean square error """
+      mse = (self.acc / float(self.acc_len))
+      return mse
+
 
 class Graph:
    """ The Graph class

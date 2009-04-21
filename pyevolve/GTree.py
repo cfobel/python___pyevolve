@@ -260,8 +260,7 @@ class GTreeNodeGP(GTreeNodeBase):
 
    def __repr__(self):
       str_repr  = GTreeNodeBase.__repr__(self)
-      node_type_str = Consts.nodeType.keys()[self.node_type]
-      str_repr += " - [%s][%s]" % (self.node_data, node_type_str)
+      str_repr += " - [%s]" % self.node_data
       return str_repr     
 
    def compare(self, other):

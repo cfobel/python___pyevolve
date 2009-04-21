@@ -373,7 +373,7 @@ class GTreeNodeBase:
 
    def __repr__(self):
       parent = "None" if self.getParent() is None else "Present"
-      str_repr = "GTreeNodeBase @%s [Childs=%d, Parent=%s]" % (id(self), len(self), parent)
+      str_repr = "GTreeNodeBase [Childs=%d]" % len(self)
       return str_repr
 
    def __len__(self):
@@ -557,7 +557,7 @@ class GTreeBase:
       return all_nodes 
 
    def __repr__(self):
-      str_buff  = "- GTree @%s\n" % id(self)
+      str_buff  = "- GTree\n"
       str_buff += "\tHeight:\t\t\t%d\n" % self.getHeight()
       str_buff += "\tNodes:\t\t\t%d\n" % self.getNodesCount()
       str_buff += "\n" + self.getTraversalString()
