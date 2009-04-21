@@ -7,6 +7,7 @@ This module have the *scaling schemes* like Linear scaling, etc.
 
 """
 import Consts
+import Util
 import math
 import logging
 
@@ -40,9 +41,7 @@ def LinearScaling(pop):
    for i in xrange(len(pop)):
       f = pop[i].score
       if f < 0.0:
-         critical_msg = "Negative score, linear scaling not supported !"
-         logging.critical(critical_msg)
-         raise Exception(critical_msg)
+         Util.raiseException("Negative score, linear scaling not supported !", ValueError)
       f = f * a + b
       if f < 0:
          f = 0.0
@@ -72,27 +71,25 @@ def PowerLawScaling(pop):
    for i in xrange(len(pop)):
       f = pop[i].score
       if f < 0.0:
-         critical_msg = "Negative score, power law scaling not supported !"
-         logging.critical(critical_msg)
-         raise Exception(critical_msg)
+         Util.raiseException("Negative score, power law scaling not supported !", ValueError)
       f = math.pow(f, k)
       pop[i].fitness = f
 
 
 def BoltzmannScaling(pop):
-   """ Boltzmann scaling scheme. You can specify the **boltzTemperature** to the
+   """ Boltzmann scaling scheme. You can specify the **boltz_temperature** to the
    population parameters, this parameter will set the start temperature. You
-   can specify the **boltzFactor** and the **boltzMin** parameters, the **boltzFactor**
-   is the value that the temperature will be subtracted and the **boltzMin** is the
+   can specify the **boltz_factor** and the **boltz_min** parameters, the **boltz_factor**
+   is the value that the temperature will be subtracted and the **boltz_min** is the
    mininum temperature of the scaling scheme.
    
    .. versionadded: 0.6
       The `BoltzmannScaling` function.
 
    """
-   boltz_temperature = pop.getParam("boltzTemperature", Consts.CDefScaleBoltzStart)
-   boltz_factor      = pop.getParam("boltzFactor", Consts.CDefScaleBoltzFactor)
-   boltz_min         = pop.getParam("boltzMin", Consts.CDefScaleBoltzMinTemp)
+   boltz_temperature = pop.getParam("boltz_temperature", Consts.CDefScaleBoltzStart)
+   boltz_factor      = pop.getParam("boltz_factor", Consts.CDefScaleBoltzFactor)
+   boltz_min         = pop.getParam("boltz_min", Consts.CDefScaleBoltzMinTemp)
 
    boltz_temperature-= boltz_factor
    boltz_temperature = max(boltz_temperature, boltz_min)
@@ -102,7 +99,7 @@ def BoltzmannScaling(pop):
    avg = 0.0
 
    for i in xrange(len(pop)):
-      val = math.exp(pop[i].score / (boltz_temperature))
+      val = math.exp(pop[i].score / boltz_temperature)
       boltz_e.append(val)
       avg += val
       

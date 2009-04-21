@@ -94,7 +94,7 @@ def G1DListMutatorIntegerRange(genome, **args):
    """
    if args["pmut"] <= 0.0: return 0
    listSize = len(genome)
-   mutations = args["pmut"] * (listSize)
+   mutations = args["pmut"] * listSize
 
    if mutations < 1.0:
       mutations = 0

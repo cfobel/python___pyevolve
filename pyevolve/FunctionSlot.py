@@ -166,6 +166,7 @@ class FunctionSlot:
       """
       if len(self.funcList) <= 0:
          Util.raiseException("No function defined: " + self.slotName)
+      
       if not self.rand_apply:
          for f in self.funcList:
             yield f(obj, **args)
