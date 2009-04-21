@@ -128,6 +128,9 @@ class FunctionSlot:
       """ Return true if the function slot is empy """
       return (len(self.funcList) == 0)
 
+   #def __call__(self, *args):
+   #   """ The callable method """
+
    def set(self, func, weight=0.5):
       """ Used to clear all functions in the slot and add one
 
