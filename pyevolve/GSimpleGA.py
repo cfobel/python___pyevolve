@@ -606,15 +606,17 @@ class GSimpleGA:
       # Odd population size
       if size_iterate % 2 != 0: size_iterate -= 1
 
+      crossover_empty = self.select(popID=self.currentGeneration).crossover.isEmpty()
+      
       for i in xrange(0, size_iterate, 2):
          genomeMom = self.select(popID=self.currentGeneration)
          genomeDad = self.select(popID=self.currentGeneration)
          
-         if not genomeMom.crossover.isEmpty() and self.pCrossover >= 1.0:
+         if not crossover_empty and self.pCrossover >= 1.0:
             for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=2):
                (sister, brother) = it
          else:
-            if not genomeMom.crossover.isEmpty() and Util.randomFlipCoin(self.pCrossover):
+            if not crossover_empty and Util.randomFlipCoin(self.pCrossover):
                for it in genomeMom.crossover.applyFunctions(mom=genomeMom, dad=genomeDad, count=2):
                   (sister, brother) = it
             else:
