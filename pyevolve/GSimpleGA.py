@@ -90,14 +90,14 @@ def RawScoreCriteria(ga_engine):
    """ Terminate the evolution using the bestRawScore parameter obtained from the individual
 
    Example:
-      >>> genome.setParams(bestRawScore=0.00, roundDecimal=2)
+      >>> genome.setParams(bestrawscore=0.00, rounddecimal=2)
       (...)
       >>> ga_engine.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
    """
    ind = ga_engine.bestIndividual()
-   bestRawScore = ind.getParam("bestRawScore")
-   roundDecimal = ind.getParam("roundDecimal")
+   bestRawScore = ind.getParam("bestrawscore")
+   roundDecimal = ind.getParam("rounddecimal")
 
    if bestRawScore is None:
       Util.raiseException("you must specify the bestRawScore parameter", ValueError)
