@@ -288,8 +288,7 @@ def G1DListMutatorAllele(genome, **args):
 def G1DListMutatorAlleleGaussian(genome, **args):
    """ The mutator of G1DList, Allele Gaussian Mutator
 
-   Accepts the *rangemin* and *rangemax* genome parameters, both optional. Also
-   accepts the parameter *gauss_mu* and the *gauss_sigma* which respectively
+   Accepts the parameter *gauss_mu* and the *gauss_sigma* which respectively
    represents the mean and the std. dev. of the random distribution.
 
    .. note:: This mutator will ignore alleles like GAlleleList
