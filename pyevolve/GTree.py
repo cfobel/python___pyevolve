@@ -364,6 +364,18 @@ class GTreeGP(GenomeBase, GTreeBase):
       ret += "\tExpression: %s\n" % self.getPreOrderExpression()
       return ret
 
+   def writeDotImage(self, filename):
+      """ Writes a image representation of the individual
+
+      :param filename: the output file image
+      """
+      if not HAVE_PYDOT:
+         Util.raiseException("You must install Pydot to use this feature !")
+
+      graph = pydot.Dot()
+      self.writeDotGraph(graph)
+      graph.write_jpeg(filename, prog='dot')
+
    def writeDotGraph(self, graph, startNode=0):
       """ Write a graph to the pydot Graph instance
       
@@ -542,7 +554,6 @@ class GTreeGP(GenomeBase, GTreeBase):
       :param start: the start index of individuals
       :param end: the end index of individuals
       """
-
       if not HAVE_PYDOT:
          Util.raiseException("You must install Pydot to use this feature !")
 
