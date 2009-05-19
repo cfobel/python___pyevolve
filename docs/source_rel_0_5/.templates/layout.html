@@ -9,7 +9,7 @@ function hideBlogHeadlines() {
 }
 
 $(document).ready(function() {
-	$.get("http://pyevolve.sourceforge.net/wordpress/?feed=rss2", function(d){  
+	$.get("http://feeds2.feedburner.com/pyevolve?format=xml", function(d){  
 		$(d).find('item').each(function(){  
 			var $it = $(this);
 			var title = $it.find('title').text();
@@ -38,7 +38,7 @@ $(document).ready(function() {
 </a>
 <br>
 
-<h3><a href="javascript:hideBlogHeadlines();">Recent Blog Posts</a></h3>
+<h3><a href="http://pyevolve.sourceforge.net/wordpress">Recent Blog Posts</a></h3>
 
 <div id="rotator" style="height: 150px; overflow:hidden;">
 <div style="height: 80px"><p style="font-size: 90%" align="center">&mdash;</p></div>
