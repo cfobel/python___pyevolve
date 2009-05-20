@@ -11,7 +11,9 @@ Welcome to Pyevolve documentation !
 
 \- **Charles R. Darwin**
 
-Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*.
+Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*, but from the version 0.6, the framework is also supporting Genetic Programming, so in the near future, the framework will be  more an Evolutionary Algorithms framework than a simple GA framework.
+
+See the changes in the What's New section of this documentation.
 
 See some plot screenshots on the :ref:`graphs_screens` section.
 

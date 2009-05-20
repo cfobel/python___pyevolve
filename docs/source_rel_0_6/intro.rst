@@ -2,7 +2,7 @@
 Introduction
 ============================================================
 
-This is the documentation of the Pyevolve release |release|. Since the version 0.5, Pyevolve has changed too much, many new features was added and **many** bugs was fixed, this documentation describes those changes, the new API and new features.
+This is the documentation of the Pyevolve release |release|. Since the version 0.5, Pyevolve has changed in many aspects, many new features was added and **many** bugs was fixed, this documentation describes those changes, the new API and new features.
 
 Pyevolve was developed to be a *complete genetic algorithm framework written in pure python*, the main objectives of Pyevolve is:
 
@@ -41,9 +41,17 @@ Pyevolve requires the follow modules:
 * **Optional, for graph plotting**: `Matplotlib 0.98.4+ <http://matplotlib.sourceforge.net/>`_
      The matplotlib [#matplotlib]_ is required to plot the graphs.
 
+* **Optional, for real-time statistics visualization: VPython <http://vpython.org/index.html>`_
+     The VPython [#vpython]_ is required to see real-time statistics visualization.
+
+* **Optional, for drawing GP Trees: `Pydot 1.0.2+ <http://code.google.com/p/pydot/>`_
+     The Pydot [#pydot]_ is plot the Genetic Programming Tress.
+
 .. rubric:: Footnotes
 
 .. [#matplotlib] Matplotlib is Copyright (c) 2002-2008 John D. Hunter; All Rights Reserved
+.. [#vpython] VPython was originated by David Scherer in 2000.
+.. [#pydot] Pydot was developed by Ero Carrera.
 
 .. _download_sec:
 
@@ -199,6 +207,34 @@ Sites
 
 `A Genetic Algorithm Tutorial by Darrell Whitley Computer Science Department Colorado State University <http://samizdat.mines.edu/ga_tutorial/ga_tutorial.ps>`_
    An excellent tutorial with lots of theory
+
+
+Genetic Programming Literature
+------------------------------------
+
+In this section, you will find study material to learn more about Genetic Programming.
+
+Books
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Poli, Riccardo; Langdon, William B.; McPhee, Nicholas F.**, *A Field Guide to Genetic Programming*,
+this book is also available online (a GREAT initiative from authors) in `Book Site <http://en.wikipedia.org/wiki/Genetic_algorithm>`_
+
+**Koza, John R.**, *Genetic Programming: On the Programming of Computers by Means of Natural Selection*, MIT Press, 1992.
+
+.. seealso::
+
+   `Wikipedia: Genetic Programming <http://en.wikipedia.org/wiki/Genetic_programming>`_
+      The Wikipedia article about Genetic Programming.
+
+Sites
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+`Introduction to Genetic Algorithms <http://www.genetic-programming.org/>`_
+   A nice collection of GP related content !
+
+`A Field Guide to Genetic Programming <http://www.gp-field-guide.org.uk/p>`_
+   A book, freely downloadable under a Creative Commons license.
 
 
 Glossary / Concepts
