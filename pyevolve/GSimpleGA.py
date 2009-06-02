@@ -74,6 +74,7 @@ import logging
 from time  import time
 from types import BooleanType
 from sys   import platform as sys_platform
+from sys   import stdout as sys_stdout
 
 import code
 import pyevolve
@@ -100,7 +101,7 @@ def RawScoreCriteria(ga_engine):
    roundDecimal = ind.getParam("rounddecimal")
 
    if bestRawScore is None:
-      Util.raiseException("you must specify the bestRawScore parameter", ValueError)
+      Util.raiseException("you must specify the bestrawscore parameter", ValueError)
 
    if ga_engine.getMinimax() == Consts.minimaxType["maximize"]:
       if roundDecimal is not None:
@@ -685,6 +686,7 @@ class GSimpleGA:
       message = "Gen. %d (%.2f%%):" % (self.currentGeneration, percent)
       logging.info(message)
       print message,
+      sys_stdout.flush()
       self.internalPop.statistics()
       stat_ret = self.internalPop.printStats()
       return message + stat_ret

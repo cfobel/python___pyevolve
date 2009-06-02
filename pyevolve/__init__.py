@@ -22,7 +22,7 @@ import Consts
 import sys
 
 if sys.version_info[:2] < Consts.CDefPythonRequire:
-   raise Exception("Python 2.5+ required, the version %d.%d was found on your system !" % (sys.version_info[:2],))
+   raise Exception("Python 2.5+ required, the version %s was found on your system !" % (sys.version_info[:2],))
 
 del sys
 
