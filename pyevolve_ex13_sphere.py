@@ -1,5 +1,4 @@
-from pyevolve import G1DList, GSimpleGA, Selectors
-from pyevolve import Initializators, Mutators, Consts, DBAdapters
+from pyevolve import *
 import math
 
 # This is the Sphere Function
@@ -13,12 +12,12 @@ def sphere(xlist):
 
 if __name__ == "__main__":
    
-   import psyco
-   psyco.full()
+   #import psyco
+   #psyco.full()
 
    # Genome instance
    genome = G1DList.G1DList(50)
-   genome.setParams(rangemin=-5.12, rangemax=5.13, bestRawScore=0.00, roundDecimal=2)
+   genome.setParams(rangemin=-5.12, rangemax=5.13, bestrawscore=0.00, rounddecimal=2)
    genome.initializator.set(Initializators.G1DListInitializatorReal)
    genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
@@ -43,5 +42,5 @@ if __name__ == "__main__":
    # Best individual
    best = ga.bestIndividual()
    print "\nBest individual score: %.2f" % (best.score,)
-   #print best
+   print best
 
