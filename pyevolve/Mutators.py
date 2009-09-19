@@ -86,6 +86,32 @@ def G1DListMutatorSwap(genome, **args):
 
    return int(mutations)
 
+def G1DListMutatorSIM(genome, **args):
+   """ The mutator of G1DList, Simple Inversion Mutation
+   
+   .. note:: this mutator is :term:`Data Type Independent`
+
+   """
+   mutations = 0
+   if args["pmut"] <= 0.0: return 0
+
+   cuts = [rand_randint(0, len(genome)), rand_randint(0, len(genome))]
+
+   if cuts[0] > cuts[1]:
+      Util.listSwapElement(cuts, 0, 1)
+
+   if (cuts[1]-cuts[0]) <= 0:
+      cuts[1] = rand_randint(cuts[0], len(genome))
+
+   if Util.randomFlipCoin(args["pmut"]):
+      part = genome[cuts[0]:cuts[1]]
+      if len(part) == 0: return 0
+      part.reverse()
+      genome[cuts[0]:cuts[1]] = part
+      mutations += 1
+      
+   return mutations
+
 def G1DListMutatorIntegerRange(genome, **args):
    """ Simple integer range mutator for G1DList
 

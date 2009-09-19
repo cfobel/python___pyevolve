@@ -405,6 +405,20 @@ class GPopulation:
       pop.internalParams = self.internalParams
       pop.multiProcessing = self.multiProcessing
    
+   def getParam(self, key, nvl=None):
+      """ Gets an internal parameter
+
+      Example:
+         >>> population.getParam("tournamentPool")
+         5
+
+      :param key: the key of param
+      :param nvl: if the key doesn't exist, the nvl will be returned
+
+      """
+      return self.internalParams.get(key, nvl)
+
+
    def clear(self):
       """ Remove all individuals from population """
       del self.internalPop[:]

@@ -212,6 +212,45 @@ def G1DListCrossoverOX(genome, **args):
    return (sister, brother)
 
 
+def G1DListCrossoverCutCrossfill(genome, **args):
+   """ The crossover of G1DList, Cut and crossfill, for permutations
+   """
+   sister = None
+   brother = None
+   gMom = args["mom"]
+   gDad = args["dad"]
+   
+   if len(gMom) == 1:
+      Util.raiseException("The 1D List have one element, can't use the Single Point Crossover method !", TypeError)
+      
+   cut = rand_randint(1, len(gMom)-1)
+
+   if args["count"] >= 1:
+      sister = gMom.clone()
+      mother_part = gMom[0:cut]
+      sister.resetStats()
+      i = (len(sister) - cut)
+      x = 0
+      for v in gDad:
+         if v in mother_part: continue
+         if x >= i: break
+         sister[cut+x] = v
+         x += 1
+      
+   if args["count"] == 2:
+      brother = gDad.clone()
+      father_part = gDad[0:cut]
+      brother.resetStats()
+      i = (len(brother) - cut) 
+      x = 0
+      for v in gMom:
+         if v in father_part: continue
+         if x >= i: break
+         brother[cut+x] = v
+         x += 1
+      
+   return (sister, brother)
+
 ####################
 ##     2D List    ##
 ####################

@@ -34,7 +34,9 @@ def key_fitness_score(individual):
 
 
 def GRankSelector(population, **args):
-   """ The Rank Selector """
+   """ The Rank Selector - This selector will pick the best individual of
+   the population every time.
+   """
    count = 0
 
    if args["popID"] != GRankSelector.cachePopID:
@@ -58,6 +60,36 @@ def GRankSelector(population, **args):
 
 GRankSelector.cachePopID = None
 GRankSelector.cacheCount = None
+
+def GRankSelectorAlternative(population, **args):
+   """ The Rank Selector - This selector will pick the best individual of
+   the population every time.
+   """
+   count = 0
+
+   if args["popID"] != GRankSelector.cachePopID:
+      if population.sortType == Consts.sortType["scaled"]:
+         best_fitness = population.bestFitness().fitness
+         for index in xrange(1, len(population.internalPop)):
+            if population[index].fitness == best_fitness:
+               count += 1
+      else:
+         best_raw = population.bestRaw().score
+         for index in xrange(1, len(population.internalPop)):
+            if population[index].score == best_raw:
+               count += 1
+
+      GRankSelector.cachePopID = args["popID"]
+      GRankSelector.cacheCount = count
+
+   else: count = GRankSelector.cacheCount
+
+   return population[random.randint(0, count)]
+
+GRankSelector.cachePopID = None
+GRankSelector.cacheCount = None
+
+
 
 def GUniformSelector(population, **args):
    """ The Uniform Selector """
@@ -89,7 +121,7 @@ def GTournamentSelector(population, **args):
 
    return choosen
 
-def GTournamentAlternative(population, **args):
+def GTournamentSelectorAlternative(population, **args):
    """ The alternative Tournament Selector
    
    This Tournament Selector don't uses the Roulette Wheel
