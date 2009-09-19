@@ -234,8 +234,8 @@ class GPopulation:
       self.stats["rawMax"] = max(self, key=key_raw_score).score
       self.stats["rawMin"] = min(self, key=key_raw_score).score
       self.stats["rawAve"] = raw_sum / float(len_pop)
-      self.stats["rawTot"] = raw_sum
-      self.stats["fitTot"] = fit_sum
+      #self.stats["rawTot"] = raw_sum
+      #self.stats["fitTot"] = fit_sum
       
       tmpvar = 0.0
       for ind in xrange(len_pop):

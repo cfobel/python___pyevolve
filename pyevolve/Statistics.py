@@ -41,9 +41,7 @@ class Statistics:
                               "rawVar"  : 0.0,
                               "fitMax"  : 0.0,
                               "fitMin"  : 0.0,
-                              "fitAve"  : 0.0,
-                              "fitTot"  : 0.0 ,
-                              "rawTot"  : 0.0 }
+                              "fitAve"  : 0.0 }
 
       self.descriptions = {   "rawMax" : "Maximum raw score",
                               "rawMin" : "Minimum raw score",
@@ -52,10 +50,7 @@ class Statistics:
                               "rawVar" : "Raw scores variance",
                               "fitMax" : "Maximum fitness",
                               "fitMin" : "Minimum fitness",
-                              "fitAve" : "Fitness average",
-                              "fitTot" : "Total fitness",
-                              "rawTot" : "Total raw" }
-
+                              "fitAve" : "Fitness average" }
    def __getitem__(self, key):
       """ Return the specific statistic by key """
       return self.internalDict[key]

@@ -177,7 +177,7 @@ class DBURLPost(DBBaseAdapter):
    """ DBURLPost Class - Adapter to call an URL with statistics
 
    Example:
-      >>> dbadapter = DBSQLite(url="http://localhost/post.py", identify="test")
+      >>> dbadapter = DBURLPost(url="http://localhost/post.py", identify="test")
 
 
    The parameters that will be sent is all the statistics described in the :class:`Statistics.Statistics`
