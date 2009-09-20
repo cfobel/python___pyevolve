@@ -3,23 +3,6 @@
 from optparse import OptionParser
 from optparse import OptionGroup
 
-STAT = {
-   "identify"   : 0, "generation" : 1, "rawMin"     : 2,
-   "fitMin"     : 3, "rawDev"     : 4, "fitMax"     : 5,
-   "rawMax"     : 6, "fitAve"     : 7, "rawVar"     : 8,
-   "rawAve"     : 9
-}
-
-POP = {
-   "identify"   : 0, "generation"  : 1, "individual" : 2,
-   "fitness"    : 3, "raw"         : 4
-}
-
-def parse(line_record, field):
-   return line_record[STAT[field]]
-
-def parsePop(line_record, field):
-   return line_record[POP[field]]
 
 def graph_pop_heatmap_raw(all, minimize, colormap="jet", filesave=None):
    pylab.imshow(all, aspect="equal", interpolation="gaussian", cmap=matplotlib.cm.__dict__[colormap])
@@ -57,9 +40,9 @@ def graph_diff_raw(all, minimize, filesave=None):
    diff_fit_y = []
 
    for it in all:
-      x.append(parse(it, "generation"))
-      diff_raw_y.append(parse(it, "rawMax") - parse(it, "rawMin"))
-      diff_fit_y.append(parse(it, "fitMax") - parse(it, "fitMin"))
+      x.append(it["generation"])
+      diff_raw_y.append(it["rawMax"] - it["rawMin"])
+      diff_fit_y.append(it["fitMax"] - it["fitMin"])
 
    pylab.figure()
    pylab.subplot(211)
@@ -118,11 +101,11 @@ def graph_maxmin_raw(all, minimize, filesave=None):
    avg_y = []
 
    for it in all:
-      x.append(parse(it, "generation"))
-      max_y.append(parse(it, "rawMax"))
-      min_y.append(parse(it, "rawMin"))
-      std_dev_y.append(parse(it, "rawDev"))
-      avg_y.append(parse(it, "rawAve"))
+      x.append(it["generation"])
+      max_y.append(it["rawMax"])
+      min_y.append(it["rawMin"])
+      std_dev_y.append(it["rawDev"])
+      avg_y.append(it["rawAve"])
 
    pylab.figure()
 
@@ -188,10 +171,10 @@ def graph_maxmin_fitness(all, minimize, filesave=None):
    avg_y = []
 
    for it in all:
-      x.append(parse(it, "generation"))
-      max_y.append(parse(it, "fitMax"))
-      min_y.append(parse(it, "fitMin"))
-      avg_y.append(parse(it, "fitAve"))
+      x.append(it["generation"])
+      max_y.append(it["fitMax"])
+      min_y.append(it["fitMin"])
+      avg_y.append(it["fitAve"])
 
    pylab.figure()
    pylab.plot(x, max_y, "g", label="Max fitness")
@@ -234,10 +217,10 @@ def graph_errorbars_raw(all, minimize, filesave=None):
    yerr_min = []
 
    for it in all:
-      x.append(parse(it, "generation"))
-      y.append(parse(it, "rawAve"))
-      ymax = parse(it, "rawMax") - parse(it, "rawAve")
-      ymin = parse(it, "rawAve") - parse(it, "rawMin")
+      x.append(it["generation"])
+      y.append(it["rawAve"])
+      ymax = it["rawMax"] - it["rawAve"]
+      ymin = it["rawAve"] - it["rawMin"]
       
       yerr_max.append(ymax)
       yerr_min.append(ymin)
@@ -262,10 +245,10 @@ def graph_errorbars_fitness(all, minimize, filesave=None):
    yerr_min = []
 
    for it in all:
-      x.append(parse(it, "generation"))
-      y.append(parse(it, "fitAve"))
-      ymax = parse(it, "fitMax") - parse(it, "fitAve")
-      ymin = parse(it, "fitAve") - parse(it, "fitMin")
+      x.append(it["generation"])
+      y.append(it["fitAve"])
+      ymax = it["fitMax"] - it["fitAve"]
+      ymin = it["fitAve"] - it["fitMin"]
       
       yerr_max.append(ymax)
       yerr_min.append(ymin)
@@ -296,9 +279,9 @@ def graph_compare_raw(all, minimize, id_list, filesave=None):
       min_y = []
 
       for it in it_out:
-         x.append(parse(it, "generation"))
-         max_y.append(parse(it, "rawMax"))
-         min_y.append(parse(it, "rawMin"))
+         x.append(it["generation"])
+         max_y.append(it["rawMax"])
+         min_y.append(it["rawMin"])
 
 
       if minimize:
@@ -336,9 +319,9 @@ def graph_compare_fitness(all, minimize, id_list, filesave=None):
       min_y = []
 
       for it in it_out:
-         x.append(parse(it, "generation"))
-         max_y.append(parse(it, "fitMax"))
-         min_y.append(parse(it, "fitMin"))
+         x.append(it["generation"])
+         max_y.append(it["fitMax"])
+         min_y.append(it["fitMin"])
 
       if minimize:
          pylab.plot(x, max_y, colors_list[index], linewidth=0.05)
@@ -459,6 +442,7 @@ if __name__ == "__main__":
 
    if options.pop_heatmap_raw or options.pop_heatmap_fitness:
       conn = sqlite3.connect(options.dbfile)
+      conn.row_factory = sqlite3.Row
       c = conn.cursor()
 
       if options.genrange:
@@ -479,9 +463,9 @@ if __name__ == "__main__":
          ret_fetch = ret.fetchall()
          for it in ret_fetch:
             if options.pop_heatmap_raw:
-               pop_tmp.append(parsePop(it, "raw"))
+               pop_tmp.append(it["raw"])
             else:
-               pop_tmp.append(parsePop(it, "fitness"))
+               pop_tmp.append(it["fitness"])
          all.append(pop_tmp)
 
       ret.close()
@@ -501,6 +485,7 @@ if __name__ == "__main__":
          parser.error("You can't use this graph type with only one identify !")
 
       conn = sqlite3.connect(options.dbfile)
+      conn.row_factory = sqlite3.Row
       c = conn.cursor()
 
       if options.genrange:
@@ -526,6 +511,7 @@ if __name__ == "__main__":
          parser.error("You can't use many ids with this graph type !")
 
       conn = sqlite3.connect(options.dbfile)
+      conn.row_factory = sqlite3.Row
       c = conn.cursor()
       for item in identify_list:
          if options.genrange:
