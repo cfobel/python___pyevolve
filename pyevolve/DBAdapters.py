@@ -511,22 +511,28 @@ class DBVPythonGraph(DBBaseAdapter):
       >>> ga_engine.setDBAdapter(adapter)
    
    :param identify: the identify of the run
+   :param genmax: use the generations as max value for x-axis, default False
    :param frequency: the generational dump frequency
 
    .. versionadded:: 0.6
       The *DBVPythonGraph* class.
    """
 
-   def __init__(self, identify=None, frequency = 20):
+   def __init__(self, identify=None, frequency = 20, genmax=False):
       DBBaseAdapter.__init__(self, frequency, identify)
+      self.genmax = genmax
       self.vtkGraph = None
 
    def makeDisplay(self, title_sec, x, y, ga_engine):
       title = "Pyevolve v.%s - %s - id [%s]" % (__version__, title_sec, self.identify)
-      disp = self.vtkGraph.gdisplay(title=title, xtitle='Generation', ytitle=title_sec,
+      if self.genmax:
+         disp = self.vtkGraph.gdisplay(title=title, xtitle='Generation', ytitle=title_sec,
                                     xmax=ga_engine.getGenerations(), xmin=0., width=500,
                                     height=250, x=x, y=y)
-      return disp
+      else:
+         disp = self.vtkGraph.gdisplay(title=title, xtitle='Generation', ytitle=title_sec,
+                                    xmin=0., width=500, height=250, x=x, y=y)
+         return disp
 
    def open(self, ga_engine):
       """ Imports the VPython module and creates the four graph windows
