@@ -5,9 +5,9 @@ from optparse import OptionGroup
 
 STAT = {
    "identify"   : 0, "generation" : 1, "rawMin"     : 2,
-   "fitMin"     : 3, "fitTot"     : 4, "rawDev"     : 5,
-   "fitMax"     : 6, "rawMax"     : 7, "fitAve"     : 8,
-   "rawVar"     : 9, "rawAve"     : 10, "rawTot"    : 11
+   "fitMin"     : 3, "rawDev"     : 4, "fitMax"     : 5,
+   "rawMax"     : 6, "fitAve"     : 7, "rawVar"     : 8,
+   "rawAve"     : 9
 }
 
 POP = {
