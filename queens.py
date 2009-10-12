@@ -1,7 +1,7 @@
 from pyevolve import *
 from random import shuffle
 
-BOARD_SIZE = 64
+BOARD_SIZE = 24
 
 def queens_eval(genome):
    collisions = 0
@@ -36,7 +36,7 @@ def run_main():
    ga.setMutationRate(0.02)
    ga.setCrossoverRate(1.0)
 
-   #sqlite_adapter = DBAdapters.DBSQLite(identify="queens")
+   #sqlite_adapter = DBAdapters.DBSQLite(identify="queens2")
    #ga.setDBAdapter(sqlite_adapter)
 
    vpython_adapter = DBAdapters.DBVPythonGraph(identify="queens", frequency=1)
