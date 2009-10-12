@@ -104,12 +104,47 @@ What's new on the release |release|:
    examples with symbolic regression. The GTreeGP choromsome representation
    is used for the GP main tree.
 
-**Mutators - G1DList Simple Inversion Mutation**
+**Mutators**
 
-   Added the new Simple Inversion Mutation :func:`Mutators.G1DListMutatorSIM`.
-   This mutator is for the G1DList genome.
+   Added the Simple Inversion Mutation (:func:`Mutators.G1DListMutatorSIM`) for G1DList genome.
 
-**Crossovers - G1DList Cut and crossfill**
+   Added the Integer Range Mutation (:func:`Mutators.G2DListMutatorIntegerRange`) for the G2DList genome.
 
-   Added the new Cut and Crossfill crossover (used for permutations) :func:`Crossovers.G1DListCrossoverCutCrossfill`.
+   Added the Binary String Swap Mutator (:func:`Mutators.G2DListMutatorIntegerRange`) for the G2DBinaryString genome.
+
+   Added the Binary String Flip Mutator (:func:`Mutators.G2DBinaryStringMutatorFlip`) for the G2DBinaryString genome.
+
+   Added the GTree Swap Mutator (:func:`Mutators.GTreeMutatorSwap`) for the GTree genome.
+
+   Added the GTree Integer Range Mutator (:func:`Mutators.GTreeMutatorIntegerRange`) for the GTree genome.
+
+   Added the GTree Integer Gaussian Mutator (:func:`Mutators.GTreeMutatorIntegerGaussian`) for the GTree genome.
+
+   Added the GTree Real Range Mutator (:func:`Mutators.GTreeMutatorRealRange`) for the GTree genome.
+
+   Added the GTree Real Gaussian Mutator (:func:`Mutators.GTreeMutatorRealGaussian`) for the GTree genome.
+
+   Added the GTreeGP Operation Mutator (:func:`Mutators.GTreeGPMutatorOperation`) for the GTreeGP genome.
+
+   Added the GTreeGP Subtree Mutator (:func:`Mutators.GTreeGPMutatorSubtree`) for the GTreeGP genome.
+
+**Crossovers**
+
+   Added the Cut and Crossfill Crossover (:func:`Crossovers.G1DListCrossoverCutCrossfill`), used for permutations, for
+   the G1DList genome.
+
+   Added the Uniform Crossover (:func:`Crossovers.G2DBinaryStringXUniform`) for the G2DBinaryString genome.
+
+   Added the Single Vert. Point Crossover (:func:`Crossovers.G2DBinaryStringXSingleVPoint`) for the G2DBinaryString genome.
+
+   Added the Single Horiz. Point Crossover (:func:`Crossovers.G2DBinaryStringXSingleHPoint`) for the G2DBinaryString genome.
+
+   Added the Single Point Crossover (:func:`Crossovers.GTreeCrossoverSinglePoint`) for the GTree genome.
+
+   Added the Single Point Strict Crossover (:func:`Crossovers.GTreeCrossoverSinglePointStrict`) for the GTree genome.
+
+   Added the Single Point Crossover (:func:`Crossovers.GTreeGPCrossoverSinglePoint`) for the GTreeGP genome.
+   
+
+
    
