@@ -153,7 +153,7 @@ What's new on the release |release|:
 
    Added the Allele Initializator (:func:`Initializators.GTreeInitializatorAllele`) for the GTree genome.
 
-   Added the GTreeGP (Genetic Programming genome) Initializator (:func:`Initializators.GTreeGPInitializator`). It accepts the methods: grow, full and ramped.
+   Added the GTreeGP (Genetic Programming genome) Initializator (:func:`Initializators.GTreeGPInitializator`). It accept the methods: grow, full and ramped.
 
 
 
