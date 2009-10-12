@@ -310,55 +310,6 @@ def G1DListMutatorAllele(genome, **args):
 
    return int(mutations)
 
-
-def G1DListMutatorAlleleGaussian(genome, **args):
-   """ The mutator of G1DList, Allele Gaussian Mutator
-
-   Accepts the parameter *gauss_mu* and the *gauss_sigma* which respectively
-   represents the mean and the std. dev. of the random distribution.
-
-   .. note:: This mutator will ignore alleles like GAlleleList
-   """
-   if args["pmut"] <= 0.0: return 0
-   listSize = len(genome) - 1
-   mutations = args["pmut"] * (listSize+1)
-
-   mu    = genome.getParam("gauss_mu", Consts.CDefG1DListMutRealMU)
-   sigma = genome.getParam("gauss_sigma", Consts.CDefG1DListMutRealSIGMA)
-
-   allele = genome.getParam("allele")
-   if allele is None:
-      Util.raiseException("to use the G1DListMutatorAlleleGaussian, you must specify the 'allele' parameter", TypeError)
-
-   if mutations < 1.0:
-      mutations = 0
-      for it in xrange(listSize+1):
-         if Util.randomFlipCoin(args["pmut"]):
-            if not hasattr(allele[it], "getReal"): return 0
-            if not allele[it].getReal():
-               Util.raiseException("To use the G1DListMutatorAlleleGaussian, you must use the GAlleleRange with Real numbers !", TypeError)
-
-            final_value = genome[it] + rand_gauss(mu, sigma)
-            final_value = min(final_value, allele[it].getMaximum())
-            final_value = max(final_value, allele[it].getMinimum())
-            genome[it] = final_value
-            assert genome[it] is not None
-            mutations+=1
-   else:
-      for it in xrange(int(round(mutations))):
-         which_gene = rand_randint(0, listSize)
-         if not hasattr(allele[which_gene], "getReal"): return 0
-         if not allele[which_gene].getReal():
-            Util.raiseException("To use the G1DListMutatorAlleleGaussian, you must use the GAlleleRange with Real numbers !", TypeError)
-
-         final_value = genome[which_gene] + rand_gauss(mu, sigma)
-         final_value = min(final_value, allele[which_gene].getMaximum())
-         final_value = max(final_value, allele[which_gene].getMinimum())
-         genome[which_gene] = final_value
-
-   return int(mutations)
-
-
 ####################
 ##     2D List    ##
 ####################
