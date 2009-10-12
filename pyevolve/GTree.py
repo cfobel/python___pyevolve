@@ -1,6 +1,6 @@
 """
 
-:mod:`GTree` -- the tree chromosome
+:mod:`GTree` and GTreeGP -- the tree chromosomes
 =============================================================
 
 This is the rooted tree representation, this chromosome representation

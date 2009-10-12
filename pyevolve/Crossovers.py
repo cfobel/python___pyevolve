@@ -577,13 +577,18 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
 
    return (sister, brother)
 
-#############################################################################3
-#############################################################################3
-#############################################################################3
-#############################################################################3
-#############################################################################3
+#############################################################################
+#################  GTreeGP Crossovers  ######################################
+#############################################################################
 
 def GTreeGPCrossoverSinglePoint(genome, **args):
+   """ The crossover of the GTreeGP, Single Point for Genetic Programming
+
+   ..note:: This crossover method creates offspring with restriction of the
+            *max_depth* parameter.
+   
+   Accepts the *max_attempt* parameter, *max_depth* (required).   
+   """
    sister = None
    brother = None
 
