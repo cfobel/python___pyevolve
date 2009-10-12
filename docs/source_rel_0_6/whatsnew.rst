@@ -145,6 +145,18 @@ What's new on the release |release|:
 
    Added the Single Point Crossover (:func:`Crossovers.GTreeGPCrossoverSinglePoint`) for the GTreeGP genome.
    
+**Initializators**
 
+   Added the Integer Initializator (:func:`Initializators.G2DBinaryStringInitializator`) for the G2DBinaryString genome.
+
+   Added the Integer Initializator (:func:`Initializators.GTreeInitializatorInteger`) for the GTree genome.
+
+   Added the Allele Initializator (:func:`Initializators.GTreeInitializatorAllele`) for the GTree genome.
+
+   Added the GTreeGP (Genetic Programming genome) Initializator (:func:`Initializators.GTreeGPInitializator`). It accepts the methods: grow, full and ramped.
+
+
+
+   
 
    
