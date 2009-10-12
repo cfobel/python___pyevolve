@@ -103,3 +103,13 @@ What's new on the release |release|:
    Added new support for the Genetic Programming, you can check the
    examples with symbolic regression. The GTreeGP choromsome representation
    is used for the GP main tree.
+
+**Mutators - G1DList Simple Inversion Mutation**
+
+   Added the new Simple Inversion Mutation :func:`Mutators.G1DListMutatorSIM`.
+   This mutator is for the G1DList genome.
+
+**Crossovers - G1DList Cut and crossfill**
+
+   Added the new Cut and Crossfill crossover (used for permutations) :func:`Crossovers.G1DListCrossoverCutCrossfill`.
+   
