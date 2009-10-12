@@ -159,7 +159,7 @@ def GTreeInitializatorInteger(genome, **args):
       The number of maximum siblings of an node
 
    *method*
-      The method, accepts "grow" or "full"
+      The method, accepts "grow", "full" or "ramped".
 
    .. versionadded:: 0.6
       The *GTreeInitializatorInteger* function.
@@ -240,7 +240,7 @@ def GTreeGPInitializator(genome, **args):
       The max depth of the tree
 
    *method*
-      The method, accepts "grow" or "full"
+      The method, accepts "grow", "full" or ramped
 
    .. versionadded:: 0.6
       The *GTreeGPInitializator* function.
