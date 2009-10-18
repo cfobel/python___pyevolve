@@ -376,6 +376,19 @@ class GTreeGP(GenomeBase, GTreeBase):
       self.writeDotGraph(graph)
       graph.write_jpeg(filename, prog='dot')
 
+   def writeDotRaw(self, filename):
+      """ Writes the raw dot file (text-file used by dot/neato) with the
+      representation of the individual
+
+      :param filename: the output file, ex: individual.dot
+      """
+      if not HAVE_PYDOT:
+         Util.raiseException("You must install Pydot to use this feature !")
+
+      graph = pydot.Dot(graph_type="digraph")
+      self.writeDotGraph(graph)
+      graph.write(filename, prog='dot', format="raw")
+
    def writeDotGraph(self, graph, startNode=0):
       """ Write a graph to the pydot Graph instance
       
@@ -386,7 +399,6 @@ class GTreeGP(GenomeBase, GTreeBase):
          print "You must install Pydot to use this feature !"
          return
 
-      graph.set_type("graph")
       count = startNode
       node_stack = []
       nodes_dict = {}
@@ -437,6 +449,8 @@ class GTreeGP(GenomeBase, GTreeBase):
          node_stack.extend(rev_childs)
 
       return count
+
+
 
    def getSExpression(self, start_node=None):
       """ Returns a tree-formated string (s-expression) of the tree.
@@ -540,11 +554,11 @@ class GTreeGP(GenomeBase, GTreeBase):
       return 0
 
    @staticmethod
-   def writePopulation(ga_engine, filename, start=0, end=0):
+   def writePopulationDot(ga_engine, filename, format="jpeg", start=0, end=0):
       """ Writes to a graphical file using pydot, the population of trees
 
       Example:
-         >>> GTreeGP.writeGTreeGPPopulation(ga_engine, "pop.jpg", 0, 10)
+         >>> GTreeGP.writePopulationDot(ga_engine, "pop.jpg", "jpeg", 0, 10)
 
       This example will draw the first ten individuals of the population into
       the file called "pop.jpg".
@@ -558,7 +572,7 @@ class GTreeGP(GenomeBase, GTreeBase):
          Util.raiseException("You must install Pydot to use this feature !")
 
       pop = ga_engine.getPopulation()
-      graph = pydot.Dot()
+      graph = pydot.Dot(graph_type="digraph")
 
       if not isinstance(pop[0], GTreeGP):
          Util.raiseException("The population must have individuals of the GTreeGP chromosome !")
@@ -567,9 +581,46 @@ class GTreeGP(GenomeBase, GTreeBase):
       end_index = len(pop) if end==0 else end
       for i in xrange(start, end_index):
          ind = pop[i]
-         n = ind.writeDotGraph(graph, n)
+         subg = pydot.Cluster("cluster_%d" % i, label="\"Ind. #%d - Score Raw/Fit.: %.4f/%.4f\"" % (i, ind.getRawScore(), ind.getFitnessScore()))
+         n = ind.writeDotGraph(subg, n)
+         graph.add_subgraph(subg)
 
-      graph.write_jpeg(filename, prog='dot')
+      graph.write(filename, prog='dot', format=format)
+
+   @staticmethod
+   def writePopulationDotRaw(ga_engine, filename, start=0, end=0):
+      """ Writes to a raw dot file using pydot, the population of trees
+
+      Example:
+         >>> GTreeGP.writePopulationDotRaw(ga_engine, "pop.dot", 0, 10)
+
+      This example will draw the first ten individuals of the population into
+      the file called "pop.dot".
+
+      :param ga_engine: the GA Engine
+      :param filename: the filename, ie. population.dot
+      :param start: the start index of individuals
+      :param end: the end index of individuals
+      """
+      if not HAVE_PYDOT:
+         Util.raiseException("You must install Pydot to use this feature !")
+
+      pop = ga_engine.getPopulation()
+      graph = pydot.Dot(graph_type="digraph")
+
+      if not isinstance(pop[0], GTreeGP):
+         Util.raiseException("The population must have individuals of the GTreeGP chromosome !")
+
+      n = 0
+      end_index = len(pop) if end==0 else end
+      for i in xrange(start, end_index):
+         ind = pop[i]
+         subg = pydot.Cluster("cluster_%d" % i, label="\"Ind. #%d - Score Raw/Fit.: %.4f/%.4f\"" % (i, ind.getRawScore(), ind.getFitnessScore()))
+         n = ind.writeDotGraph(subg, n)
+         graph.add_subgraph(subg)
+
+      graph.write(filename, prog='dot', format="raw")
+
 
 #################################
 #    Tree GP Utility Functions  # 
