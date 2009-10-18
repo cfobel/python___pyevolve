@@ -13,12 +13,13 @@ def eval_func(chromosome):
    rmse_accum.reset()
    code_comp = chromosome.getCompiledCode()
    
-   for a in xrange(0, 80):
-      for b in xrange(0, 80):
+   for a in xrange(0, 10):
+      for b in xrange(0, 10):
          evaluated     = eval(code_comp)
          target        = math.sqrt((a*a)+(b*b))
          rmse_accum   += (target, evaluated)
    return rmse_accum.getRMSE()
+
 
 def main_run():
    genome = GTree.GTreeGP()
@@ -31,14 +32,15 @@ def main_run():
                 gp_function_prefix = "gp")
 
    ga.setMinimax(Consts.minimaxType["minimize"])
-   ga.setGenerations(20)
+   ga.setGenerations(40)
    ga.setCrossoverRate(1.0)
    ga.setMutationRate(0.08)
    ga.setPopulationSize(800)
-   ga.setMultiProcessing(False)
    
-   ga(freq_stats=5)
+   ga(freq_stats=10)
+   
    best = ga.bestIndividual()
+
 
 if __name__ == "__main__":
    main_run()
