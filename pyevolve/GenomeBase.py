@@ -330,6 +330,9 @@ class GTreeNodeBase:
    def getChilds(self):
       """ Return the childs of the node
 
+      .. warning :: use .getChilds()[:] if you'll change the list itself, like using childs.reverse(),
+                    otherwise the original genome child order will be changed.
+
       :rtype: a list of nodes
       """
       return self.childs
