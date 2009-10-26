@@ -36,21 +36,21 @@ Pyevolve can be executed under `IronPython 2.x <http://www.codeplex.com/IronPyth
 
 Pyevolve requires the follow modules:
 
-* `Python 2.5+ <http://www.python.org>`_
+* `Python 2.5+, v.2.6 is recommended <http://www.python.org>`_
 
 * **Optional, for graph plotting**: `Matplotlib 0.98.4+ <http://matplotlib.sourceforge.net/>`_
      The matplotlib [#matplotlib]_ is required to plot the graphs.
 
-* **Optional, for real-time statistics visualization: VPython <http://vpython.org/index.html>`_
-     The VPython [#vpython]_ is required to see real-time statistics visualization.
+* **Optional, for real-time statistics visualization**: `VPython <http://vpython.org/index.html>`_
+     The VPython [#vvpython]_ is required to see real-time statistics visualization.
 
-* **Optional, for drawing GP Trees: `Pydot 1.0.2+ <http://code.google.com/p/pydot/>`_
+* **Optional, for drawing GP Trees**: `Pydot 1.0.2+ <http://code.google.com/p/pydot/>`_
      The Pydot [#pydot]_ is plot the Genetic Programming Tress.
 
 .. rubric:: Footnotes
 
 .. [#matplotlib] Matplotlib is Copyright (c) 2002-2008 John D. Hunter; All Rights Reserved
-.. [#vpython] VPython was originated by David Scherer in 2000.
+.. [#vvpython] VPython was originated by David Scherer in 2000.
 .. [#pydot] Pydot was developed by Ero Carrera.
 
 .. _download_sec:
@@ -230,7 +230,7 @@ this book is also available online (a GREAT initiative from authors) in `Book Si
 Sites
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Introduction to Genetic Algorithms <http://www.genetic-programming.org/>`_
+`Introduction to Genetic Programming <http://www.genetic-programming.org/>`_
    A nice collection of GP related content !
 
 `A Field Guide to Genetic Programming <http://www.gp-field-guide.org.uk/p>`_

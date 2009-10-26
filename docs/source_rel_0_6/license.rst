@@ -57,7 +57,7 @@ Agreement.
 Credits
 ==============================================
 
-Pyevolve was written by Christian S. perone and is currently
+Pyevolve was written by Christian S. Perone and is currently
 maintained by himself.
 
 

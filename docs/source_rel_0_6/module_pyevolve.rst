@@ -1,7 +1,4 @@
 .. automodule:: pyevolve
-   :members:
-   :inherited-members:
-
 
 General Modules
 ----------------------------------------------------------------------
