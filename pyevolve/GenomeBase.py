@@ -10,6 +10,7 @@ take a inside look into this module.
 """
 import copy
 from random import randint as rand_randint, choice as rand_choice
+import inspect
 
 from FunctionSlot import FunctionSlot
 import Util

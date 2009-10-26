@@ -236,7 +236,7 @@ def buildGTreeFull(depth, value_callback, max_siblings, max_depth):
    else:                range_val = random.randint(1, abs(max_siblings))
  
    for i in xrange(range_val):
-      child = buildTreeFull(depth+1, value_callback, max_siblings, max_depth)
+      child = buildGTreeFull(depth+1, value_callback, max_siblings, max_depth)
       child.setParent(n)
       n.addChild(child)
    return n

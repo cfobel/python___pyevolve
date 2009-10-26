@@ -485,7 +485,7 @@ class DBXMLRPC(DBBaseAdapter):
          self.xmlrpclibmod = Util.importSpecial("xmlrpclib")
 
       logging.debug("Opening the XML RPC Server Proxy on %s", self.url)
-      self.proxy = xmlrpclib.ServerProxy(self.url, allow_none=True)
+      self.proxy = self.xmlrpclibmod.ServerProxy(self.url, allow_none=True)
 
    def insert(self, ga_engine):
       """ Calls the XML RPC procedure
