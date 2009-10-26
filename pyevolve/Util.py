@@ -9,37 +9,9 @@ use, like list item swap, random utilities and etc.
 """
 
 from random import random as rand_random, choice as rand_choice
-from sys import platform as sys_platform
 from math import sqrt as math_sqrt
 import logging
 import Consts
-
-if sys_platform[:5] == "linux":
-   import sys, termios
-   from select import select
-
-   fd = sys.stdin.fileno()
-   new_term = termios.tcgetattr(fd)
-   old_term = termios.tcgetattr(fd)
-   new_term[3] = (new_term[3] & ~termios.ICANON & ~termios.ECHO)
-
-def set_normal_term():
-   """ This is a linux platform function to set the term back to normal """
-   termios.tcsetattr(fd, termios.TCSAFLUSH, old_term)
-
-def set_curses_term():
-   """ This is a linux platform function to set the term to curses """
-   termios.tcsetattr(fd, termios.TCSAFLUSH, new_term)
-
-def getch():
-   """ Linux platform function to get a pressed key """
-   return sys.stdin.read(1)
-
-def kbhit():
-   """ The linux implementation of the kbhit() function """
-   dr = select([sys.stdin], [], [], 0)[0]
-   #dr,dw,de = select([sys.stdin], [], [], 0)
-   return dr != []
 
 def randomFlipCoin(p):
    """ Returns True with the *p* probability. If the *p* is 1.0,

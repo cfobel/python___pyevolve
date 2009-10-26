@@ -82,10 +82,6 @@ import pyevolve
 # Platform dependant code for the Interactive Mode
 if sys_platform[:3] == "win":
    import msvcrt
-elif sys_platform[:5] == "linux":
-   import atexit
-   atexit.register(Util.set_normal_term)
-   Util.set_curses_term()
 
 def RawScoreCriteria(ga_engine):
    """ Terminate the evolution using the bestRawScore parameter obtained from the individual
@@ -785,20 +781,6 @@ class GSimpleGA:
                         from pyevolve import Interaction
                         print " done !"
                         interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-Z to quit interactive mode." % (pyevolve.__version__,)
-                        session_locals = { "ga_engine"  : self,
-                                           "population" : self.getPopulation(),
-                                           "pyevolve"   : pyevolve,
-                                           "it"         : Interaction}
-                        print
-                        code.interact(interact_banner, local=session_locals)
-               elif sys_platform[:5] == "linux":
-                  if Util.kbhit():
-                     if ord(Util.getch()) == Consts.CDefESCKey:
-                        print "Loading modules for Interactive Mode...",
-                        logging.debug("Linux Interactive Mode key detected ! generation=%d", self.getCurrentGeneration())
-                        from pyevolve import Interaction
-                        print " done !"
-                        interact_banner = "## Pyevolve v.%s - Interactive Mode ##\nPress CTRL-D to quit interactive mode." % (pyevolve.__version__,)
                         session_locals = { "ga_engine"  : self,
                                            "population" : self.getPopulation(),
                                            "pyevolve"   : pyevolve,
