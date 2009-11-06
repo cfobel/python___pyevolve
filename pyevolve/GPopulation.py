@@ -38,6 +38,16 @@ from Statistics import Statistics
 from math import sqrt as math_sqrt
 import logging
 
+try:
+   from multiprocessing import cpu_count, Pool
+   CPU_COUNT = cpu_count()
+   MULTI_PROCESSING = True if CPU_COUNT > 1 else False
+   logging.debug("You have %d CPU cores, so the multiprocessing state is %s", CPU_COUNT, MULTI_PROCESSING)
+except ImportError:
+   MULTI_PROCESSING = False
+   logging.debug("You don't have multiprocessing support for your Python version !")
+
+
 def key_raw_score(individual):
    """ A key function to return raw score
 
@@ -60,13 +70,6 @@ def key_fitness_score(individual):
    """
    return individual.fitness
 
-try:
-   from multiprocessing import cpu_count, Pool
-   CPU_COUNT = cpu_count()
-   MULTI_PROCESSING = True if CPU_COUNT > 1 else False
-   logging.debug("The multiprocessing state is: %s", MULTI_PROCESSING)
-except:
-   MULTI_PROCESSING = False
 
 def multiprocessing_eval(ind):
    """ Internal used by the multiprocessing """
