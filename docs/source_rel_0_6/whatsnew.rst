@@ -104,6 +104,12 @@ What's new on the release |release|:
    examples with symbolic regression. The GTreeGP choromsome representation
    is used for the GP main tree.
 
+**Interactive mode - no more platform independent code**
+
+   Code that was platform independent from the Interactive Mode was removed,
+   so if you are unable to enter in the Interactive Mode using the ESC key,
+   try using the method call to enter in the mode at a defined generation.
+
 **Mutators**
 
    Added the Simple Inversion Mutation (:func:`Mutators.G1DListMutatorSIM`) for G1DList genome.
