@@ -63,14 +63,14 @@ This example show the use of the DB Adapters (:mod:`DBAdapters`) :
 .. literalinclude:: ../../pyevolve_ex6_dbadapter.py
 
 
-Example 7 - The Rastringin function
+Example 7 - The Rastrigin function
 -------------------------------------------------------------------------------
 
-Filename: :file:`examples/pyevolve_ex7_rastringin.py`
+Filename: :file:`examples/pyevolve_ex7_rastrigin.py`
 
-This example minimizes the deceptive function Rastringin with 20 variables: 
+This example minimizes the deceptive function Rastrigin with 20 variables: 
 
-.. literalinclude:: ../../pyevolve_ex7_rastringin.py
+.. literalinclude:: ../../pyevolve_ex7_rastrigin.py
 
 
 Example 8 - The Gaussian Integer Mutator
