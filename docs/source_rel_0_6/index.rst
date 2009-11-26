@@ -32,6 +32,7 @@ Contents
    graphs
    examples
    faq
+   contributors
    license
    contact
 
