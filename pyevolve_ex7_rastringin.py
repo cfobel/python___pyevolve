@@ -1,49 +1,40 @@
-from pyevolve import G1DList, GSimpleGA
-from pyevolve import Initializators, Mutators, Consts, Selectors
+from pyevolve import GSimpleGA
+from pyevolve import G1DList
+from pyevolve import Mutators, Initializators
+from pyevolve import Selectors
+from pyevolve import Consts
 import math
 
-# This is the Rastringin Function, a deception function
-def rastringin(xlist):
-   n = len(xlist)
+# This is the Rastrigin Function, a deception function
+def rastrigin(genome):
+   n = len(genome)
    total = 0
    for i in xrange(n):
-      total += xlist[i]**2 - 10*math.cos(2*math.pi*xlist[i])
+      total += genome[i]**2 - 10*math.cos(2*math.pi*genome[i])
    return (10*n) + total
 
-if __name__ == "__main__":
-
-   #import psyco
-   #psyco.full()
-
+def run_main():
    # Genome instance
    genome = G1DList.G1DList(20)
-   genome.setParams(rangemin=-5.2, rangemax=5.30, bestRawScore=0.00, roundDecimal=2)
+   genome.setParams(rangemin=-5.2, rangemax=5.30, bestrawscore=0.00, rounddecimal=2)
    genome.initializator.set(Initializators.G1DListInitializatorReal)
    genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
 
-   # The evaluator function (objective function)
-   genome.evaluator.set(rastringin)
+   genome.evaluator.set(rastrigin)
 
    # Genetic Algorithm Instance
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setMinimax(Consts.minimaxType["minimize"])
-   #ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(1000)
-   ga.setCrossoverRate(0.8)
-   ga.setPopulationSize(200)
-   ga.setMutationRate(0.06)
    ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
+   ga.setMinimax(Consts.minimaxType["minimize"])
+   ga.setGenerations(3000)
+   ga.setCrossoverRate(0.8)
+   ga.setPopulationSize(100)
+   ga.setMutationRate(0.06)
 
-   # Create DB Adapter and set as adapter
-   #sqlite_adapter = DBAdapters.DBSQLite(identify="rastringin")
-   #ga.setDBAdapter(sqlite_adapter)
+   ga.evolve(freq_stats=50)
 
-   # Do the evolution, with stats dump
-   # frequency of 10 generations
-   ga.evolve(freq_stats=10)
-
-   # Best individual
    best = ga.bestIndividual()
-   print "\nBest individual score: %.2f" % (best.getRawScore(),)
-   #print best
+   print best
 
+if __name__ == "__main__":
+   run_main()
