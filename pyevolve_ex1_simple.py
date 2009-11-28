@@ -10,7 +10,7 @@ def eval_func(genome):
    score = 0.0
 
    # iterate over the chromosome
-   # score = len(filter(lambda x: x==0, chromosome.genomeList))
+   # The same as "score = len(filter(lambda x: x==0, genome))"
    for value in genome:
       if value==0:
          score += 1
