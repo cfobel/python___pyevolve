@@ -84,7 +84,8 @@ if sys_platform[:3] == "win":
    import msvcrt
 
 def RawScoreCriteria(ga_engine):
-   """ Terminate the evolution using the bestRawScore parameter obtained from the individual
+   """ Terminate the evolution using the **bestrawscore** and **rounddecimal**
+   parameter obtained from the individual
 
    Example:
       >>> genome.setParams(bestrawscore=0.00, rounddecimal=2)
@@ -160,7 +161,7 @@ class GSimpleGA:
    :param interactiveMode: this flag enables the Interactive Mode, the default is True
    :param seed: the random seed value
 
-   .. note:: if you use the same ramdom seed, all the runs of algorithm will be the same
+   .. note:: if you use the same random seed, all the runs of algorithm will be the same
 
    """
 
