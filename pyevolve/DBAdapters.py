@@ -268,7 +268,6 @@ class DBSQLite(DBBaseAdapter):
    :param resetIdentify: if True, the identify with the same name will be overwrite with new data
    :param frequency: the generational dump frequency
    :param commit_freq: the commit frequency
-
    """
 
    def __init__(self, dbname=Consts.CDefSQLiteDBName, identify=None, resetDB=False,
@@ -308,10 +307,11 @@ class DBSQLite(DBBaseAdapter):
       self.connection = self.sqlite3mod.connect(self.dbName)
 
       temp_stats = Statistics.Statistics()
-      self.createStructure(temp_stats)
 
       if self.resetDB:
          self.resetStructure(Statistics.Statistics())
+
+      self.createStructure(temp_stats)
 
       if self.resetIdentify:
          self.resetTableIdentify()
@@ -378,7 +378,7 @@ class DBSQLite(DBBaseAdapter):
          c.execute(stmt, (self.getIdentify(),))
          c.execute(stmt2, (self.getIdentify(),))
       except self.sqlite3mod.OperationalError, expt:
-         if expt.message.find("no such table") >= 0:
+         if str(expt).find("no such table") >= 0:
             print "\n ## The DB Adapter can't find the tables ! Consider enable the parameter resetDB ! ##\n"
 
       self.commit()
