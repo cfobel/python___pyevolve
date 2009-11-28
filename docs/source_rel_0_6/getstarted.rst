@@ -434,7 +434,7 @@ Using two mutators at same time
    function slot, like this:
 
       >>> genome.mutator.set(Mutators.G1DListMutatorRealGaussian)
-      >>> genome.mutator.set(Mutators.G1DListMutatorSwap)
+      >>> genome.mutator.add(Mutators.G1DListMutatorSwap)
 
    The first line will set the :func:`Mutators.G1DListMutatorRealGaussian`, and the second line
    add one more mutator, the :func:`Mutators.G1DListMutatorSwap`.
