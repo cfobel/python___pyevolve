@@ -171,6 +171,18 @@ class ErrorAccumulator:
       self.acc_len    +=1
       return self
 
+   def getMean(self):
+      """ Return the mean of the non-squared accumulator """
+      return self.acc / self.acc_len
+
+   def getSquared(self):
+      """ Returns the squared accumulator """
+      return self.acc_square
+
+   def getNonSquared(self):
+      """ Returns the non-squared accumulator """
+      return self.acc
+
    def getAdjusted(self):
       """ Returns the adjusted fitness
       This fitness is calculated as 1 / (1 + standardized fitness)
