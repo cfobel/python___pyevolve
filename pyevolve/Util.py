@@ -144,13 +144,15 @@ class ErrorAccumulator:
    Mean Square Error (MSE)
    """
    def __init__(self):
-      self.acc     = 0.0
-      self.acc_len = 0
+      self.acc        = 0.0
+      self.acc_square = 0.0
+      self.acc_len    = 0
 
    def reset(self):
       """ Reset the accumulator """
-      self.acc     = 0.0
-      self.acc_len = 0
+      self.acc_square = 0.0
+      self.acc        = 0.0
+      self.acc_len    = 0
 
    def append(self, target, evaluated):
       """ Add value to the accumulator
@@ -158,30 +160,36 @@ class ErrorAccumulator:
       :param target: the target value
       :param evaluated: the evaluated value
       """
-      self.acc += (target - evaluated)**2
-      self.acc_len+=1
+      self.acc_square += (target - evaluated)**2
+      self.acc        += (target - evaluated)
+      self.acc_len    +=1
       
    def __iadd__(self, value):
       """ The same as append, but you must pass a tuple """
-      self.acc += (value[0] - value[1])**2
-      self.acc_len+=1
+      self.acc_square += (value[0] - value[1])**2
+      self.acc        += abs(value[0] - value[1])
+      self.acc_len    +=1
       return self
+
+   def getAdjusted(self):
+      """ Returns the adjusted fitness
+      This fitness is calculated as 1 / (1 + standardized fitness)
+      """
+      return 1.0/(1.0 + self.acc)
 
    def getRMSE(self):
       """ Return the root mean square error
       
       :rtype: float RMSE
       """
-      rmse = math_sqrt(self.acc / float(self.acc_len))
-      return rmse
+      return math_sqrt(self.acc_square / float(self.acc_len))
 
    def getMSE(self):
       """ Return the mean square error
 
       :rtype: float MSE
       """
-      mse = (self.acc / float(self.acc_len))
-      return mse
+      return (self.acc_square / float(self.acc_len))
 
 
 class Graph:
