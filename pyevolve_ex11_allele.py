@@ -1,6 +1,5 @@
 from pyevolve import G1DList
 from pyevolve import GSimpleGA
-from pyevolve import Selectors
 from pyevolve import Mutators
 from pyevolve import Initializators
 from pyevolve import GAllele
@@ -14,35 +13,60 @@ def eval_func(chromosome):
    for value in chromosome:
       if value == 0:
          score += 0.5
+
+   # Remember from the allele set defined above
+   # this value 'a' is possible at this position
+   if chromosome[18] == 'a':
+      score += 1.0
+
+   # Remember from the allele set defined above
+   # this value 'xxx' is possible at this position
+   if chromosome[12] == 'xxx':
+      score += 1.0
+
    return score
 
-# Genome instance
-setOfAlleles = GAllele.GAlleles()
-for i in xrange(11):
-   a = GAllele.GAlleleRange(0, i)
-   setOfAlleles.add(a)
+def run_main():
+   # Genome instance
+   setOfAlleles = GAllele.GAlleles()
 
-for i in xrange(11, 20):
-   # You can even add an object to the list
-   a = GAllele.GAlleleList(['a','b', 'xxx', 666, 0])
-   setOfAlleles.add(a)
-   
-genome = G1DList.G1DList(20)
-genome.setParams(allele=setOfAlleles)
+   # From 0 to 10 we can have only some
+   # defined ranges of integers
+   for i in xrange(11):
+      a = GAllele.GAlleleRange(0, i)
+      setOfAlleles.add(a)
 
-# The evaluator function (objective function)
-genome.evaluator.set(eval_func)
-genome.mutator.set(Mutators.G1DListMutatorAllele)
-genome.initializator.set(Initializators.G1DListInitializatorAllele)
+   # From 11 to 19 we can have a set
+   # of elements
+   for i in xrange(11, 20):
+      # You can even add objects instead of strings or 
+      # primitive values
+      a = GAllele.GAlleleList(['a','b', 'xxx', 666, 0])
+      setOfAlleles.add(a)
+      
+   genome = G1DList.G1DList(20)
+   genome.setParams(allele=setOfAlleles)
 
-# Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
-ga.selector.set(Selectors.GRouletteWheel)
-ga.setGenerations(500)
+   # The evaluator function (objective function)
+   genome.evaluator.set(eval_func)
 
-# Do the evolution, with stats dump
-# frequency of 10 generations
-ga.evolve(freq_stats=50)
+   # This mutator and initializator will take care of
+   # initializing valid individuals based on the allele set
+   # that we have defined before
+   genome.mutator.set(Mutators.G1DListMutatorAllele)
+   genome.initializator.set(Initializators.G1DListInitializatorAllele)
 
-# Best individual
-print ga.bestIndividual()
+   # Genetic Algorithm Instance
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.setGenerations(40)
+
+   # Do the evolution, with stats dump
+   # frequency of 10 generations
+   ga.evolve(freq_stats=5)
+
+   # Best individual
+   print ga.bestIndividual()
+
+
+if __name__ == "__main__":
+   run_main()
