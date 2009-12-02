@@ -162,3 +162,30 @@ This example minimizes the Rosenbrock function, another deceptive function:
 
 .. literalinclude:: ../../pyevolve_ex15_rosenbrock.py
 
+Example 16 - The 2D Binary String
+-------------------------------------------------------------------------------
+
+Filename: :file:`examples/pyevolve_ex16_g2dbinstr.py`
+
+This example shows the use of the 2D Binary String genome: 
+
+.. literalinclude:: ../../pyevolve_ex16_g2dbinstr.py
+
+Example 17 - The Tree genome example
+-------------------------------------------------------------------------------
+
+Filename: :file:`examples/pyevolve_ex17_gtree.py`
+
+This example shows the use of the Tree genome: 
+
+.. literalinclude:: ../../pyevolve_ex17_gtree.py
+
+Example 18 - The Genetic Programming example
+-------------------------------------------------------------------------------
+
+Filename: :file:`examples/pyevolve_ex18_gp.py`
+
+This example shows the use of the GTreeGP genome (for Genetic Programming): 
+
+.. literalinclude:: ../../pyevolve_ex18_gp.py
+
