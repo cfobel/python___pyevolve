@@ -15,23 +15,26 @@ def eval_func(chromosome):
       
    return score
 
-# Genome instance
-genome = G1DBinaryString.G1DBinaryString(50)
+def run_main():
+   # Genome instance
+   genome = G1DBinaryString.G1DBinaryString(50)
 
-# The evaluator function (objective function)
-genome.evaluator.set(eval_func)
-genome.mutator.set(Mutators.G1DBinaryStringMutatorFlip)
+   # The evaluator function (objective function)
+   genome.evaluator.set(eval_func)
+   genome.mutator.set(Mutators.G1DBinaryStringMutatorFlip)
 
-# Genetic Algorithm Instance
-ga = GSimpleGA.GSimpleGA(genome)
-ga.selector.set(Selectors.GTournamentSelector)
+   # Genetic Algorithm Instance
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.selector.set(Selectors.GTournamentSelector)
+   ga.setGenerations(70)
 
-ga.setGenerations(70)
+   # Do the evolution, with stats dump
+   # frequency of 10 generations
+   ga.evolve(freq_stats=20)
 
-# Do the evolution, with stats dump
-# frequency of 10 generations
-ga.evolve(freq_stats=10)
+   # Best individual
+   print ga.bestIndividual()
 
-# Best individual
-best = ga.bestIndividual()
-print best
+if __name__ == "__main__":
+   run_main()
+   
