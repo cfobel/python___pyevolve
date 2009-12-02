@@ -1,8 +1,13 @@
-from pyevolve import *
+from pyevolve import G1DList
+from pyevolve import Mutators, Crossovers
+from pyevolve import Consts, GSimpleGA
+from pyevolve import DBAdapters
 from random import shuffle
 
-BOARD_SIZE = 24
+# The "n" in n-queens
+BOARD_SIZE = 64
 
+# The n-queens fitness function
 def queens_eval(genome):
    collisions = 0
    for i in xrange(0, BOARD_SIZE):
@@ -32,11 +37,11 @@ def run_main():
    ga.setMinimax(Consts.minimaxType["maximize"])
    
    ga.setPopulationSize(100)
-   ga.setGenerations(200)
+   ga.setGenerations(250)
    ga.setMutationRate(0.02)
    ga.setCrossoverRate(1.0)
 
-   #sqlite_adapter = DBAdapters.DBSQLite(identify="queens2")
+   #sqlite_adapter = DBAdapters.DBSQLite(identify="queens")
    #ga.setDBAdapter(sqlite_adapter)
 
    vpython_adapter = DBAdapters.DBVPythonGraph(identify="queens", frequency=1)
@@ -46,7 +51,7 @@ def run_main():
 
    best = ga.bestIndividual()
    print best
-   print "\nBest individual score: %.2f\n" % (best.score,)
+   print "Best individual score: %.2f\n" % (best.getRawScore(),)
 
 if __name__ == "__main__":
    run_main()
