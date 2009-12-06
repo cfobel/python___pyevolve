@@ -150,6 +150,8 @@ What's new on the release |release|:
    Added the Single Point Strict Crossover (:func:`Crossovers.GTreeCrossoverSinglePointStrict`) for the GTree genome.
 
    Added the Single Point Crossover (:func:`Crossovers.GTreeGPCrossoverSinglePoint`) for the GTreeGP genome.
+
+   Added the SBX Crossover (:func:`Crossovers.G1DListCrossoverRealSBX`) for G1DList genome, thanks to Amit Saha.
    
 **Initializators**
 
