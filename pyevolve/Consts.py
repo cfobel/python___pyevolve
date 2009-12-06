@@ -472,6 +472,11 @@ CDefG1DListCrossover = Crossovers.G1DListCrossoverSinglePoint
 CDefG1DListInit      = Initializators.G1DListInitializatorInteger
 CDefG1DListCrossUniformProb = 0.5
 
+# SBX Crossover defaults
+# Crossover distribution index for SBX
+CDefG1DListSBXEtac  = 10
+CDefG1DListSBXEPS   = 1.0e-14
+  
 # - G2DList defaults
 CDefG2DListMutIntMU = 2
 CDefG2DListMutIntSIGMA = 10
