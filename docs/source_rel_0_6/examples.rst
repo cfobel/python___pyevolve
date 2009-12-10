@@ -189,3 +189,24 @@ This example shows the use of the GTreeGP genome (for Genetic Programming):
 
 .. literalinclude:: ../../pyevolve_ex18_gp.py
 
+Example 21 - The n-queens problem (64x64 chess board)
+-------------------------------------------------------------------------------
+
+Filename: :file:`examples/pyevolve_ex21_nqueens.py`
+
+This example shows the use of GA to solve the n-queens problem for a 
+chess board of size 64x64: 
+
+.. literalinclude:: ../../pyevolve_ex21_nqueens.py
+
+
+Example 22 - The Infinite Monkey Theorem
+-------------------------------------------------------------------------------
+
+Filename: :file:`examples/pyevolve_ex22_monkey.py`
+
+This example was a kindly contribution by Jelle Feringa, it shows the
+`Infinite Monkey Theorem <http://en.wikipedia.org/wiki/Infinite_monkey_theorem>`_:
+
+.. literalinclude:: ../../pyevolve_ex22_monkey.py
+
