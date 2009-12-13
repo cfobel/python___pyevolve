@@ -152,6 +152,8 @@ What's new on the release |release|:
    Added the Single Point Crossover (:func:`Crossovers.GTreeGPCrossoverSinglePoint`) for the GTreeGP genome.
 
    Added the SBX Crossover (:func:`Crossovers.G1DListCrossoverRealSBX`) for G1DList genome, thanks to Amit Saha.
+
+   Added the Edge Recombination (:func:`Crossovers.G1DListCrossoverEdge`) for G1DList genome.
    
 **Initializators**
 

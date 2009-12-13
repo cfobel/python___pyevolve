@@ -211,9 +211,43 @@ def G1DListCrossoverOX(genome, **args):
       brother.genomeList = P2[listSize - c2:] + gMom[c1:c2] + P2[:listSize-c2]
 
    assert listSize == len(sister)
+   assert listSize == len(brother)
 
    return (sister, brother)
 
+def G1DListCrossoverEdge(genome, **args):
+   """ THe Edge Recombination crossover for G1DList (widely used for TSP problem)
+
+   See more information in the `Edge Recombination Operator <http://en.wikipedia.org/wiki/Edge_recombination_operator>`_
+   Wikipedia entry.
+   """
+   gMom, sisterl  = args["mom"], []
+   gDad, brotherl = args["dad"], []
+
+   mom_edges, dad_edges, merge_edges = Util.G1DListGetEdgesComposite(gMom, gDad)
+
+   for c, u in (sisterl, set(gMom)), (brotherl, set(gDad)):
+      curr = None
+      for i in xrange(len(gMom)):
+         curr = rand_choice(tuple(u)) if not curr else curr         
+         c.append(curr)
+         u.remove(curr)
+         d = [v for v in merge_edges.get(curr, []) if v in u]
+         if d: curr = rand_choice(d)
+         else:
+            s  = [v for v in mom_edges.get(curr, []) if v in u]
+            s += [v for v in dad_edges.get(curr, []) if v in u]
+            curr = rand_choice(s) if s else None
+
+   sister = gMom.clone()
+   brother = gDad.clone()
+   sister.resetStats()
+   brother.resetStats()
+
+   sister.genomeList  = sisterl
+   brother.genomeList = brotherl
+
+   return (sister, brother)
 
 def G1DListCrossoverCutCrossfill(genome, **args):
    """ The crossover of G1DList, Cut and crossfill, for permutations
