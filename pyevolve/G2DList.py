@@ -114,7 +114,7 @@ class G2DList(GenomeBase):
       genome.crossover.set(Crossovers.G2DListCrossoverSingleHPoint)
    """
 
-   def __init__(self, height, width):
+   def __init__(self, height, width, cloning=False):
       """ The initializator of G2DList representation,
       height and width must be specified """
       GenomeBase.__init__(self)
@@ -125,9 +125,10 @@ class G2DList(GenomeBase):
       for i in xrange(height):
          self.genomeList[i] = [None] * width
 
-      self.initializator.set(Consts.CDefG2DListInit)
-      self.mutator.set(Consts.CDefG2DListMutator)
-      self.crossover.set(Consts.CDefG2DListCrossover)
+      if not cloning:
+         self.initializator.set(Consts.CDefG2DListInit)
+         self.mutator.set(Consts.CDefG2DListMutator)
+         self.crossover.set(Consts.CDefG2DListCrossover)
 
    def __eq__(self, other):
       """ Compares one chromosome with another """
@@ -247,7 +248,7 @@ class G2DList(GenomeBase):
       :rtype: the G2DList clone instance
 
       """
-      newcopy = G2DList(self.height, self.width)
+      newcopy = G2DList(self.height, self.width, True)
       self.copy(newcopy)
       return newcopy
 

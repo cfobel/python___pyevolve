@@ -132,14 +132,15 @@ class G1DList(GenomeBase, G1DBase):
       genome.crossover.set(Crossovers.G1DListCrossoverUniform)
    """
 
-   def __init__(self, size=10):
+   def __init__(self, size=10, cloning=False):
       """ The initializator of G1DList representation,
       size parameter must be specified """
       GenomeBase.__init__(self)
       G1DBase.__init__(self, size)
-      self.initializator.set(Consts.CDefG1DListInit)
-      self.mutator.set(Consts.CDefG1DListMutator)
-      self.crossover.set(Consts.CDefG1DListCrossover)
+      if not cloning:
+         self.initializator.set(Consts.CDefG1DListInit)
+         self.mutator.set(Consts.CDefG1DListMutator)
+         self.crossover.set(Consts.CDefG1DListCrossover)
 
    def __mul__(self, other):
       """ Multiply every element of G1DList by "other" """
@@ -188,7 +189,7 @@ class G1DList(GenomeBase, G1DBase):
       :rtype: the G1DList clone instance
 
       """
-      newcopy = G1DList(self.genomeSize)
+      newcopy = G1DList(self.genomeSize, True)
       self.copy(newcopy)
       return newcopy
 
