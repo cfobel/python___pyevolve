@@ -349,12 +349,13 @@ class GTreeGP(GenomeBase, GTreeBase):
    
    :param root_node: the Root node of the GP Tree
    """
-   def __init__(self, root_node=None):
+   def __init__(self, root_node=None, cloning=False):
       GenomeBase.__init__(self)
       GTreeBase.__init__(self, root_node)
-      self.initializator.set(Consts.CDefGTreeGPInit)
-      self.mutator.set(Consts.CDefGGTreeGPMutator)
-      self.crossover.set(Consts.CDefGTreeGPCrossover)
+      if not cloning:
+         self.initializator.set(Consts.CDefGTreeGPInit)
+         self.mutator.set(Consts.CDefGGTreeGPMutator)
+         self.crossover.set(Consts.CDefGTreeGPCrossover)
 
    def __repr__(self):
       """ Return a string representation of Genome """
@@ -517,7 +518,7 @@ class GTreeGP(GenomeBase, GTreeBase):
       
       :rtype: the new GTreeGP instance
       """
-      newcopy = GTreeGP()
+      newcopy = GTreeGP(cloning=True)
       self.copy(newcopy)
       newcopy.processNodes(True)
       return newcopy
