@@ -292,6 +292,21 @@ class G1DBase:
       g.genomeSize = self.genomeSize
       g.genomeList = self.genomeList[:]
 
+   def getInternalList(self):
+      """ Returns the internal list of the genome
+
+      ... note:: this method was created to solve performance issues
+      :rtype: the internal list
+      """
+      return self.genomeList
+
+   def setInternalList(self, lst):
+      """ Assigns a list to the internal list of the chromosome
+      
+      :param lst: the list to assign the internal list of the chromosome
+      """
+      self.genomeList = lst
+
 class GTreeNodeBase:
    """ GTreeNodeBase Class - The base class for the node tree genomes
    
