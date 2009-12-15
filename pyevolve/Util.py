@@ -305,11 +305,16 @@ def G1DListGetEdges(individual):
    :param individual: the G1DList individual
    :rtype: the edges dictionary
    """
-   edg = {} 
-   for i in xrange(len(individual)):
-      a, b = individual[i], individual[i-1]
-      edg.setdefault(a, []).append(b)
-      edg.setdefault(b, []).append(a)
+   edg = {}
+   ind_list = individual.getInternalList()
+   for i in xrange(len(ind_list)):
+      a, b = ind_list[i], ind_list[i-1]
+
+      if a not in edg: edg[a] = []
+      else: edg[a].append(b)
+
+      if b not in edg: edg[b] = []
+      else: edg[b].append(a)
    return edg
  
 def G1DListMergeEdges(eda, edb):
