@@ -210,7 +210,7 @@ class GSimpleGA:
 
    def __init__(self, genome, seed=None, interactiveMode=True):
       """ Initializator of GSimpleGA """
-      random.seed(seed)
+      if seed: random.seed(seed)
 
       if type(interactiveMode) != BooleanType:
          Util.raiseException("Interactive Mode option must be True or False", TypeError)
