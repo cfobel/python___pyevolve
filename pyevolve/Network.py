@@ -17,6 +17,7 @@ import sys
 import Util
 import cPickle, zlib
 import Consts
+import logging
 
 def getMachineIP():
    """ Return all the IPs from current machine.
@@ -187,7 +188,7 @@ class UDPThreadUnicastClient(threading.Thread):
 
       """
       if self.poolLength() >= self.poolSize:
-         print "warning: the send pool is full, consider increasing the pool size or decreasing the timeout !"
+         logging.warning('the send pool is full, consider increasing the pool size or decreasing the timeout !')
          return
 
       with self.sendPoolLock:

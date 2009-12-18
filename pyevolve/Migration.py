@@ -15,6 +15,7 @@ from random import randint as rand_randint, choice as rand_choice
 import Network
 import Consts
 from FunctionSlot import FunctionSlot
+import logging
 
 class MigrationScheme:
    """ This is the base class for all migration schemes
@@ -221,10 +222,11 @@ class WANMigration(MigrationScheme):
       self.clientThread.join(client_timeout+3)
 
       if self.serverThread.isAlive():
-         print "warning: server thread not joined !"
+         logging.warning("warning: server thread not joined !")
 
       if self.clientThread.isAlive():
-         print "warning: client thread not joined !"
+         logging.warning("warning: client thread not joined !")
+
 
    def exchange(self):
       """ This is the main method, is where the individuals
