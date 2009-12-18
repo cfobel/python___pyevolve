@@ -263,5 +263,6 @@ class WANMigration(MigrationScheme):
          if len(pool) <= 0: break
          choice = rand_choice(pool)
          pool.remove(choice)
-         #if self.internalPop.bestRaw(i).score > newPop.bestRaw(i).score:
+
+         # replace the worst
          population[len(population)-1-i] = choice[2]

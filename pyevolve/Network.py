@@ -130,7 +130,7 @@ class UDPThreadUnicastClient(threading.Thread):
    :param timeout: the time interval to check if the client have data to send
 
    """
-   def __init__(self, host, port, pool_size=10, timeout=1):
+   def __init__(self, host, port, pool_size=10, timeout=0.5):
       threading.Thread.__init__(self)
       self.host = host
       self.port = port
@@ -267,7 +267,7 @@ class UDPThreadServer(threading.Thread):
              discard the received individuals.
 
    """
-   def __init__(self, host, port, poolSize=10, timeout=5):
+   def __init__(self, host, port, poolSize=10, timeout=3):
       threading.Thread.__init__(self)
       self.recvPool = []
       self.recvPoolLock = threading.Lock()
