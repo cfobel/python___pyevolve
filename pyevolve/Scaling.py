@@ -108,3 +108,24 @@ def BoltzmannScaling(pop):
    for i in xrange(len(pop)):
       pop[i].fitness = boltz_e[i] / avg
    
+def ExponentialScaling(pop):
+   """ Exponential Scaling Scheme. The fitness will be the same as (e^score).
+
+   .. versionadded: 0.6
+      The `ExponentialScaling` function.
+   """
+   for i in xrange(len(pop)):
+      score = pop[i].score
+      pop[i].fitness = math.exp(score)
+
+def SaturatedScaling(pop):
+   """ Saturated Scaling Scheme. The fitness will be the same as 1.0-(e^score)
+
+   .. versionadded: 0.6
+      The `SaturatedScaling` function.
+   """
+   for i in xrange(len(pop)):
+      score = pop[i].score
+      pop[i].fitness = 1.0 - math.exp(score)
+
+

@@ -32,6 +32,12 @@ What's new on the release |release|:
    spread between the high and low fitnesses increases. See the description
    on the :func:`Scaling.BoltzmannScaling` function.
 
+**Scaling Scheme - Exponential and Saturated scaling**
+
+   Added the Exponential and Saturated scaling schemes, using the exponential function
+   to calculate the fitness values. See more in :func:`Scaling.ExponentialScaling` and
+   :func:`Scaling.SaturatedScaling`.
+
 **Selectors - the alternative Tournament Selection**
    
    Added an alternative Tournament selection method, the :func:`Selectors.GTournamentAlternative`.
