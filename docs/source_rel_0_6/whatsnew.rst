@@ -92,8 +92,8 @@ What's new on the release |release|:
 **Tree chromosome - new Tree representation chromosome**
 
    Added the module :mod:`GTree`, this module contains the
-   new GTree chromosome representation and all tree related
-   functions.
+   new :class:`GTree.GTree` chromosome representation and all tree related
+   functions and the :class:`GTree.GTreeGP` chromosome used by Genetic Programming.
 
 **VPython DB Adapter - real-time graph statistics**
 
@@ -116,7 +116,7 @@ What's new on the release |release|:
    Code that was platform independent from the Interactive Mode was removed,
    so if you are unable to enter in the Interactive Mode using the ESC key,
    try using the method call to enter in the mode at a defined generation.
-
+   
 **Mutators**
 
    Added the Simple Inversion Mutation (:func:`Mutators.G1DListMutatorSIM`) for G1DList genome.
@@ -170,7 +170,8 @@ What's new on the release |release|:
 
    Added the Allele Initializator (:func:`Initializators.GTreeInitializatorAllele`) for the GTree genome.
 
-   Added the GTreeGP (Genetic Programming genome) Initializator (:func:`Initializators.GTreeGPInitializator`). It accept the methods: grow, full and ramped.
+   Added the GTreeGP (Genetic Programming genome) Initializator (:func:`Initializators.GTreeGPInitializator`).
+   It accept the methods: grow, full and ramped.
 
 
 
