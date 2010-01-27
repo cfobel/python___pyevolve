@@ -824,6 +824,8 @@ def GTreeGPMutatorOperation(genome, **args):
 
 def GTreeGPMutatorSubtree(genome, **args):
    """ The mutator of GTreeGP, Subtree Mutator
+
+   This mutator will recreate random subtree of the tree using the grow algorithm.
    
    .. versionadded:: 0.6
       The *GTreeGPMutatorSubtree* function
