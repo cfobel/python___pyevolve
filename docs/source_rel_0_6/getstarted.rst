@@ -7,7 +7,8 @@ Pyevolve combined with Python language can be a powerful tool. The best way to s
 First Example
 ---------------------------------------------------------------------------
 
-To make the API easy, we have created default parameters for almost every parameter in Pyevolve, for example, when you will use the :class:`G1DList.G1DList` genome without specifying the Mutator, Crossover and Initializator, you will use the default ones: Swap Mutator, One Point Crossover and the Integer Initialzator. All those default parameters are specified in the :mod:`Consts` module (and you are highly encouraged to take a look at source code).
+To make the API easy to use, we have created default parameters for almost every parameter in Pyevolve,
+for example, when you will use the :class:`G1DList.G1DList` genome without specifying the Mutator, Crossover and Initializator, you will use the default ones: Swap Mutator, One Point Crossover and the Integer Initialzator. All those default parameters are specified in the :mod:`Consts` module (and you are highly encouraged to take a look at source code).
 
 Let's begin with the first simple example (Ex. 1). First of all, you must know your problem, in this case, our problem is to find a simple 1D list of integers of *n*-size with zero in all positions.
 At the first look, we know by intuition that the representation needed to this problem is a 1D List, which you can found in Pyevolve by the name of :class:`G1DList.G1DList`, which means Genome 1D List. This representation is based on a python list as you will see, and is very easy to manipulate.
@@ -139,7 +140,7 @@ Here is the final source code: ::
 
 .. rubric:: Footnotes
 
-.. [#rawscore] It is important to note that in Pyevolve, we have :term:`raw score` and :term:`fitness score`, the raw score is the return of the evaluation function and the fitness score is the scaled score.
+.. [#rawscore] It is important to note that in Pyevolve, we have :term:`raw score` and :term:`fitness score`, the raw score is the return of the evaluation function and the fitness score is the scaled score or the raw score in absence of a scaling scheme.
 
 .. [#samplegenome] The term :term:`sample genome` means one genome which provides the main configuration for all individuals.
 
@@ -155,6 +156,12 @@ is enabled, you can press the *ESC Key* anytime in the evolution process. By
 pressing that key, you will enter in the interactive mode, with a normal
 python prompt and the :mod:`Interaction` module exposed to you as the "it"
 module. 
+
+.. warning:: note that the Interactive Mode for Linux/Mac was disabled in the
+             0.6 release of Pyevolve. The cause was the platform dependant code.
+             To use it in Linux/Mac you must set the generation in wich Pyevolve
+             will enter in the Interactive Mode by using :meth:`GSimpleGA.GSimpleGA.setInteractiveGeneration`
+             method; see the :mod:`Interaction` module documentation for more information.
 
 If you want to continue the evolution, just press *CTRL-D* on Linux or *CTRL-Z*
 on Windows.
@@ -182,8 +189,8 @@ Now, *what you can do* with this prompt !?
 * Plot graphics of the current population
 * Data analysis, etc... python is your limit.
 
-.. note:: Mac users should use the :meth:`GSimpleGA.GSimpleGA.setInteractiveGeneration`, for
-          more information, see :mod:`Interaction` module documentation.
+.. note:: to use graphical plots you will obviously need the Matplotlib, see more information
+          in the :ref:`requirements` section for more information.
 
 Inspecting the population
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
