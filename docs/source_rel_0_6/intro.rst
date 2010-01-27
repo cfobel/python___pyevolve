@@ -45,13 +45,17 @@ Pyevolve requires the follow modules:
      The VPython [#vvpython]_ is required to see real-time statistics visualization.
 
 * **Optional, for drawing GP Trees**: `Pydot 1.0.2+ <http://code.google.com/p/pydot/>`_
-     The Pydot [#pydot]_ is plot the Genetic Programming Tress.
+     The Pydot [#pydot]_ is used to plot the Genetic Programming Trees.
+
+* **Optional, for MySQL DB Adapter**: `MySQL for Python <http://sourceforge.net/projects/mysql-python/>`_
+     The MySQL [#mysqldb]_ is used by the MySQL DB Adapter.
 
 .. rubric:: Footnotes
 
 .. [#matplotlib] Matplotlib is Copyright (c) 2002-2008 John D. Hunter; All Rights Reserved
 .. [#vvpython] VPython was originated by David Scherer in 2000.
 .. [#pydot] Pydot was developed by Ero Carrera.
+.. [#mysqldb] MySQLdb was developed by Andy Dustman and contributors.
 
 .. _download_sec:
 
@@ -120,13 +124,13 @@ This command will automatic search, download and install a suitable version of p
 
 *easy_install* utility is part of `setuptools <http://pypi.python.org/pypi/setuptools>`_. Once you have installed setuptools, you will find the easy_install.exe program in your Python Scripts subdirectory.
 
-GA Features
+Genetic Algorithm Features
 -----------------------------------
 
 **Chromosomes / Representations**
-   **1D List**, **2D List** and the **1D Binary String**
+   **1D List**, **2D List**, **1D Binary String**, **2D Binary String** and **Tree**
 
-   .. note:: it is important to note, that the 1D List and the 2D list can carry
+   .. note:: it is important to note, that the 1D List, 2D List and Tree can carry
              any type of python objects or primitives.
    
 **Crossover Methods**
@@ -135,27 +139,44 @@ GA Features
       Single Point Crossover, Two Point Crossover, Uniform Crossover
 
    **1D List** 
-      Single Point Crossover, Two Point Crossover, Uniform Crossover, OX Crossover      
+      Single Point Crossover, Two Point Crossover, Uniform Crossover, OX Crossover, Edge Recombination
+      Crossover, Cut and Crossfill Crossover, Real SBX Crossover
 
    **2D List**
       Uniform Crossover, Single Vertical Point Crossover, Single Horizontal Point Crossover
+
+   **2D Binary String**
+      Uniform Crossover, Single Vertical Point Crossover, Single Horizontal Point Crossover
+
+   **Tree**
+      Single Point Crossover, Strict Single Point Crossover
 
 **Mutator Methods**
 
    **1D Binary String**
       Swap Mutator, Flip Mutator
 
+   **2D Binary String**
+      Swap Mutator, Flip Mutator
+
    **1D List**
       Swap Mutator, Integer Range Mutator, Real Range Mutator, Integer Gaussian Mutator,
-      Real Gaussian Mutator, Integer Binary Mutator, Allele Mutator
+      Real Gaussian Mutator, Integer Binary Mutator, Allele Mutator, Simple Inversion Mutator
 
    **2D List**
       Swap Mutator, Integer Gaussian Mutator, Real Gaussian Mutator, Allele Mutator,
       Integer Range Mutator
 
+   **Tree**
+      Swap Mutator, Integer Range Mutator, Real Range Mutator, Integer Gaussian Mutator,
+      Real Gaussian Mutator
+
 **Initializators**
 
    **1D Binary String**
+      Binary String Initializator
+
+   **2D Binary String**
       Binary String Initializator
 
    **1D List**
@@ -164,13 +185,54 @@ GA Features
    **2D List**
       Allele Initializator, Integer Initializator, Real Initializator
 
+   **Tree**
+      Integer Initializator, Allele Initializator
+
 **Scaling Methods**
 
-   Linear Scaling, Sigma Truncation Scaling and Power Law Scaling, Raw Scaling
+   Linear Scaling, Sigma Truncation Scaling and Power Law Scaling, Raw Scaling,
+   Boltzmann Scaling, Exponential Scaling, Saturated Scaling
 
 **Selection Methods**
 
-   Rank Selection, Uniform Selection, Tournament Selection, Roulette Wheel Selection
+   Rank Selection, Uniform Selection, Tournament Selection, Tournament Selection
+   Alternative (doesn't uses the Roulette Wheel), Roulette Wheel Selection
+
+
+Genetic Programming Features
+-----------------------------------
+
+**Chromosomes / Representations**
+
+   **Tree**
+
+   .. warning:: the Tree of Genetic Programming is the class :class:`GTree.GTreeGP`
+                and not the :class:`GTree.GTree` class of the Genetic Algorithm representation.
+   
+**Crossover Methods**
+
+   **Tree**
+      Single Point Crossover
+
+**Mutator Methods**
+
+   **Tree**
+      Operation Mutator, Subtree mutator
+      
+**Initializators**
+
+   **Tree**
+      Grow Initializator, Full Initializator, Ramped Half-n-Half
+
+**Scaling Methods**
+
+   Linear Scaling, Sigma Truncation Scaling and Power Law Scaling, Raw Scaling,
+   Boltzmann Scaling, Exponential Scaling, Saturated Scaling
+
+**Selection Methods**
+
+   Rank Selection, Uniform Selection, Tournament Selection, Tournament Selection
+   Alternative (doesn't uses the Roulette Wheel), Roulette Wheel Selection
 
 
 Genetic Algorithms Literature
@@ -218,7 +280,7 @@ Books
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 **Poli, Riccardo; Langdon, William B.; McPhee, Nicholas F.**, *A Field Guide to Genetic Programming*,
-this book is also available online (a GREAT initiative from authors) in `Book Site <http://en.wikipedia.org/wiki/Genetic_algorithm>`_
+this book is also available online (a GREAT initiative from authors) in `Book Site <http://www.gp-field-guide.org.uk/>`_
 
 **Koza, John R.**, *Genetic Programming: On the Programming of Computers by Means of Natural Selection*, MIT Press, 1992.
 
@@ -235,6 +297,10 @@ Sites
 
 `A Field Guide to Genetic Programming <http://www.gp-field-guide.org.uk/p>`_
    A book, freely downloadable under a Creative Commons license.
+
+`The Genetic Programming Bibliography <http://www.cs.bham.ac.uk/~wbl/biblio/README.html>`_
+   A very interesting initiative mantained by William Langdon, Steven Gustafson, and John Koza.
+   Over than 6000 GP references !
 
 
 Glossary / Concepts
@@ -291,3 +357,6 @@ Glossary / Concepts
 
    `Wikipedia: Genetic Algorithm <http://en.wikipedia.org/wiki/Genetic_algorithm>`_
       An article talking about Genetic Algorithms.
+
+   `Wikipedia: Genetic Programming <http://en.wikipedia.org/wiki/Genetic_programming>`_
+      The Wikipedia article about Genetic Programming.
