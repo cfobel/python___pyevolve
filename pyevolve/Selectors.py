@@ -86,9 +86,8 @@ def GRankSelectorAlternative(population, **args):
 
    return population[random.randint(0, count)]
 
-GRankSelector.cachePopID = None
-GRankSelector.cacheCount = None
-
+GRankSelectorAlternative.cachePopID = None
+GRankSelectorAlternative.cacheCount = None
 
 
 def GUniformSelector(population, **args):
