@@ -14,7 +14,6 @@ import inspect
 
 from FunctionSlot import FunctionSlot
 import Util
-from collections import deque
 
 class GenomeBase:
    """ GenomeBase Class - The base of all chromosome representation """
