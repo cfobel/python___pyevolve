@@ -348,7 +348,7 @@ Glossary / Concepts
 
    Data Type Independent
       When a genetic operator is data type idependent, it will operates on different 
-      data types but not with differente chromosome representation, for example, the
+      data types but not with different chromosome representation, for example, the
       :func:`Mutators.G1DListMutatorSwap` mutator will operate on Real, Allele or
       Integer :class:`G1DList.G1DList` chromosome, but not on :class:`G2DList.G2DList`
       chromosome.
