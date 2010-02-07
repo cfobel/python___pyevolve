@@ -158,7 +158,7 @@ def GRouletteWheel_PrepareWheel(population):
 
       if pop_fitMax == pop_fitMin:
          for index in xrange(len_pop):
-            psum[index] = index+1 / float(len_pop)
+            psum[index] = (index+1) / float(len_pop)
       elif (pop_fitMax > 0 and pop_fitMin >= 0) or (pop_fitMax <= 0 and pop_fitMin < 0):
          population.sort()
          if population.minimax == Consts.minimaxType["maximize"]:
@@ -179,7 +179,7 @@ def GRouletteWheel_PrepareWheel(population):
 
       if pop_rawMax == pop_rawMin:
          for index in xrange(len_pop):
-            psum[index] = index+1 / float(len_pop)
+            psum[index] = (index+1) / float(len_pop)
       
       elif (pop_rawMax > 0 and pop_rawMin >= 0) or (pop_rawMax <= 0 and pop_rawMin < 0):
          population.sort()
