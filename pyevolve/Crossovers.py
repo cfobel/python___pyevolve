@@ -289,7 +289,7 @@ def G1DListCrossoverCutCrossfill(genome, **args):
    return (sister, brother)
 
 def G1DListCrossoverRealSBX(genome, **args):
-   """ Experimental SBX Implementation- Follows the implementation in NSGA-II (Deb, et.al)
+   """ Experimental SBX Implementation - Follows the implementation in NSGA-II (Deb, et.al)
 
    Some implementation `reference <http://vision.ucsd.edu/~sagarwal/icannga.pdf>`_.
 
