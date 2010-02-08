@@ -353,6 +353,31 @@ Glossary / Concepts
       Integer :class:`G1DList.G1DList` chromosome, but not on :class:`G2DList.G2DList`
       chromosome.
 
+
+   Standardized Fitness
+      The standardized fitness restates the raw score so that a lower numerical value is
+      always a better value. 
+
+      .. seealso::
+
+         `Genetic Programming: On the Programming of Computers by Means of Natural Selection <http://www.amazon.com/Genetic-Programming-Computers-Selection-Adaptive/dp/0262111705>`_
+            A book from John R. Koza about Genetic Programming.
+
+
+   Adjusted Fitness
+      The adjusted fitness is a measure computed from the Standardized Fitness, the Adjusted Fitness is always
+      between 0 and 1 and it's always bigger for better individuals.
+
+      .. seealso::
+
+         `Genetic Programming: On the Programming of Computers by Means of Natural Selection <http://www.amazon.com/Genetic-Programming-Computers-Selection-Adaptive/dp/0262111705>`_
+            A book from John R. Koza about Genetic Programming.
+
+   Non-terminal node
+      The non-terminal node or non-terminal function is a function in a parse tree which is either a root
+      or a branch in that tree, in the GP we call non-terminal nodes as "functions", the opposite of
+      terminal nodes, which are the variables of the GP.
+
 .. seealso::
 
    `Wikipedia: Genetic Algorithm <http://en.wikipedia.org/wiki/Genetic_algorithm>`_

@@ -180,6 +180,8 @@ This example shows the use of the Tree genome:
 
 .. literalinclude:: ../../pyevolve_ex17_gtree.py
 
+.. _pyevolve-example18:
+
 Example 18 - The Genetic Programming example
 -------------------------------------------------------------------------------
 

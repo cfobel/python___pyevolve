@@ -240,7 +240,7 @@ def GTreeGPInitializator(genome, **args):
       The max depth of the tree
 
    *method*
-      The method, accepts "grow", "full" or ramped
+      The method, accepts "grow", "full" or "ramped"
 
    .. versionadded:: 0.6
       The *GTreeGPInitializator* function.

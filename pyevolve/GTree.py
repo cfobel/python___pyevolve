@@ -499,6 +499,8 @@ class GTreeGP(GenomeBase, GTreeBase):
 
    def getCompiledCode(self):
       """ Get the compiled code for the Tree expression
+      After getting the compiled code object, you just need to evaluate it using
+      the :func:`eval` native Python method.
       
       :rtype: compiled python code
       """
