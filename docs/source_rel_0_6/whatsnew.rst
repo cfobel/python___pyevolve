@@ -7,7 +7,13 @@ What's new on the release |release|:
 
 **Optimizations and bug-fixes**
 
-   Added some general optimizations and bug-fixes. The code is more *pythonic* now.
+   Added many general optimizations and bug-fixes. The code is more *pythonic* and stable
+   now.
+
+**Documentation, documentation and documentation**
+
+   Added documentation about the new GP core, new features, changes were done
+   to reflect API changes here and there, etc... 
 
 **Function Slots - Functions now have weights**
    
