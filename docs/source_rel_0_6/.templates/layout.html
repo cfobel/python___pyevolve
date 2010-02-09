@@ -5,7 +5,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$.get("http://pyevolve.sourceforge.net/wordpress/?feed=rss2", function(d){  
+	$.get("http://feeds2.feedburner.com/pyevolve", function(d){  
 		$(d).find('item').each(function(){  
 			var $it = $(this);
 			var title = $it.find('title').text();
@@ -21,6 +21,7 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block sidebarlogo %}
+<p align="center">
 <a href="http://del.icio.us/post?url=http://pyevolve.sourceforge.net" target="_blank">
 	<img src="_static/delicious_icon.png" border="0">
 </a>
@@ -29,9 +30,10 @@ $(document).ready(function() {
 	<img src="_static/digg_icon.png"  border="0">
 </a>
 
-<a href="http://www.reddit.com/domain/pyevolve.sourceforge.net" target="_blank">
+<a href="http://www.reddit.com/submit?resubmit=true&url=http%3A%2F%2Fpyevolve.sourceforge.net%2F" target="_blank">
 	<img src="_static/reddit_icon.png" border="0">
 </a>
+</p>
 <br>
 
 <h3><a href="http://pyevolve.sourceforge.net/wordpress">Recent Blog Posts</a></h3>
