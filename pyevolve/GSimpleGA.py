@@ -558,6 +558,8 @@ class GSimpleGA:
       return self.internalPop.bestRaw()
 
    def __gp_catch_functions(self, prefix):
+      """ Internally used to catch functions with some specific prefix
+      as non-terminals of the GP core """
       import __main__ as mod_main
 
       function_set = {}

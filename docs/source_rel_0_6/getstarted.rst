@@ -696,6 +696,8 @@ Doing the same evolution on with random seed
    when instantiating the :class:`GSimpleGA.GSimpleGA` class: ::
 
       ga_engine = GSimpleGA(genome, 123)
+      # or
+      ga_engine = GSimpleGA(genome, seed=123)
 
    The value *123* will be passed as the random seed of the GA Engine.
 
@@ -770,4 +772,49 @@ Real-time statistics visualization
       Adapter will show four statistical graphs, it is fast and
       easy to use.
 
+How to manually add non-terminal functions to Genetic Programming core
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+When you set Pyevolve to automatically catch non-terminal funcions for your GP
+core you do something like this: ::
 
+   ga = GSimpleGA.GSimpleGA(genome)
+   ga.setParams(gp_terminals       = ['a', 'b'],
+                gp_function_prefix = "gp")
+
+The "gp_function_prefix" paremter tells Pyevolve to catch any function starting
+with "gp". But there are times that you want to add each function manually, so
+you just need to add a dictionar parameter called "gp_function_set", like this: ::
+
+   ga.setParams(gp_terminals       = ['a', 'b'],
+                gp_function_set = {"gp_add" :2,
+                                   "gp_sub" :2,
+                                   "gp_sqrt":1})
+
+Note the "gp_function_set" dictionary parameter which holds as key the function
+name and for the value, the number of arguments from that function, in this case
+we have "gp_add" with 2 parameters, "gp_sub" with 2 and "gp_sqrt" with just one.
+
+
+Passing extra parameters to the individual
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Sometimes we want to add extra parameters which we need the individuals must
+carry, in this case, we can use the method :meth:`GenomeBase.GenomeBase.setParams`
+to set internal parameters of the individual and the method :meth:`GenomeBase.GenomeBase.getParam`
+to get it's parameters back, see an example: ::
+
+   def evaluation_function(genome):
+      parameter_a = genome.getParam("parameter_a")
+
+   def main():
+      # (...)
+      genome = G1DList.G1DList(20)
+      genome.setParams(rangemin=-5.2, rangemax=5.30, parameter_a="my_value")
+      # (...)
+
+.. note:: Due to performance issues, Pyevolve doesn't copy the internal parameters
+          into each new created individual, it simple references the original
+          parameters, this reduces memory and increases speed.
+
+
+   
+      
