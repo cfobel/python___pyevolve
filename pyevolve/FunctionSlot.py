@@ -58,7 +58,7 @@ class FunctionSlot:
       self.rand_apply = rand_apply
 
    def __typeCheck(self, func):
-      if not (inspect.isfunction(func) or inspect.ismethod(func)):
+      if not callable(func):
          Util.raiseException("The function must be a method or function", TypeError)
 
    def __iadd__(self, func):
