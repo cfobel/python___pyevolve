@@ -12,7 +12,6 @@ from random import random as rand_random
 import math
 import Util
 import Consts
-import logging
 
 #############################
 ##     1D Binary String    ##
@@ -361,7 +360,7 @@ def G1DListCrossoverRealSBX(genome, **args):
          sister[i] = gMom[i]
          brother[i] = gDad[i]
 
-   return (sister,brother)
+   return (sister, brother)
         
 
 ####################
@@ -655,7 +654,7 @@ def GTreeCrossoverSinglePointStrict(genome, **args):
       if (dD+mH <= max_depth) and (mD+dH <= max_depth):
          break
 
-   if i==(max_attempt-1):
+   if i == (max_attempt-1):
       assert gMom.getHeight() <= max_depth
       return (gMom, gDad)
    else:

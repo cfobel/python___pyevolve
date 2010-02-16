@@ -8,8 +8,7 @@ if you are planning to create a new representation, you must
 take a inside look into this module.
 
 """
-import copy
-from random import randint as rand_randint, choice as rand_choice
+from random import choice as rand_choice
 import inspect
 
 from FunctionSlot import FunctionSlot

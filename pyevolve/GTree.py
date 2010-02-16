@@ -37,7 +37,6 @@ import random
 from GenomeBase import GenomeBase, GTreeBase, GTreeNodeBase
 import Consts
 import Util
-import cStringIO
 
 try:
    import pydot

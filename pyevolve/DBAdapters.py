@@ -522,8 +522,21 @@ class DBVPythonGraph(DBBaseAdapter):
       DBBaseAdapter.__init__(self, frequency, identify)
       self.genmax = genmax
       self.vtkGraph = None
+      self.curveMin = None
+      self.curveMax = None
+      self.curveDev = None
+      self.curveAvg = None
 
    def makeDisplay(self, title_sec, x, y, ga_engine):
+      """ Used internally to create a new display for VPython.
+      
+      :param title_sec: the title of the window
+      :param x: the x position of the window
+      :param y: the y position of the window
+      :param ga_engine: the GA Engine
+
+      :rtype: the window (the return of gdisplay call)
+      """
       title = "Pyevolve v.%s - %s - id [%s]" % (__version__, title_sec, self.identify)
       if self.genmax:
          disp = self.vtkGraph.gdisplay(title=title, xtitle='Generation', ytitle=title_sec,
@@ -619,7 +632,7 @@ class DBMySQLAdapter(DBBaseAdapter):
 
    def __repr__(self):
       """ The string representation of adapter """
-      ret = "DBMySQLAdapter DB Adapter [identify='%', host='%s', username='%s', db='%s']" % (self.getIdentify(),
+      ret = "DBMySQLAdapter DB Adapter [identify='%s', host='%s', username='%s', db='%s']" % (self.getIdentify(),
             self.host, self.user, self.db)
       return ret
 

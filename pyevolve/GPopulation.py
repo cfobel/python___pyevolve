@@ -232,7 +232,7 @@ class GPopulation:
       len_pop = len(self)
       for ind in xrange(len_pop):
          raw_sum += self[ind].score
-         fit_sum += self[ind].fitness
+         #fit_sum += self[ind].fitness
 
       self.stats["rawMax"] = max(self, key=key_raw_score).score
       self.stats["rawMin"] = min(self, key=key_raw_score).score

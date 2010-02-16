@@ -58,6 +58,11 @@ class FunctionSlot:
       self.rand_apply = rand_apply
 
    def __typeCheck(self, func):
+      """ Used internally to check if a function passed to the
+      function slot is callable. Otherwise raises a TypeError exception.
+  
+      :param func: the function object
+      """
       if not callable(func):
          Util.raiseException("The function must be a method or function", TypeError)
 
