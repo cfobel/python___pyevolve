@@ -245,7 +245,7 @@ def G1DListMutatorRealGaussian(genome, **args):
    else:
       for it in xrange(int(round(mutations))):
          which_gene = rand_randint(0, listSize-1)
-         final_value = genome[which_gene] + rand_gauss(0, 1)
+         final_value = genome[which_gene] + rand_gauss(mu, sigma)
 
          final_value = min(final_value, genome.getParam("rangemax", Consts.CDefRangeMax))
          final_value = max(final_value, genome.getParam("rangemin", Consts.CDefRangeMin))
