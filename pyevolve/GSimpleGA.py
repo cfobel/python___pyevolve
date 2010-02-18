@@ -381,7 +381,7 @@ class GSimpleGA:
       ret+="\n"
       return ret
    
-   def setMultiProcessing(self, flag=True):
+   def setMultiProcessing(self, flag=True, full_copy=False):
       """ Sets the flag to enable/disable the use of python multiprocessing module.
       Use this option when you have more than one core on your CPU and when your
       evaluation function is very slow.
@@ -395,7 +395,12 @@ class GSimpleGA:
       the individuals, so the use of this feature will make sense if you have a
       truly slow evaluation function (which is commom in GAs).      
 
+      The parameter "full_copy" defines where the individual data should be copied back
+      after the evaluation or not. This parameter is useful when you change the
+      individual in the evaluation function.
+      
       :param flag: True (default) or False
+      :param full_copy: True or False (default)
 
       .. warning:: Use this option only when your evaluation function is slow, so you'll
                    get a good tradeoff between the process communication speed and the
@@ -413,7 +418,11 @@ class GSimpleGA:
       """
       if type(flag) != BooleanType:
          Util.raiseException("Multiprocessing option must be True or False", TypeError)
-      self.internalPop.setMultiProcessing(flag)
+
+      if type(full_copy) != BooleanType:
+         Util.raiseException("Multiprocessing 'full_copy' option must be True or False", TypeError)
+
+      self.internalPop.setMultiProcessing(flag, full_copy)
 
    def setMigrationAdapter(self, migration_adapter=None):
       """ Sets the Migration Adapter

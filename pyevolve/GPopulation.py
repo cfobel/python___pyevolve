@@ -76,6 +76,12 @@ def multiprocessing_eval(ind):
    ind.evaluate()
    return ind.score
 
+def multiprocessing_eval_full(ind):
+   """ Internal used by the multiprocessing (full copy)"""
+   ind.evaluate()
+   return ind
+
+
 class GPopulation:
    """ GPopulation Class - The container for the population
 
@@ -145,18 +151,22 @@ class GPopulation:
       self.allSlots      = [self.scaleMethod]
 
       self.internalParams = {}
-      self.multiProcessing = False
+      self.multiProcessing = (False, False)
 
       # Statistics
       self.statted = False
       self.stats   = Statistics()
 
-   def setMultiProcessing(self, flag=True):
+   def setMultiProcessing(self, flag=True, full_copy=False):
       """ Sets the flag to enable/disable the use of python multiprocessing module.
       Use this option when you have more than one core on your CPU and when your
       evaluation function is very slow.
-
+      The parameter "full_copy" defines where the individual data should be copied back
+      after the evaluation or not. This parameter is useful when you change the
+      individual in the evaluation function.
+      
       :param flag: True (default) or False
+      :param full_copy: True or False (default)
 
       .. warning:: Use this option only when your evaluation function is slow, se you
                    will get a good tradeoff between the process communication speed and the
@@ -166,7 +176,7 @@ class GPopulation:
          The `setMultiProcessing` method.
 
       """
-      self.multiProcessing = flag
+      self.multiProcessing = (flag, full_copy)
    
    def setMinimax(self, minimax):
       """ Sets the population minimax
@@ -350,12 +360,19 @@ class GPopulation:
 
       """
       # We have multiprocessing
-      if self.multiProcessing and MULTI_PROCESSING:
+      if self.multiProcessing[0] and MULTI_PROCESSING:
          logging.debug("Evaluating the population using the multiprocessing method")
          proc_pool = Pool()
-         results = proc_pool.map(multiprocessing_eval, self.internalPop)
-         for individual, score in zip(self.internalPop, results):
-            individual.score = score
+
+         # Multiprocessing full_copy parameter
+         if self.multiProcessing[1]:
+            results = proc_pool.map(multiprocessing_eval_full, self.internalPop)
+            for i in xrange(len(self.internalPop)):
+               self.internalPop[i] = results[i]
+         else:
+            results = proc_pool.map(multiprocessing_eval, self.internalPop)
+            for individual, score in zip(self.internalPop, results):
+               individual.score = score
       else:
          for ind in self.internalPop:
             ind.evaluate(**args)
