@@ -439,6 +439,19 @@ class GPopulation:
       return self.internalParams.get(key, nvl)
 
 
+   def setParams(self, **args):
+      """ Gets an internal parameter
+
+      Example:
+         >>> population.setParams(tournamentPool=5)
+
+      :param args: parameters to set
+
+      .. versionadded:: 0.6
+         The `setParams` method.
+      """
+      self.internalParams.update(args)
+
    def clear(self):
       """ Remove all individuals from population """
       del self.internalPop[:]
