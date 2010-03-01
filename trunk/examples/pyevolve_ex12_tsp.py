@@ -5,6 +5,7 @@ from pyevolve import Crossovers
 from pyevolve import Consts
 
 import sys, random
+random.seed(1024)
 from math import sqrt
 
 PIL_SUPPORT = None
@@ -18,9 +19,10 @@ except:
 
 cm     = []
 coords = []
-CITIES = 40
+CITIES = 100
 WIDTH   = 1024
 HEIGHT  = 768
+LAST_SCORE = -1
 
 def cartesian_matrix(coords):
    """ A distance matrix """
@@ -35,9 +37,10 @@ def cartesian_matrix(coords):
 def tour_length(matrix, tour):
    """ Returns the total length of the tour """
    total = 0
+   t = tour.getInternalList()
    for i in range(CITIES):
       j      = (i+1)%CITIES
-      total += matrix[tour[i], tour[j]]
+      total += matrix[t[i], t[j]]
    return total
 
 def write_tour_to_img(coords, tour, img_file):
@@ -73,18 +76,21 @@ def G1DListTSPInitializator(genome, **args):
    """ The initializator for the TSP """
    lst = [i for i in xrange(genome.getListSize())]
    random.shuffle(lst)
-   genome.genomeList = lst
+   genome.setInternalList(lst)
 
 # This is to make a video of best individuals along the evolution
 # Use mencoder to create a video with the file list list.txt
 # mencoder mf://@list.txt -mf w=400:h=200:fps=3:type=png -ovc lavc
 #          -lavcopts vcodec=mpeg4:mbd=2:trell -oac copy -o output.avi
 #
-# def evolve_callback(ga_engine):
-#   if ga_engine.currentGeneration % 10 == 0:
-#      best = ga_engine.bestIndividual()
-#      write_tour_to_img( coords, best, "tsp_result_%d.png" % (ga_engine.currentGeneration,))
-#   return False
+def evolve_callback(ga_engine):
+   global LAST_SCORE
+   if ga_engine.getCurrentGeneration() % 100 == 0:
+      best = ga_engine.bestIndividual()
+      if LAST_SCORE != best.getRawScore():
+         write_tour_to_img( coords, best, "tspimg/tsp_result_%d.png" % ga_engine.getCurrentGeneration())
+         LAST_SCORE = best.getRawScore()
+   return False
 
 def main_run():
    global cm, coords, WIDTH, HEIGHT
@@ -98,19 +104,22 @@ def main_run():
    genome.crossover.set(Crossovers.G1DListCrossoverEdge)
    genome.initializator.set(G1DListTSPInitializator)
 
+   # 3662.69
    ga = GSimpleGA.GSimpleGA(genome)
-   ga.setGenerations(100000)
+   ga.setGenerations(200000)
    ga.setMinimax(Consts.minimaxType["minimize"])
    ga.setCrossoverRate(1.0)
-   ga.setMutationRate(0.06)
-   ga.setPopulationSize(100)
+   ga.setMutationRate(0.02)
+   ga.setPopulationSize(80)
 
    # This is to make a video
-   # ga.stepCallback.set(evolve_callback)
+   ga.stepCallback.set(evolve_callback)
+   # 21666.49
+   import psyco
+   psyco.full()
 
-   ga.evolve(freq_stats=100)
+   ga.evolve(freq_stats=500)
    best = ga.bestIndividual()
-   print best
 
    if PIL_SUPPORT:
       write_tour_to_img(coords, best, "tsp_result.png")
@@ -119,5 +128,3 @@ def main_run():
 
 if __name__ == "__main__":
    main_run()
-
-   

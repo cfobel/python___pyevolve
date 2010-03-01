@@ -1,21 +1,19 @@
 from pyevolve import G1DList, GSimpleGA, Selectors, Statistics
 from pyevolve import Initializators, Mutators, Consts, DBAdapters
 
-# This is the Rosenbrock Function, a deception function
+# This is the Rosenbrock Function
 def rosenbrock(xlist):
    sum_var = 0
    for x in xrange(1, len(xlist)):
       sum_var += 100.0 * (xlist[x] - xlist[x-1]**2)**2 + (1 - xlist[x-1])**2
    return sum_var
 
-if __name__ == "__main__":
-   import psyco
-   psyco.full()
-
+def run_main():
    # Genome instance
-   genome = G1DList.G1DList(50)
-   genome.setParams(rangemin=-5, rangemax=10, bestRawScore=0.0)
-   genome.mutator.set(Mutators.G1DListMutatorIntegerRange)
+   genome = G1DList.G1DList(15)
+   genome.setParams(rangemin=-1, rangemax=1.1)
+   genome.initializator.set(Initializators.G1DListInitializatorReal)
+   genome.mutator.set(Mutators.G1DListMutatorRealRange)
 
    # The evaluator function (objective function)
    genome.evaluator.set(rosenbrock)
@@ -23,20 +21,13 @@ if __name__ == "__main__":
    # Genetic Algorithm Instance
    ga = GSimpleGA.GSimpleGA(genome)
    ga.setMinimax(Consts.minimaxType["minimize"])
-   #ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(50000)
-   ga.setCrossoverRate(0.8)
-   ga.setPopulationSize(200)
+   ga.selector.set(Selectors.GRouletteWheel)
+   ga.setGenerations(4000)
+   ga.setCrossoverRate(0.9)
+   ga.setPopulationSize(100)
    ga.setMutationRate(0.03)
-   ga.terminationCriteria.set(GSimpleGA.RawScoreCriteria)
 
-   # Create DB Adapter and set as adapter
-   #sqlite_adapter = DBAdapters.DBSQLite(identify="rosenbrock")
-   #ga.setDBAdapter(sqlite_adapter)
-
-   # Do the evolution, with stats dump
-   # frequency of 10 generations
-   ga.evolve(freq_stats=40)
+   ga.evolve(freq_stats=500)
 
    # Best individual
    best = ga.bestIndividual()
@@ -44,6 +35,8 @@ if __name__ == "__main__":
    print best
 
 
+if __name__ == "__main__":
+    run_main()
 
 
 
