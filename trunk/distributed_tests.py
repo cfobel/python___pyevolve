@@ -19,12 +19,12 @@ def eval_func(chromosome):
    return score
 
 if __name__ == "__main__":
-   genome = G1DList.G1DList(50)
+   genome = G1DList.G1DList(800)
    genome.setParams(rangemin=0, rangemax=10)
    genome.evaluator.set(eval_func)
    ga = GSimpleGA.GSimpleGA(genome)
    ga.selector.set(Selectors.GRouletteWheel)
-   ga.setGenerations(800)
+   ga.setGenerations(8000000)
 
    mig = Migration.WANMigration("192.168.0.1", 666, "group_ex1_simple")
    topology = Util.Graph()
